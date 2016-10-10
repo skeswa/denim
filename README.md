@@ -11,18 +11,18 @@ import (
 )
 
 func main() {
-  q! := Queue<*time.Time>.create()
+  q! := Queue<time.Time>.create()
   q.Enqueue(time.Now())
   fmt.Println(q.Dequeue())
   
-  q = Queue<*time.Time>.create()
+  q = Queue<time.Time>.create()
   q.Enqueue(time.Now())
   time.Sleep(3 * time.Second)
   q.Enqueue(time.Now())
   fmt.Println(q.Dequeue(), q.Dequeue())
 }
 
-type Queue<*T> struct {
+type Queue<T> struct {
   lock *sync.RWMutex
   head!, tail! *node<T>
   length! int
@@ -60,10 +60,10 @@ type Queue<*T> struct {
     defer this.lock.Unlock()
 
     if this.tail == nil {
-      this.head = node<T>.create(*t)
+      this.head = node<T>.create(t)
       this.tail = this.head
     } else {
-      this.tail.next = node<T>.create(*t)
+      this.tail.next = node<T>.create(t)
     }
 
     this.length++
