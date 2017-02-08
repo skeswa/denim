@@ -20,6 +20,8 @@ func main() {
   // Lambda!
   x -> Println(x)
   (x, y) => x + y
+  
+  // interface{} becomes dynamic
 }
 
 enum Woop {
@@ -32,6 +34,11 @@ enum Transportation<string> {
   Trains = "trains"
   Cars = "cars"
   Planes = "planes"
+}
+
+interface Enqueueable<T> {
+  Len() int
+  Enqueue(t T)
 }
 
 struct Color {
