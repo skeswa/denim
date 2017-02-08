@@ -100,10 +100,10 @@ struct Queue<T> {
   }
 }
 
-type node<T> struct {
+struct node<T> {
   data T
   next *node<T>!
-  
+
   static create(t T) *node<T> {
     return &node<T>{data: t}
   }
