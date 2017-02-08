@@ -2,27 +2,49 @@
 A compile-to-go language concept.
 
 ```go
-import (
-  "fmt" as fmt
-  "sync" as sync
-  "time" as time
-
-  "github.com/go/server" as server
-)
+import { Println } from "fmt"
+import { Now, Time, Sleep, Second } from "time"
+import * as server from "github.com/go/server"
 
 func main() {
-  q! := Queue<time.Time>.create()
-  q.Enqueue(time.Now())
-  fmt.Println(q.Dequeue())
+  q! := Queue<Time>.create()
+  q.Enqueue(Now())
+  Println(q.Dequeue())
   
-  q = Queue<time.Time>.create()
-  q.Enqueue(time.Now())
-  time.Sleep(3 * time.Second)
-  q.Enqueue(time.Now())
-  fmt.Println(q.Dequeue(), q.Dequeue())
+  q = Queue<Time>.create()
+  q.Enqueue(Now())
+  Sleep(3 * Second)
+  q.Enqueue(Now())
+  Println(q.Dequeue(), q.Dequeue())
+  
+  // Lambda!
+  x -> Println(x)
+  (x, y) => x + y
 }
 
-type Queue<T> struct {
+enum Woop {
+  Woooop
+  Wooooooop
+  Wooooooooooooop
+}
+
+enum Transportation<string> {
+  Trains = "trains"
+  Cars = "cars"
+  Planes = "planes"
+}
+
+struct Color {
+  Hex string
+}
+
+enum Colors<Color> {
+  Red = Color{Hex: "#ff0000"}
+  Blue = Color{Hex: "#0000ff"}
+  Green = Color{Hex: "#00ff00"}
+}
+
+struct Queue<T> {
   lock *sync.RWMutex
   head!, tail! *node<T>
   length! int
