@@ -7,7 +7,7 @@ import { Now, Time, Sleep, Second } from "time"
 import * as server from "github.com/go/server"
 
 func main() {
-  q! := Queue<Time>.create()
+  q := Queue<Time>.create()
   q.Enqueue(Now())
   Println(q.Dequeue())
   
@@ -53,7 +53,7 @@ enum Colors<Color> {
 
 struct Queue<T> {
   lock *sync.RWMutex
-  head!, tail! *node<T>
+  head, tail *node<T>
   length! int
   
   static Create() *Queue {
@@ -102,7 +102,7 @@ struct Queue<T> {
 
 struct node<T> {
   data T
-  next *node<T>!
+  next *node<T>
 
   static create(t T) *node<T> {
     return &node<T>{data: t}
