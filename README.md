@@ -24,12 +24,6 @@ func main() {
   // interface{} becomes dynamic
 }
 
-enum Woop {
-  Woooop
-  Wooooooop
-  Wooooooooooooop
-}
-
 enum Transportation<string> {
   Trains = "trains"
   Cars = "cars"
