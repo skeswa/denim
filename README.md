@@ -105,3 +105,75 @@ struct node<T> {
 
 
 ```
+
+better error handling:
+```go
+func makeRequest() error {  
+    req, err := http.NewRequest("GET", url, nil)
+    if err != nil {
+        return fmt.Errorf("failed to make request: %v", err)
+    }
+
+    // Set cookies if they were passed as argument
+    if cookies != "" {
+        req.Header.Set("Cookie", cookies)
+    }
+
+    // Send request
+    resp, err := client.Do(req)
+    if err != nil {
+        return fmt.Errorf("failed to make request: %v", err)
+    }
+    // Save response body into data variable
+    data, err := ioutil.ReadAll(resp.Body)
+    if err != nil {
+        return fmt.Errorf("failed to make request: %v", err)
+    }
+
+    // If lastData is equal to "", it means that it is 
+    // the first request and we set lastData to current 
+    // response body
+    // Otherwise, we compare previous and current HTML
+    if lastData == "" {
+        lastData = string(data)
+    } else {
+        checkChanges(string(data))
+    }
+    
+    return nil
+}
+```
+becomes:
+```go
+func makeRequest() error {  
+    req, #err := http.NewRequest("GET", url, nil)
+    // Set cookies if they were passed as argument
+    if cookies != "" {
+        req.Header.Set("Cookie", cookies)
+    }
+    // Send request
+    resp, #err := client.Do(req)
+    // Save response body into data variable
+    data, #otherErr := ioutil.ReadAll(resp.Body)
+    
+    // Handle the errors
+    #err(err error) {
+      return fmt.Errorf("look how much better this is: %v", err)
+    }
+    #otherErr(err error) {
+      return fmt.Errorf("look how much better this is: %v", err)
+    }
+
+    // If lastData is equal to "", it means that it is 
+    // the first request and we set lastData to current 
+    // response body
+    // Otherwise, we compare previous and current HTML
+    if lastData == "" {
+        lastData = string(data)
+    } else {
+        checkChanges(string(data))
+    }
+    
+    return nil
+}
+```
