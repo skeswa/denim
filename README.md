@@ -2,9 +2,12 @@
 A compile-to-go language concept.
 
 ```go
-import { Println } from "fmt"
-import { Now, Time, Sleep, Second } from "time"
-import * as server from "github.com/go/server"
+from "fmt" import Println
+from "time" import Now, Time, Sleep, Second
+from "github.com/go/server" import * as server
+
+// Relative imports work as expected.
+from "../../hello" as Something
 
 func main() {
   q := Queue<Time>.create()
@@ -16,18 +19,24 @@ func main() {
   Sleep(3 * Second)
   q.Enqueue(Now())
   Println(q.Dequeue(), q.Dequeue())
+
+  // Function types look like:
+  var fn (int, int) => int
   
-  // Lambda!
-  x -> Println(x)
-  (x, y) => x + y
+  // Lambda decls. have type inference!
+  fn = (x, y) => x + y
   
   // interface{} becomes dynamic
 }
 
+// Rust-style enums! Yay!
 enum Transportation<string> {
-  Trains = "trains"
-  Cars = "cars"
-  Planes = "planes"
+  Trains
+  Cars(year int)
+  Planes {
+    Airline string
+    FlightNumber int
+  }
 }
 
 interface Enqueueable<T> {
@@ -54,24 +63,25 @@ struct Queue<T> {
     return &Queue{lock: &sync.RWMutex{}}
   }
   
+  // Methods that start with a `*` are only accessible for pointer values.
   *Len() int {
-    this.lock.RLock()
-    defer this.lock.RUnlock()
+    ~lock.RLock()
+    defer ~lock.RUnlock()
 
-    return this.length
+    return ~length
   }
   
   *Dequeue() *T {
-    this.lock.Lock()
-    defer this.lock.Unlock()
+    ~lock.Lock()
+    defer ~lock.Unlock()
 
-    if this.head != nil {
-      data := this.head.data
-      this.head = this.head.next
-      if this.head == nil && this.tail != nil {
-        this.tail = nil
+    if ~head != nil {
+      data := ~head.data
+      this.head = ~head.next
+      if this.head == nil && ~tail != nil {
+        ~tail = nil
       }
-      this.length--
+      ~length--
       return &data
     }
 
@@ -79,18 +89,18 @@ struct Queue<T> {
   }
   
   *Enqueue(t *T) {
-    this.lock.Lock()
-    defer this.lock.Unlock()
+    ~lock.Lock()
+    defer ~lock.Unlock()
 
-    if this.tail == nil {
-      this.head = node<T>.create(t)
-      this.tail = this.head
+    if ~tail == nil {
+      ~head = node<T>.create(t)
+      ~tail = this.head
     } else {
-      this.tail.next = node<T>.create(t)
+      ~tail.next = node<T>.create(t)
     }
 
-    this.length++
-    this.lock.Unlock()
+    ~length++
+    ~lock.Unlock()
   }
 }
 
@@ -145,12 +155,18 @@ func makeRequest() error {
 ```
 becomes:
 ```go
-func makeRequest() error {  
-    req, #err := http.NewRequest("GET", url, nil)
+func makeRequest() *int, error {
+    // Error variables can be replaced by functions with indigo. When an error
+    // occurs, the function should exit the surrounding function
+    req, err => fmt.Error := http.NewRequest("GET", url, nil)
     // Set cookies if they were passed as argument
     if cookies != "" {
         req.Header.Set("Cookie", cookies)
     }
+    
+    // Exit functions do not have to be defined inline
+    exit := message => err => 
+    
     // Send request
     resp, #err := client.Do(req)
     // Save response body into data variable
