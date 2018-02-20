@@ -156,19 +156,14 @@ func makeRequest() error {
 becomes:
 ```go
 func makeRequest() *int, error {
-    // Error variables can be replaced by functions with indigo. When an error
-    // occurs, the function should exit the surrounding function
-    req, err => fmt.Error := http.NewRequest("GET", url, nil)
+    // 
+    req, fatal!(nil, cause) := http.NewRequest("GET", url, nil)
     // Set cookies if they were passed as argument
     if cookies != "" {
         req.Header.Set("Cookie", cookies)
     }
     
-    // Exit functions do not have to be defined inline
-    exit := message => err => 
-    
-    // Send request
-    resp, #err := client.Do(req)
+    resp, fatal(nil, (cause) => errors.New("uh oh")) := client.Do(req)
     // Save response body into data variable
     data, #otherErr := ioutil.ReadAll(resp.Body)
     
