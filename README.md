@@ -157,7 +157,7 @@ becomes:
 ```go
 func makeRequest() *int, error {
     // 
-    req, fatal!(nil, cause) := http.NewRequest("GET", url, nil)
+    req, return(nil, err => errors.New(err)) := http.NewRequest("GET", url, nil)
     // Set cookies if they were passed as argument
     if cookies != "" {
         req.Header.Set("Cookie", cookies)
