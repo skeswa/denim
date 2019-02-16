@@ -1,15 +1,43 @@
 # indigo
 A compile-to-go language concept.
 
-```go
-from "fmt" import Println
-from "time" import Now, Time, Sleep, Second
-from "github.com/go/server" import * as server
+```dart
+// No more `library`.
+// No more `'package:'` in front of imports.
+// Explicit imports by default.
+// Falls back to importing `index.dart` when no file is specified.
+// No more importing specific dart files from dart packages.
 
-// Relative imports work as expected.
-from "../../hello" as Something
+from 'flutter/material' import StatefulWidget
 
-func main() {
+// Absolute path support. Import * with no as puts all the exports of '~/helpers' in this file's namespace.
+from '~/helpers' import *
+// Relative path support.
+from '../some/helpers' import * as someHelpers
+
+interface Thing {
+  height?: int
+  act(): Future<void>
+}
+
+struct State {
+  height?: int
+  width: int
+}
+
+class SomeClass<T implements Thing> extends SomeBaseClass<T> {
+  _state: State
+
+  constructor(t: T, { requiredOptions: Map<String, int>, optionalOptions?: Map<String, int> }) {
+    
+  }
+  
+  staticMethod(a: bool, b: int, c: num => void) {
+    
+  }
+}
+
+fn main() {
   q := Queue<Time>.create()
   q.Enqueue(Now())
   Println(q.Dequeue())
