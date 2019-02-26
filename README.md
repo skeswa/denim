@@ -62,6 +62,9 @@ match coin {
     Coin::Quarter => 25,
 }
 
+// Rust macros
+// TODO!
+
 // No more `get`. No more `set`. All classes are abstract by default.
 class SomeClass<T implements Thing> extends SomeBaseClass<T> {
   // Class fields are immutable by default - you need `mut` to make them mutable.
