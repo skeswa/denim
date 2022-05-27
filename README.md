@@ -3,7 +3,7 @@ A programming language designed for cross-environment business logic.
 
 ## Pitch
 
-So, you know how pretty much each modern, garbage-collected language feels eerily like the others lately? I think it is because they are converging on the same features and concepts; they all have first-class functions, co-routines, and data classes now. The only difference between one of these languages and another _really_ is the ecosystems and platforms that they can hook into. Go gets you into the cloud and terminal ecosystems, while JS/TS gets you into the browser and to the edge. Swift and Kotlin get you onto phones, and with C# you're on an Xbox.
+So, you know how pretty much each modern, garbage-collected language feels eerily like the others lately? I think it is because they are converging on the same features and concepts; they all have first-class functions, co-routines, and data classes now. The only difference between one of these languages and another _really_ is the ecosystems and platforms that they can hook into. Go gets you into the cloud and terminal ecosystems, while JS/TS gets you into the browser and to the edge. Swift and Kotlin get you onto phones, and with C# you can ship on an Xbox.
 
 And it got me thinking: **if the languages we use to write our apps are this similar, why on earth are we writing the same logic over and over again**. Why can't we write most of our logic, constants, and types once, and important them anywhere? What if there was a language purely design to be imported in other languages?
 
@@ -26,9 +26,9 @@ Esper is not designed to be fast, or sexy, or interesting, or well-suited for an
 
 Esper should never feel as esoteric and ornate as Rust, but it should feel a smidge more expressive than Go. It should be easy to read, follow, and document like Java; getting out of your way and letting you solve the damn problem like Node.js.
 
-Nothing that could be described like Esper is above will be particularly easy to design, and even less easy to successfully implement, but our hope is to at least move the [Overton window](https://en.wikipedia.org/wiki/Overton_window) in a direction that we bet the programming world would enjoy.
+Described above is language that will be difficult to design, and even harder to implement. My hope in all of this, at the very least, is to move the [Overton window](https://en.wikipedia.org/wiki/Overton_window) in a direction that we bet the programming world would enjoy.
 
-Wish us luck.
+Wish me luck.
 
 ### Lineage
 
