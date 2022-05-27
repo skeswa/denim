@@ -1,5 +1,38 @@
-# indigo
-A compile-to-go language concept.
+# esper
+A programming language designed for cross-environment business logic.
+
+## Pitch
+
+So, you know how pretty much each modern, garbage-collected language feels eerily like the others lately? I think it is because they are converging on the same features and concepts; they all have first-class functions, co-routines, and data classes now. The only difference between one of these languages and another _really_ is the ecosystems and platforms that they can hook into. Go gets you into the cloud and terminal ecosystems, while JS/TS gets you into the browser and to the edge. Swift and Kotlin get you onto phones, and with C# you're on an Xbox.
+
+And it got me thinking: **if the languages we use to write our apps are this similar, why on earth are we writing the same logic over and over again**. Why can't we write most of our logic, constants, and types once, and important them anywhere? What if there was a language purely design to be imported in other languages?
+
+Esper is that language.
+
+The intent behind Esper is to incorporate the smallest set of common features from these garbage-collected languages sufficient to:
+- Create common types
+- Implement business logic
+- Declare common constants
+
+Of course, it wouldn't hurt to end up with a language that is pleasant to use and maintain while we're at it.
+
+## Design
+
+Esper is not designed to be fast, or sexy, or interesting, or well-suited for any specific domain. It should fit right into the source coce powering any ol' user interface, backend API, and smart fridge. Esper's guiding design principles, are to be:
+
+- Simple,
+- Familar, and
+- Practical
+
+Esper should never feel as esoteric and ornate as Rust, but it should feel a smidge more expressive than Go. It should be easy to read, follow, and document like Java; getting out of your way and letting you solve the damn problem like Node.js.
+
+Nothing that could be described like Esper is above will be particularly easy to design, and even less easy to successfully implement, but our hope is to at least move the [Overton window](https://en.wikipedia.org/wiki/Overton_window) in a direction that we bet the programming world would enjoy.
+
+Wish us luck.
+
+### Lineage
+
+
 
 ```dart
 // No more `library`.
