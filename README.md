@@ -32,7 +32,70 @@ Wish me luck.
 
 ### Lineage
 
+As Esper is designed to feel familiar, it borrows heavily from some popular programming languages/runtimes:
 
+- Dependency management from [Deno](https://deno.land/)
+- Module system and batteries-included standard library championed by [Go](https://go.dev/)
+- Syntax largely stolen from [Rust](https://www.rust-lang.org/) with a few tricks from [TypeScript](https://www.typescriptlang.org/) and [Python](https://www.python.org/) included
+- Concurrency model inspired by [Dart](https://dart.dev/)
+
+#### Syntax
+
+There is always where you want to start with a new language - what will it look like?
+
+```rust
+// Hey look ma! Pythonic imports with Deno/Go-style dependency management.
+// And yes, and you have probably gathered, Esper comments = Rust comments.
+
+from "github.com/abc/xyz@v0.9.0" import { hello, world };
+from "github.com/foo/bar@v1.2.0-beta/nested/module" import * as module;
+
+// Relative imports are a thing too. Notice how the version isn't specified - this is
+// because relatively imported modules always share the version of the importer.
+
+from "some/sub/module" import { something };
+from "../bing/bang" import { boom as büm };
+
+// Rusty variable declaration with type inference. That means
+// `some_immutable_integer` and other variables declared like this cannot be mutated.
+let some_immutable_integer = 12;
+
+// As far as primitives go, we plan to support a few:
+// - `boolean`
+// - `char`
+// - `double`
+// - `int` (no unsigned ints for now)
+// - `string`
+//
+// Operators are fairly typical too:
+// - `&&`, `||`, `==`, and `!=` all do what you think they do
+// - `+`, `-`, `*`, `/`, and `%` all do what you think they do
+//   (except that they only apply to numbers)
+// - `**`, the exponentiation operator, is stolen from [ES2017](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Exponentiation)
+// - `~/`, truncate divide, is stolen from [Dart](https://api.flutter.dev/flutter/dart-core/num/operator_truncate_divide.html)
+//
+// You might be wondering where all the bitwise operators are - there are none! lol.
+// Good riddance.
+
+
+// `mut` makes the declared variable mutable.
+let mut some_mutable_integer = -7.1e2;
+some_mutable_integer = some_mutable_integer + 1;
+
+// Like in Rust, you can export stuff with `pub`. Anything not declared with a `pub`
+// will only be visible to things in its own module.
+pub let stuff_outside_of_this_module_can_see_me = true;
+
+fn print_labeled_measurement(value: i32, unit_label: char) {
+  // Printing works like it does in Dart.
+  print("The measurement is $value$unit_label");
+}
+
+```
+
+#### Module system
+
+As mentioned above, Esper modules will work a lot like Go modules. Each directory, and all of the source files within it, act a single module.
 
 ```dart
 // No more `library`.
