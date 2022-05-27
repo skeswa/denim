@@ -80,8 +80,8 @@ let some_immutable_integer = 12;
 
 
 // `mut` makes the declared variable mutable.
-let mut some_mutable_integer = -7.1e2;
-some_mutable_integer = some_mutable_integer + 1;
+let mut some_mutable_double = -7.1e2;
+some_mutable_double = some_mutable_double + 1;
 
 // Like in Rust, you can export stuff with `pub`. Anything not declared with a `pub`
 // will only be visible to things in its own module.
@@ -97,56 +97,54 @@ pub let stuff_outside_of_this_module_can_see_me = true;
 /// # Code links
 ///
 /// All you have to do to reference somthing in your code is wrap it in `[]`.
-/// For instance, [some_mutable_integer] is a variable we defined above.
+/// For instance, [some_mutable_double] is a variable we defined above.
 /// (This was 100% stolen from Dart).
 let a_string = "this is a string";
 
-/// Rusty functions everybody!
-///
-/// No need to specify if a function is `void`, just say nothing at all:
-/// ```esper
-/// fn print_hello_world() {
-///   print("hello world");
-/// }
-/// ```
-///
-/// There is just one wrinkle - Esper does not have positional arguments.
-/// Args must be labeled unless a variable is passed along sharing the name of
-/// an argument. There is one exception to this rule: if a function has just a
-/// single argument, no label is necessary:
-///
-/// ```esper
-/// fn multiply_by_two(num: double) -> double {
-///   num * 2
-/// }
-///
-/// print(multiply_by_two(3)); // prints "6"
-///
-/// fn multiply(a: double, b: double) -> double {
-///   a * b
-/// }
-///
-/// print(multiply(a: 2, b: 5)); // prints "10"
-///
-/// let b = 5;
-///
-/// print(multiply(a: 2, b)); // prints "10"
-/// ```
-///
-/// Oh! And one more thing, all you have to make an argument optional is give
-/// it a default value:
-/// ```esper
-/// fn i_cant_wait_to(action: string = "take a nap") {
-///   print("Time to $action!");
-/// }
-///
-/// print(i_cant_wait_to("eat donuts")); // prints "Time to eat donuts!"
-/// print(i_cant_wait_to()); // prints "Time to take a nap!"
-/// ```
-fn print_labeled_measurement(value: int, unit_label: char) {
-  // Printing works like it does in Dart. There is also Darty string interpolation.
-  print("The measurement is $value$unit_label");
+// Rusty functions everybody!
+// No need to specify if a function is `void`, just say nothing at all:
+
+fn print_hello_world() {
+  // By the way, printing works like it does in Dart.
+  print("hello world");
 }
+
+// There is just one wrinkle with functions - Esper does not have positional
+// arguments. Args must be labeled unless a variable is passed along sharing
+// the name of an argument. There is one exception to this rule: if a function
+// has just a single argument, no label is necessary:
+
+fn multiply_by_two(num: double) -> double {
+  num * 2
+}
+
+print(multiply_by_two(3)); // prints "6"
+
+fn multiply(a: double, b: double) -> double {
+  a * b
+}
+
+print(multiply(a: 2, b: 5)); // prints "10"
+
+let b = 5;
+
+print(multiply(a: 2, b)); // prints "10"
+
+// Oh! And one more thing, all you have to make an argument optional is give
+// it a default value:
+
+fn i_cant_wait_to(action: string = "take a nap") {
+  // Now seems like a good time to mention we stole string interpolation from
+  // Dart.
+  print("Time to $action!");
+}
+
+print(i_cant_wait_to("eat donuts")); // prints "Time to eat donuts!"
+print(i_cant_wait_to()); // prints "Time to take a nap!"
+
+// Esper even borrows Rust's syntax for lambda expressions (Rust calls them closures):
+let lambda_annotated = |i: i32| -> i32 { i + 1 };
+let lambda_inferred  = |i     |          i + 1  ;
 ```
 
 #### Module system
