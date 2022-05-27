@@ -1,5 +1,5 @@
 # esper
-A programming language designed for cross-environment business logic.
+A programming language narrowly designed for code sharing across environments.
 
 ## Pitch
 
@@ -38,6 +38,7 @@ As Esper is designed to feel familiar, it borrows heavily from some popular prog
 - Module system and batteries-included standard library championed by [Go](https://go.dev/)
 - Syntax largely stolen from [Rust](https://www.rust-lang.org/) with a few tricks from [TypeScript](https://www.typescriptlang.org/) and [Python](https://www.python.org/) included
 - Concurrency model inspired by [Dart](https://dart.dev/)
+- Testing is an hommage to [Dart](https://dart.dev/), [JavaScript](https://www.javascript.com/), and [Go](https://go.dev/)
 
 #### Syntax
 
@@ -61,7 +62,7 @@ from "../bing/bang" import { boom as büm };
 let some_immutable_integer = 12;
 
 // As far as primitives go, we plan to support a few:
-// - `boolean`
+// - `bool`
 // - `char`
 // - `double`
 // - `int` (no unsigned ints for now)
@@ -86,11 +87,66 @@ some_mutable_integer = some_mutable_integer + 1;
 // will only be visible to things in its own module.
 pub let stuff_outside_of_this_module_can_see_me = true;
 
-fn print_labeled_measurement(value: i32, unit_label: char) {
-  // Printing works like it does in Dart.
+/// Doc comments! I bet this looks familar to you Rustaceans out there.
+///
+/// # Markdown
+///
+/// Who *doesn't* _love_ some sweet [Markdown](https://www.markdownguide.org/)
+/// formatting?
+///
+/// # Code links
+///
+/// All you have to do to reference somthing in your code is wrap it in `[]`.
+/// For instance, [some_mutable_integer] is a variable we defined above.
+/// (This was 100% stolen from Dart).
+let a_string = "this is a string";
+
+/// Rusty functions everybody!
+///
+/// No need to specify if a function is `void`, just say nothing at all:
+/// ```esper
+/// fn print_hello_world() {
+///   print("hello world");
+/// }
+/// ```
+///
+/// There is just one wrinkle - Esper does not have positional arguments.
+/// Args must be labeled unless a variable is passed along sharing the name of
+/// an argument. There is one exception to this rule: if a function has just a
+/// single argument, no label is necessary:
+///
+/// ```esper
+/// fn multiply_by_two(num: double) -> double {
+///   num * 2
+/// }
+///
+/// print(multiply_by_two(3)); // prints "6"
+///
+/// fn multiply(a: double, b: double) -> double {
+///   a * b
+/// }
+///
+/// print(multiply(a: 2, b: 5)); // prints "10"
+///
+/// let b = 5;
+///
+/// print(multiply(a: 2, b)); // prints "10"
+/// ```
+///
+/// Oh! And one more thing, all you have to make an argument optional is give
+/// it a default value:
+/// ```esper
+/// fn i_cant_wait_to(action: string = "take a nap") {
+///   print("Time to $action!");
+/// }
+///
+/// print(i_cant_wait_to("eat donuts")); // prints "Time to eat donuts!"
+/// print(i_cant_wait_to()); // prints "Time to take a nap!"
+/// ```
+fn print_labeled_measurement(value: int, unit_label: char) {
+  // Printing works like it does in Dart. There is also Darty string interpolation.
   print("The measurement is $value$unit_label");
 }
-
 ```
 
 #### Module system
