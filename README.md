@@ -152,3 +152,7 @@ let lambda_inferred  = |i     |          i + 1  ;
 As mentioned above, Esper modules work a lot like Go modules. Each directory, and all of the source files within it, act as a single module. This means that all source files in the same directory act sort of like one big source file. Additionally, from outside of an Esper module, there is not visibility into anything lacking a `pub` keyword.
 
 TODO(skeswa): continue noodling
+
+## Prototype
+
+I think it might be a good idea to check out something like [lalrpop](http://lalrpop.github.io/lalrpop/).
