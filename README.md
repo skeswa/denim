@@ -1,11 +1,11 @@
-# esper
+# Esper
 A programming language narrowly designed for code sharing across environments.
 
 ## Pitch
 
-So, you know how pretty much each modern, garbage-collected language feels eerily like the others lately? I think it is because they are converging on the same features and concepts; they all have first-class functions, co-routines, and data classes now. The only difference between one of these languages and another _really_ is the ecosystems and platforms that they can hook into. Go gets you into the cloud and terminal ecosystems, while JS/TS gets you into the browser and to the edge. Swift and Kotlin get you onto phones, and with C# you can ship on an Xbox.
+So, you know how pretty much each modern, garbage-collected language feels eerily like the others lately? I think we can blame this phenomenon on the fact that many of these languages are converging on the same features and concepts; how many languages have added first-class functions, co-routines, data classes, and language-level immutablity recently? The only _tangible_ differences between one language and another are the ecosystems and platforms that they can unlock for you. Go gets you into the cloud and terminal ecosystems, while JS/TS gets you into the browser and to the edge. Swift and Kotlin get you onto phones, and with C# you can ship on an Xbox.
 
-And it got me thinking: **if the languages we use to write our apps are this similar, why on earth are we writing the same logic over and over again**. Why can't we write most of our logic, constants, and types once, and important them anywhere? What if there was a language purely design to be imported in other languages?
+And it got me thinking: **if the languages we use to write our apps are this similar, why on earth are we writing the same logic over and over again?** Why can't we write most of our logic, constants, and types once, and use them anywhere? What if there was a language purely designed to be interoperable with other languages?
 
 Esper is that language.
 
@@ -91,7 +91,7 @@ pub let stuff_outside_of_this_module_can_see_me = true;
 ///
 /// # Markdown
 ///
-/// Who *doesn't* _love_ some sweet [Markdown](https://www.markdownguide.org/)
+/// Who *doesn't* _love_ some `sweet` [Markdown](https://www.markdownguide.org/)
 /// formatting?
 ///
 /// # Code links
@@ -133,7 +133,7 @@ print(multiply(a: 2, b)); // prints "10"
 // Oh! And one more thing, all you have to make an argument optional is give
 // it a default value:
 
-fn i_cant_wait_to(action: string = "take a nap") {
+fn i_cant_wait_to(action /* `: string` is inferred here */ = "take a nap") {
   // Now seems like a good time to mention we stole string interpolation from
   // Dart.
   print("Time to $action!");
