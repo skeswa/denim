@@ -149,6 +149,6 @@ let lambda_inferred  = |i     |          i + 1  ;
 
 #### Module system
 
-As mentioned above, Esper modules will work a lot like Go modules. Each directory, and all of the source files within it, act a single module.
+As mentioned above, Esper modules work a lot like Go modules. Each directory, and all of the source files within it, act as a single module. This means that all source files in the same directory act sort of like one big source file. Additionally, from outside of an Esper module, there is not visibility into anything lacking a `pub` keyword.
 
 TODO(skeswa): continue noodling
