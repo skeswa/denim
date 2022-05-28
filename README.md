@@ -3,7 +3,7 @@ A programming language narrowly designed for code sharing across environments.
 
 ## Pitch
 
-So, you know how pretty much each modern, garbage-collected language feels eerily like the others lately? I think we can blame this phenomenon on the fact that many of these languages are converging on the same features and concepts; how many languages have added first-class functions, co-routines, data classes, and language-level immutablity recently? The only _tangible_ differences between one language and another are the ecosystems and platforms that they can unlock for you. Go gets you into the cloud and terminal ecosystems, while JS/TS gets you into the browser and to the edge. Swift and Kotlin get you onto phones, and with C# you can ship on an Xbox.
+So, you know how pretty much every modern, garbage-collected language feels eerily like the others lately? I think we can blame this phenomenon on the fact that many of these languages are converging on the same features and concepts; how many languages have added first-class functions, co-routines, data classes, and language-level immutablity recently? The only _tangible_ differences between one language and another are the ecosystems and platforms that they can unlock for you. Go gets you into the cloud and terminal ecosystems, while JS/TS gets you into the browser and to the edge. Swift and Kotlin get you onto phones, and with C# you can ship on an Xbox.
 
 And it got me thinking: **if the languages we use to write our apps are this similar, why on earth are we writing the same logic over and over again?** Why can't we write most of our logic, constants, and types once, and use them anywhere? What if there was a language purely designed to be interoperable with other languages?
 
