@@ -1,4 +1,5 @@
 # Esper
+
 A programming language narrowly designed for code sharing across environments.
 
 ## Pitch
@@ -10,6 +11,7 @@ And it got me thinking: **if the languages we use to write our apps are this sim
 Esper is that language.
 
 The intent behind Esper is to incorporate the smallest set of common features from these garbage-collected languages sufficient to:
+
 - Create common types
 - Implement business logic
 - Declare common constants
@@ -48,14 +50,21 @@ There is always where you want to start with a new language - what will it look 
 // Hey look ma! Pythonic imports with Deno/Go-style dependency management.
 // And yes, and you have probably gathered, Esper comments = Rust comments.
 
-from "github.com/abc/xyz@v0.9.0" import { hello, world };
-from "github.com/foo/bar@v1.2.0-beta/nested/module" import * as module;
+from "github.com/abc/xyz@v0.9.0" use { hello, world };
+from "github.com/foo/bar@v1.2.0-beta/nested/module" use * as module;
 
 // Relative imports are a thing too. Notice how the version isn't specified - this is
 // because relatively imported modules always share the version of the importer.
 
-from "some/sub/module" import { something };
-from "../bing/bang" import { boom as büm };
+from "some/sub/module" use { something };
+from "../bing/bang" use { boom as büm };
+
+// You can also re-export in a similar way.
+
+from "github.com/abc/xyz@v0.9.0" show { hello };
+from "github.com/foo/bar@v1.2.0-beta/nested/module" show *;
+
+from "../bing/bang" show { boom as büm };
 
 // Rusty variable declaration with type inference. That means
 // `some_immutable_integer` and other variables declared like this cannot be mutated.
@@ -145,6 +154,94 @@ print(i_cant_wait_to()); // prints "Time to take a nap!"
 // Esper even borrows Rust's syntax for lambda expressions (Rust calls them closures):
 let lambda_annotated = |i: i32| -> i32 { i + 1 };
 let lambda_inferred  = |i     |          i + 1  ;
+
+// You may now be wondering how more complex data structures are created and
+// managed in Esper. I'm sure you are shocked to find out that we (mostly) stole
+// Rust syntax here too /s.
+
+struct User {
+  active: bool;
+  coolness_rating: int;
+  email: string;
+  username: string;
+}
+
+// We can make some or even all of the `struct` or its fields public using the
+// `pub` keyowrd.
+
+pub struct Company {
+  pub name: string;
+  pub phone_number: string;
+  cash_in_the_bank: double;
+}
+
+// You may notice that we opted to go with `;` to terminate field declarations
+// instead of `,`. This is mostly to make adding methods to structs feel more
+// natural. Esper sugarifies Rust's default `impl` by simply allowing you to
+// declare methods within the `struct` itself.
+
+struct Car {
+  make: string;
+  model: string;
+  owner: User;
+  still_works: bool;
+}
+
+// One important thing to note here is that, in general, Esper data structures
+// are immutable by default.
+
+let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+my_car.make = "Toyota"; // Compile time error.
+
+// To "change" an immutable value, we have to first clone it first as a mutable
+// value.
+
+let mut my_mut_car = my_car.mut;
+
+my_mut_car.make = "Toyota"; // This is a-ok.
+
+// Luckily, Esper has some syntactic sugar to make this look a little cleaner:
+
+let my_first_car = my_car.mut {
+  make: "Toyota",
+  model: "Camry",
+  year: 2008,
+};
+
+// Notice that `my_first_car` is mutable, but you may not always want this
+// side-effect.
+
+my_first_car.make = "Ferrari"; // This isn't quite right, but is not an error.
+
+// Often times, mutation is needs to happen deeper in the the struct. Esper
+// allows for this use case with some more syntax sugar.
+
+let my_next_car = my_immutable_first_car.mut {
+  make: "Rivian",
+  model: "R1T",
+  user: mut {
+    coolness_rating: self.coolness_rating + 1,
+  },
+  year: 2023,
+};
+
+// Sometimes, you just gotta mutate structs directly. This is fairly simple to
+// do in Esper. All you have to do in order to create a mutable `struct` is use
+// the `mut` at creation time:
+
+struct Donut {
+  is_tasty: bool;
+}
+
+let disappointing = mut Donut { is_tasty: false };
+
+disappointing.is_tasty = true; // This is a-ok.
+
 ```
 
 #### Module system
