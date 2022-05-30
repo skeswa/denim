@@ -37,11 +37,12 @@ and maintain while we're at it.
 Esper is not designed to be fast, or sexy, or interesting, or well-suited for
 any specific domain. It should fit right into the source coce powering any ol'
 user interface, backend API, and smart fridge. Esper's guiding design
-principles, are to be:
+principles, are to be maximally:
 
 - Simple,
-- Familar, and
-- Practical
+- Familar,
+- Practical, and
+- Compatible (with other languages)
 
 Esper should never feel as esoteric and ornate as Rust, but it should feel a
 smidge more expressive than Go. It should be easy to read, follow, and document
@@ -55,7 +56,7 @@ that we bet the programming world would enjoy.
 
 Wish me luck.
 
-### Lineage
+### Inspiration
 
 As Esper is designed to feel familiar, it borrows heavily from some popular
 programming languages/runtimes:
@@ -69,6 +70,19 @@ programming languages/runtimes:
 - Concurrency model inspired by [Dart](https://dart.dev/)
 - Testing is an hommage to [Dart](https://dart.dev/),
   [JavaScript](https://www.javascript.com/), and [Go](https://go.dev/)
+
+### Compatibility
+
+For Esper to be useful, in needs to be able to interop with most of the major
+languages with an established industrial presence. Esper is being developed with
+the following transpilation targets in mind:
+
+- [Dart](https://dart.dev/) for UIs
+- [Go](https://go.dev/) for Cloud and CLI
+- [Java](https://www.java.com/) for Android and Enterprise
+- [Python](https://www.python.org/) for Data Science
+- [Swift](https://www.python.org/) for Apple's ecosystem
+- [TypeScript](https://www.typescriptlang.org/) for Web
 
 ### Tour
 
@@ -163,9 +177,53 @@ let abc /* this is an inline comment */ = /* stick these anywhere */ 123;
 let forty_two = 42;
 ```
 
-#### Expressions vs. statements
+#### Statements and expressions
 
-TODO(skeswa): flesh this out.
+Following Rust's lead, Esper is (mostly) an expression language.
+[Rust's documentation](https://doc.rust-lang.org/reference/statements-and-expressions.html)
+does a good job describing what this means, and some of its implications:
+
+> Most forms of value-producing or effect-causing evaluation are directed by the
+> uniform syntax category of _expressions_. Each kind of expression can
+> typically nest within each other kind of expression, and rules for evaluation
+> of expressions involve specifying both the value produced by the expression
+> and the order in which its sub-expressions are themselves evaluated.
+>
+> In contrast, statements in Rust serve mostly to contain and explicitly
+> sequence expression evaluation.
+
+The quoted description can be a bit difficult to fully understand, but it
+basically boils down to a simple mantra: in Esper, almost everything, including
+control flow like `if...else`, is an "expression" can be used like a value.
+Expressions can be terminated, and their values contained, by capping them with
+a `;` character. Loosely, a terminated expression _is_ a "statement".
+
+Perhaps the best way to visualize this is to demonstrate an example involving
+`if...else`, Esper's simplest branching control flow expression.
+
+```rust
+// Pretend that `some_random_number` is defined elsewhere and is a randomly
+// generated `int`.
+let x = some_random_number;
+
+// Below, `message`'s value results from an `if...else if...else` expression
+// on `x`.
+let message = if x == 4 {
+  "x is four"
+} else if x == 3 {
+  "x is three"
+} else {
+  ""
+};
+
+// As you can see, expressions can also be used in a sort of stand-alone
+// fashion.
+if !message.is_empty() {
+  print(message);
+} else {
+  print("Looks like there is nothing to say!");
+}
+```
 
 #### Functions
 
@@ -174,6 +232,8 @@ Syntactically, Esper functions are very similar Rust functions.
 ```rust
 // Functions can specify a return type using the `->` symbol.
 pub fn multiply_by_two(num: double) -> double {
+  // Functions implicitly return the last value in their body. Since, the next
+  // line is not terminated by a `;`, it evaluates to `num * 2`.
   num * 2
 }
 
@@ -400,9 +460,9 @@ let my_next_car = my_immutable_first_car.mut {
 };
 ```
 
-Sometimes, you just gotta mutate structs directly. This is fairly simple to
-do in Esper. All you have to do in order to create a mutable `struct` is use
-the `mut` at creation time:
+Sometimes, you just gotta mutate structs directly. This is fairly simple to do
+in Esper. All you have to do in order to create a mutable `struct` is use the
+`mut` at creation time:
 
 ```rust
 struct Donut {
@@ -415,8 +475,6 @@ let mut disappointing = Donut { is_tasty: false };
 
 disappointing.is_tasty = true; // This is a-ok.
 ```
-
-
 
 ## Prototype
 
