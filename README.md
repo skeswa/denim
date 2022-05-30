@@ -91,7 +91,11 @@ look like? The answer is a lot like Rust. I just happen to think that Rust gets
 a lot of stuff right. That said, expect some deviations made in the interest of
 developer ergonomics and Esper's particular domain challenges.
 
-#### Primitive types
+#### Simple types
+
+##### Primitives
+
+TODO(skeswa): literals
 
 Esper's primitives are mostly stolen from Go. It has:
 
@@ -111,6 +115,30 @@ Esper's primitives are mostly stolen from Go. It has:
   a "character" in strings.
 - `string`\
   A sequence of bytes semantically associated with text.
+
+##### Tuples
+
+TODO(skeswa): flesh this out.
+
+##### Lists
+
+TODO(skeswa): flesh this out.
+
+##### Maps
+
+TODO(skeswa): flesh this out.
+
+##### Sets
+
+TODO(skeswa): flesh this out.
+
+##### Unions
+
+TODO(skeswa): flesh this out.
+
+##### Aliases
+
+TODO(skeswa): flesh this out.
 
 #### Operators
 
@@ -334,7 +362,9 @@ module.
 pub let stuff_outside_of_this_module_can_see_me = true;
 ```
 
-#### Structs
+#### Complex Types
+
+##### Structs
 
 You may now be wondering how more complex data structures are created and
 managed in Esper. I'm sure you are _so_ shocked to find out that we (mostly)
@@ -476,6 +506,22 @@ let mut disappointing = Donut { is_tasty: false };
 
 disappointing.is_tasty = true; // This is a-ok.
 ```
+
+###### Generics
+
+TODO(skeswa): flesh this out.
+
+##### Traits
+
+TODO(skeswa): flesh this out.
+
+##### Enums
+
+TODO(skeswa): flesh this out.
+
+#### Pattern matching
+
+TODO(skeswa): flesh this out.
 
 ## Prototype
 
