@@ -288,15 +288,6 @@ pub struct User {
   coolness_rating: int;
   pub name: string;
 }
-
-// We can make some or even all of the `struct` or its fields public using the
-// `pub` keyword.
-
-pub struct Company {
-  pub name: string;
-  pub phone_number: string;
-  cash_in_the_bank: double;
-}
 ```
 
 You may notice that we opted to go with `;` to terminate field declarations
@@ -315,7 +306,8 @@ struct Car {
   // attached to any instance of `Car`.
   fn drive(self: Car) {
     // In Esper, strings can be concatenated together just by placing string
-    // literals adjacent to each other. Esper borrows this syntax from Dart.
+    // literals adjacent to each other. Esper borrows this syntax from Dart and
+    // JavaScript.
     print(
       "A ${self.model} ${self.model} owned "
       "by ${self.owner.name} is driving",
@@ -339,28 +331,28 @@ let my_car = Car {
   owner: some_user,
 };
 
-my_car.drive(); // Prints "A Mazda Miata owned by Some User is driving".
+my_car.drive(); // Prints "A Mazda Miata owned by Some User is driving"
 ```
 
-Esper has some syntactic sugar to make this a little smoother:
+Esper has some syntactic sugar to make this a little smoother.
 
 ```rust
 let my_other_car = Car {
   make: "Nissan",
   model: "Altima",
   owner: {
-    active: true,
-    coolness_rating: 42,
-    name: "Some User",
+    active: false,
+    coolness_rating: -1,
+    name: "Another User",
   },
 };
 
-my_car.drive(); // Prints "A Nissan Altima owned by Some User is driving".
+my_car.drive(); // Prints "A Nissan Altima owned by Another User is driving"
 ```
 
 One important thing to note here is that Esper structs, like most Esper data
-structures are immutable by default. So, direct imperative mutation of Esper
-structs won't work in most situations.
+structures, are immutable by default. So, direct imperative mutation of Esper
+structs won't work in all the cases that you may be used to.
 
 ```rust
 let my_car = Car {
@@ -369,35 +361,35 @@ let my_car = Car {
   owner: some_user,
 };
 
-my_car.make = "Toyota"; // Compile time error.
+my_car.make = "Toyota"; // Compile-time error.
 ```
 
-To "change" an immutable value, we have to first clone it first as a mutable
-value.
-
-TODO(skeswa): you were here.
+To "change" a value within an immutable `struct` instance, we have to first
+clone it first as a mutable value. Esper has a special syntax for doing just
+this.
 
 ```rust
 let mut my_mut_car = my_car.mut;
 
 my_mut_car.make = "Toyota"; // This is a-ok.
+```
 
-// Luckily, Esper has some syntactic sugar to make this look a little cleaner:
+`x.mut` produces a mutable clone of `x`. Usually when you use `.mut`, you want
+to change one or more fields of a `struct`. To make this a little more
+ergonomic, Esper ships with some syntax sugar.
 
+```rust
 let my_first_car = my_car.mut {
   make: "Toyota",
   model: "Camry",
   year: 2008,
 };
+```
 
-// Notice that `my_first_car` is mutable, but you may not always want this
-// side-effect.
+Often times, mutation is needs to happen deeper in the the struct. Luckily,
+Esper allows for `mut { ... }` to be used on sub-structs too.
 
-my_first_car.make = "Ferrari"; // This isn't quite right, but is not an error.
-
-// Often times, mutation is needs to happen deeper in the the struct. Esper
-// allows for this use case with some more syntax sugar.
-
+```rust
 let my_next_car = my_immutable_first_car.mut {
   make: "Rivian",
   model: "R1T",
@@ -406,30 +398,25 @@ let my_next_car = my_immutable_first_car.mut {
   },
   year: 2023,
 };
+```
 
-// Sometimes, you just gotta mutate structs directly. This is fairly simple to
-// do in Esper. All you have to do in order to create a mutable `struct` is use
-// the `mut` at creation time:
+Sometimes, you just gotta mutate structs directly. This is fairly simple to
+do in Esper. All you have to do in order to create a mutable `struct` is use
+the `mut` at creation time:
 
+```rust
 struct Donut {
   is_tasty: bool;
 }
 
-let disappointing = mut Donut { is_tasty: false };
+// Esper infers that since the variable is declared as `mut`, the instantiated
+// `struct` is mutable.
+let mut disappointing = Donut { is_tasty: false };
 
 disappointing.is_tasty = true; // This is a-ok.
-
 ```
 
-#### Module system
 
-As mentioned above, Esper modules work a lot like Go modules. Each directory,
-and all of the source files within it, act as a single module. This means that
-all source files in the same directory act sort of like one big source file.
-Additionally, from outside of an Esper module, there is not visibility into
-anything lacking a `pub` keyword.
-
-TODO(skeswa): continue noodling
 
 ## Prototype
 
