@@ -177,7 +177,7 @@ let abc /* this is an inline comment */ = /* stick these anywhere */ 123;
 let forty_two = 42;
 ```
 
-#### Statements and expressions
+#### Expressions and statements
 
 Following Rust's lead, Esper is (mostly) an expression language.
 [Rust's documentation](https://doc.rust-lang.org/reference/statements-and-expressions.html)
@@ -207,7 +207,8 @@ Perhaps the best way to visualize this is to demonstrate an example involving
 let x = some_random_number;
 
 // Below, `message`'s value results from an `if...else if...else` expression
-// on `x`.
+// on `x`. When `x` is `4`, `message` is `"x is four"`. Also, if `x` is not `3`
+// or `4`, `message` is the empty string.
 let message = if x == 4 {
   "x is four"
 } else if x == 3 {
