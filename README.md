@@ -375,6 +375,8 @@ my_car.make = "Toyota"; // Compile time error.
 To "change" an immutable value, we have to first clone it first as a mutable
 value.
 
+TODO(skeswa): you were here.
+
 ```rust
 let mut my_mut_car = my_car.mut;
 
