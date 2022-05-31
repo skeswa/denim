@@ -42,9 +42,9 @@ just with programming languages instead.
 ## Design
 
 Esper is not designed to be fast, or sexy, or interesting, or well-suited for
-any specific domain. It should fit right into the source coce powering any ol'
-user interface, backend API, and smart fridge. Esper's guiding design
-principles, are to be maximally:
+any specific domain. It should fit right into the source code powering any ol'
+user interface, backend API, system admin script, and smart fridge. Esper's
+guiding design principles, are to be maximally:
 
 - Simple,
 - Familar,
@@ -53,11 +53,11 @@ principles, are to be maximally:
 
 Esper should never feel as esoteric and ornate as Rust, but it should feel a
 smidge more expressive than Go. It should be easy to read, follow, and document
-like Java; getting out of your way and letting you solve the damn problem like
+like Java, getting out of your way and letting you solve the damn problem like
 Node.js.
 
-Described above is language that will be difficult to design, and even harder to
-implement. My hope in all of this, at the very least, is to move the
+Described above is a language that will be difficult to design, and even harder
+to implement. My hope in all of this, at the very least, is to move the
 [Overton window](https://en.wikipedia.org/wiki/Overton_window) in a direction
 that we bet the programming world would enjoy.
 
@@ -102,26 +102,53 @@ developer ergonomics and Esper's particular domain challenges.
 
 ##### Primitives
 
-TODO(skeswa): literals
-
 Esper's primitives are mostly stolen from Go. It has:
 
 - `bool`\
   Boolean value that can be `true` or `false`.
+  
+  `bool` literals look like `true` or `false`.
 - `byte`\
   An 8-bit unsigned integer, often in strings. NOTE: in the context of a `string`,
   `byte` does not encapsulate the semantic concept of a "character" since in some
   encodings, like [UTF-8](https://developer.mozilla.org/en-US/docs/Glossary/UTF-8),
   a character may be expressed with more than one byte.
+  
+  `byte` literals are just non-negative numbers like `128`.
 - `double`\
   A 64-bit signed floating point number.
+  
+  `double` literals are either dot-delimited decimal numbers like `-12.80001`, or
+  scientific notation like `1.2e-12`.
 - `int`\
   A 64-bit signed integer number.
+  
+  `int` literals are just numbers like `11` or `-7`. Esper does not support binary,
+  hex, or octal `int` literals.
 - `rune`\
   A 32-bit unsigned integer number intended to represent the semantic concept of
   a "character" in strings.
+  
+  `rune` literals are just characters like `'k'` or `'💩'`.
 - `string`\
   A sequence of bytes semantically associated with text.
+  
+  `string` literals are usually quoted spans of text like `"hello world"`, but they
+  come in other flavors too
+  
+  ```
+  "\"With escaped characters\t";
+
+  """A
+  multiline
+  string""";
+
+  r#"
+   a raw string where \n escaped characters are not a thing
+   ";
+  ```
+  
+###### Literals
 
 ##### Tuples
 
