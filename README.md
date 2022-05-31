@@ -32,6 +32,13 @@ from these garbage-collected languages sufficient to:
 Of course, it wouldn't hurt to end up with a language that is pleasant to use
 and maintain while we're at it.
 
+## Name
+
+"Esper" is a contraction of ["Esperanto"](https://en.wikipedia.org/wiki/Esperanto).
+Esperanto was originally intended to be a universal second language for
+international communication. In a sense, Esper aspires to a similar goal -
+just with programming languages instead.
+
 ## Design
 
 Esper is not designed to be fast, or sexy, or interesting, or well-suited for
