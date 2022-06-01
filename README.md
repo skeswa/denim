@@ -147,12 +147,23 @@ Esper's primitives are mostly stolen from Go. It has:
    a raw string where \n escaped characters are not a thing
    ";
   ```
-  
-###### Literals
 
 ##### Tuples
 
-TODO(skeswa): flesh this out.
+Tuples are a fixed-size collection of different types. They can be helpful in situations where you want to group a few different pieces of data without creating a dedicated, named data structure for them. Rust Tuples are great. Why mess with a good thing? Esper Tuples are functionally identical.
+
+```rust
+// Tuple of an `int`, a `string`, and a `bool`. By the way, `let` is how we
+// create variables in Esper. We'll elaborate in depth a little later.
+let tuple = (123, "456", true);
+
+// You can read different parts of a Tuple with dot notation.
+print(tuple.0); // Prints "123"
+print(tuple.1); // Prints "456"
+print(tuple.2); // Prints "true"
+
+print(tuple.7); // Compile-time error
+```
 
 ##### Lists
 
