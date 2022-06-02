@@ -179,7 +179,29 @@ print(tuple.7); // Compile-time error
 
 ##### Lists
 
-TODO(skeswa): flesh this out.
+Perhaps the most common collection in most languages is a `List`, an ordered
+group of values. In JavaScript, it is called `Array` while in Rust it is
+called `Vec`. Esper's `List` should look feel and behave like Dart's `List`
+or JavaScript's `Array`.
+
+```rust
+// The type of `list` is inferred to be `List<int>` here.
+let list = [1, 2, 3];
+
+// You can also specify the inner type of a `List` when it
+// cannot be inferred.
+let mut another_list = <int>[];
+
+// You can add and remove from the `List` (among other other
+// helper methods).
+another_list.add(2);
+another_list.add(1);
+print(another_list); // Prints "[2, 1]"
+
+another_list.remove(2);  // Prints "[1]"
+
+<int>["this is not a number"]; // Compile-time error
+```
 
 ##### Maps
 
