@@ -40,6 +40,14 @@ intended to be a universal second language for international communication. In a
 sense, Esper aspires to a similar goal - just with programming languages
 instead.
 
+### Potential other names
+
+- **Creo**\
+  Contraction of ["Creole language"](https://en.wikipedia.org/wiki/Creole_language)
+  which this lanuage would be.
+- **Mutt**\
+  This language is a mix of the other ones and will live amongst them.
+
 ## Design
 
 Esper is not designed to be fast, or sexy, or interesting, or well-suited for
@@ -205,19 +213,15 @@ another_list.remove(2);  // Prints "[1]"
 
 ##### Maps
 
-TODO(skeswa): flesh this out.
+TODO(skeswa): flesh this out (Dart Maps).
 
 ##### Sets
 
-TODO(skeswa): flesh this out.
+TODO(skeswa): flesh this out (Dart Sets).
 
-##### Unions
+##### Type Aliases
 
-TODO(skeswa): flesh this out.
-
-##### Aliases
-
-TODO(skeswa): flesh this out.
+TODO(skeswa): flesh this out (Rust Type Aliases).
 
 #### Operators
 
@@ -593,6 +597,10 @@ TODO(skeswa): flesh this out.
 ##### Traits
 
 TODO(skeswa): flesh this out.
+
+##### Type Unions and Intersections
+
+TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS Intersections (type | type).
 
 ##### Enums
 
