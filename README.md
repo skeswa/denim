@@ -543,17 +543,17 @@ clone it first as a mutable value. Esper has a special syntax for doing just
 this.
 
 ```rust
-let mut my_mut_car = my_car.mut;
+let mut my_mut_car = my_car.clone;
 
 my_mut_car.make = "Toyota"; // This is a-ok.
 ```
 
-`x.mut` produces a mutable clone of `x`. Usually when you use `.mut`, you want
-to change one or more fields of a `struct`. To make this a little more
-ergonomic, Esper ships with some syntax sugar.
+`x.clone` produces a mutable clone of `x`. Usually when you use `.clone`,
+you want to change one or more fields of a `struct`. To make this a little
+more ergonomic, Esper ships with some syntax sugar.
 
 ```rust
-let my_first_car = my_car.mut {
+let my_first_car = my_car.clone {
   make: "Toyota",
   model: "Camry",
   year: 2008,
@@ -561,13 +561,13 @@ let my_first_car = my_car.mut {
 ```
 
 Often times, mutation is needs to happen deeper in the the struct. Luckily,
-Esper allows for `mut { ... }` to be used on sub-structs too.
+Esper allows for `clone { ... }` to be used on sub-structs too.
 
 ```rust
-let my_next_car = my_immutable_first_car.mut {
+let my_next_car = my_immutable_first_car.clone {
   make: "Rivian",
   model: "R1T",
-  user: mut {
+  user: clone {
     coolness_rating: self.coolness_rating + 1,
   },
   year: 2023,
@@ -609,6 +609,10 @@ TODO(skeswa): flesh this out.
 #### Pattern matching
 
 TODO(skeswa): flesh this out.
+
+#### Concurrency
+
+TODO(skeswa): flesh this out. This is gonna be a spicy meatball.
 
 ## Prototype
 
