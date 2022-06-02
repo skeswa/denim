@@ -79,6 +79,9 @@ programming languages/runtimes:
 - Testing is an hommage to [Dart](https://dart.dev/),
   [JavaScript](https://www.javascript.com/), and [Go](https://go.dev/)
 
+**tl;dr** "What if Rust were as easy to read/write as Dart, and as maintainable
+as Go".
+
 ### Compatibility
 
 For Esper to be useful, in needs to be able to interop with most of the major
