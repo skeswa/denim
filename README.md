@@ -34,10 +34,11 @@ and maintain while we're at it.
 
 ## Name
 
-"Esper" is a contraction of ["Esperanto"](https://en.wikipedia.org/wiki/Esperanto).
-Esperanto was originally intended to be a universal second language for
-international communication. In a sense, Esper aspires to a similar goal -
-just with programming languages instead.
+"Esper" is a contraction of
+["Esperanto"](https://en.wikipedia.org/wiki/Esperanto). Esperanto was originally
+intended to be a universal second language for international communication. In a
+sense, Esper aspires to a similar goal - just with programming languages
+instead.
 
 ## Design
 
@@ -106,36 +107,41 @@ Esper's primitives are mostly stolen from Go. It has:
 
 - `bool`\
   Boolean value that can be `true` or `false`.
-  
+
   `bool` literals look like `true` or `false`.
+
 - `byte`\
   An 8-bit unsigned integer, often in strings. NOTE: in the context of a `string`,
   `byte` does not encapsulate the semantic concept of a "character" since in some
   encodings, like [UTF-8](https://developer.mozilla.org/en-US/docs/Glossary/UTF-8),
   a character may be expressed with more than one byte.
-  
+
   `byte` literals are just non-negative numbers like `128`.
+
 - `double`\
   A 64-bit signed floating point number.
-  
-  `double` literals are either dot-delimited decimal numbers like `-12.80001`, or
-  scientific notation like `1.2e-12`.
+
+  `double` literals are either dot-delimited decimal numbers like `-12.80001`,
+  or scientific notation like `1.2e-12`.
+
 - `int`\
   A 64-bit signed integer number.
-  
-  `int` literals are just numbers like `11` or `-7`. Esper does not support binary,
-  hex, or octal `int` literals.
+
+  `int` literals are just numbers like `11` or `-7`. Esper does not support
+  binary, hex, or octal `int` literals.
+
 - `rune`\
   A 32-bit unsigned integer number intended to represent the semantic concept of
   a "character" in strings.
-  
+
   `rune` literals are just characters like `'k'` or `'💩'`.
+
 - `string`\
   A sequence of bytes semantically associated with text.
-  
-  `string` literals are usually quoted spans of text like `"hello world"`, but they
-  come in other flavors too
-  
+
+  `string` literals are usually quoted spans of text like `"hello world"`, but
+  they come in other flavors too
+
   ```
   "\"With escaped characters\t";
 
@@ -150,7 +156,10 @@ Esper's primitives are mostly stolen from Go. It has:
 
 ##### Tuples
 
-Tuples are a fixed-size collection of different types. They can be helpful in situations where you want to group a few different pieces of data without creating a dedicated, named data structure for them. Rust Tuples are great. Why mess with a good thing? Esper Tuples are functionally identical.
+Tuples are a fixed-size collection of different types. They can be helpful in
+situations where you want to group a few different pieces of data without
+creating a dedicated, named data structure for them. Rust Tuples are great. Why
+mess with a good thing? Esper Tuples are functionally identical.
 
 ```rust
 // Tuple of an `int`, a `string`, and a `bool`. By the way, `let` is how we
