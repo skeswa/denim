@@ -188,9 +188,9 @@ print(tuple.7); // Compile-time error
 ##### Lists
 
 Perhaps the most common collection in most languages is a `List`, an ordered
-group of values. In JavaScript, it is called `Array` while in Rust it is
-called `Vec`. Esper's `List` should look feel and behave like Dart's `List`
-or JavaScript's `Array`.
+group of values. In JavaScript, it is called `Array` while in Rust it is called
+`Vec`. Esper's `List` should look feel and behave like Dart's `List` or
+JavaScript's `Array`.
 
 ```rust
 // The type of `list` is inferred to be `List<int>` here.
@@ -548,9 +548,9 @@ let mut my_mut_car = my_car.clone;
 my_mut_car.make = "Toyota"; // This is a-ok.
 ```
 
-`x.clone` produces a mutable clone of `x`. Usually when you use `.clone`,
-you want to change one or more fields of a `struct`. To make this a little
-more ergonomic, Esper ships with some syntax sugar.
+`x.clone` produces a mutable clone of `x`. Usually when you use `.clone`, you
+want to change one or more fields of a `struct`. To make this a little more
+ergonomic, Esper ships with some syntax sugar.
 
 ```rust
 let my_first_car = my_car.clone {
@@ -600,7 +600,8 @@ TODO(skeswa): flesh this out.
 
 ##### Type Unions and Intersections
 
-TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS Intersections (type | type).
+TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
+Intersections (type | type).
 
 ##### Enums
 
