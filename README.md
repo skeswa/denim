@@ -163,7 +163,7 @@ Esper's primitives are mostly stolen from Go. It has:
    ";
   ```
 
-#### Special primitives
+##### Special primitives
 
 It is important to note that **Esper does not have a null-type like Go's
 `nil`**. The closest idea that Esper has in this regard is the `()` type also
