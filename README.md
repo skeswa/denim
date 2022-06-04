@@ -110,9 +110,7 @@ look like? The answer is a lot like Rust. I just happen to think that Rust gets
 a lot of stuff right. That said, expect some deviations made in the interest of
 developer ergonomics and Esper's particular domain challenges.
 
-#### Simple types
-
-##### Primitives
+#### Primitives
 
 Esper's primitives are mostly stolen from Go. It has:
 
@@ -165,7 +163,60 @@ Esper's primitives are mostly stolen from Go. It has:
    ";
   ```
 
-##### Tuples
+#### Special primitives
+
+It is important to note that **Esper does not have a null-type like Go's
+`nil`**. The closest idea that Esper has in this regard is the `()` type also
+called "unit". Since this idea is wholly stolen from Rust, we can lean on the
+[Rust docs](https://doc.rust-lang.org/std/primitive.unit.html) for a
+description:
+
+> The `()` type has exactly one value `()`, and is used when there is no other
+> meaningful value that could be returned. `()` is most commonly seen
+> implicitly: functions without a `-> ...` implicitly have return type `()`,
+> that is, these are equivalent:
+
+> ```rust
+> fn long() -> () {}
+>
+> fn short() {}
+> ```
+
+Esper also steals the `unknown` type from TypeScript. `unknown` represents all
+possible values. Every type is assignable to type `unknown`. Therefore the type
+`unknown` is a universal supertype of the type system. However, the Esper
+compiler won't allow any operation on values typed `unknown` - the values must
+first be cast to a narrower type. For more on this concept, check out
+[some information on TypeScript's `unknown`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html#new-unknown-top-type).
+
+#### Variables
+
+Esper steals variable declaration from Rust.
+
+```rust
+let abc = 123;
+```
+
+Like in Rust, Esper's `let` creates immutable variables by default. This means
+that `abc` cannot by be assigned a new value.
+
+```rust
+let abc = 123;
+abc = 321; // Compile-time error
+```
+
+To create a mutable variable, you need to use the `mut` keyword too.
+
+```rust
+let mut xyz = 123;
+
+xyz = 456; // 👍
+```
+
+Importantly, Esper does not have a notion of `const`. Instead `let` is also used
+to declare constants at the top-level lexical scope,
+
+#### Tuples
 
 Tuples are a fixed-size collection of different types. They can be helpful in
 situations where you want to group a few different pieces of data without
@@ -185,7 +236,7 @@ print(tuple.2); // Prints "true"
 print(tuple.7); // Compile-time error
 ```
 
-##### Lists
+#### Lists
 
 Perhaps the most common collection in most languages is a `List`, an ordered
 group of values. In JavaScript, it is called `Array` while in Rust it is called
@@ -206,20 +257,20 @@ another_list.add(2);
 another_list.add(1);
 print(another_list); // Prints "[2, 1]"
 
-another_list.remove(2);  // Prints "[1]"
+another_list.remove(2); // Prints "[1]"
 
 <int>["this is not a number"]; // Compile-time error
 ```
 
-##### Maps
+#### Maps
 
 TODO(skeswa): flesh this out (Dart Maps).
 
-##### Sets
+#### Sets
 
 TODO(skeswa): flesh this out (Dart Sets).
 
-##### Type Aliases
+#### Type Aliases
 
 TODO(skeswa): flesh this out (Rust Type Aliases).
 
@@ -242,32 +293,6 @@ You might be wondering where the bitwise operators are - there are none! Looking
 for operator overloads? You won't find them here.
 
 Good riddance.
-
-#### Variables
-
-Esper steals variable declaration from Rust.
-
-```rust
-let abc = 123;
-```
-
-Like in Rust, Esper's `let` creates immutable variables by default. This means
-that `abc` cannot by be assigned a new value.
-
-```rust
-let abc = 123;
-abc = 321; // Compile-time error
-```
-
-To create a mutable variable, you need to use the `mut` keyword too.
-
-```rust
-let mut xyz = 123;
-xyz = 456; // 👍
-```
-
-Importantly, Esper does not have a notion of `const`. Instead `let` is also used
-to declare constants at the top-level lexical scope,
 
 #### Comments
 
@@ -313,9 +338,9 @@ Perhaps the best way to visualize this is to demonstrate an example involving
 `if...else`, Esper's simplest branching control flow expression.
 
 ```rust
-// Pretend that `some_random_number` is defined elsewhere and is a randomly
+// Pretend that `some_random_int` is defined elsewhere and is a randomly
 // generated `int`.
-let x = some_random_number;
+let x = some_random_int;
 
 // Below, `message`'s value results from an `if...else if...else` expression
 // on `x`. When `x` is `4`, `message` is `"x is four"`. Also, if `x` is not `3`
@@ -445,9 +470,7 @@ module.
 pub let stuff_outside_of_this_module_can_see_me = true;
 ```
 
-#### Complex Types
-
-##### Structs
+#### Structs
 
 You may now be wondering how more complex data structures are created and
 managed in Esper. I'm sure you are _so_ shocked to find out that we (mostly)
@@ -538,72 +561,87 @@ let my_car = Car {
 my_car.make = "Toyota"; // Compile-time error.
 ```
 
-To "change" a value within an immutable `struct` instance, we have to first
-clone it first as a mutable value. Esper has a special syntax for doing just
-this.
+The only way to create a mutable `struct` instance is to create it with the
+`mut` keyword.
 
 ```rust
-let mut my_mut_car = my_car.clone;
+let my_mut_car = mut Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
 
-my_mut_car.make = "Toyota"; // This is a-ok.
+my_mut_car.make = "Toyota"; // 👍
 ```
 
-`x.clone` produces a mutable clone of `x`. Usually when you use `.clone`, you
-want to change one or more fields of a `struct`. To make this a little more
-ergonomic, Esper ships with some syntax sugar.
+All Esper structs can be shallow cloned with `.mut`. Therafter, the shallow
+clone can be mutated.
 
 ```rust
-let my_first_car = my_car.clone {
+let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+let my_other_car = my_car.mut;
+
+my_other_car.make = "Toyota"; // 👍
+```
+
+Often when you `.mut` something, you want to change one or more fields of a
+`struct`. To make this a little more ergonomic, Esper ships with some helpful
+syntactic sugar.
+
+```rust
+let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+let my_other_car = my_car.mut {
+  // `make` is changed, but all of the other fields stay the same.
   make: "Toyota",
-  model: "Camry",
-  year: 2008,
 };
 ```
 
-Often times, mutation is needs to happen deeper in the the struct. Luckily,
-Esper allows for `clone { ... }` to be used on sub-structs too.
+But what about when you need to change a `struct` instance within a `struct`
+instance? Given how frequently this is necessary, it felt like a good idea for
+Esper to ship with a dedicated syntax.
 
 ```rust
-let my_next_car = my_immutable_first_car.clone {
+let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+let my_other_car = my_other_car.mut {
   make: "Rivian",
   model: "R1T",
-  user: clone {
+  user: mut {
+    // `self` refers to the original value of this `User` field.
     coolness_rating: self.coolness_rating + 1,
   },
   year: 2023,
 };
 ```
 
-Sometimes, you just gotta mutate structs directly. This is fairly simple to do
-in Esper. All you have to do in order to create a mutable `struct` is use the
-`mut` at creation time:
-
-```rust
-struct Donut {
-  is_tasty: bool;
-}
-
-// Esper infers that since the variable is declared as `mut`, the instantiated
-// `struct` is mutable.
-let mut disappointing = Donut { is_tasty: false };
-
-disappointing.is_tasty = true; // This is a-ok.
-```
-
-###### Generics
+##### Generics
 
 TODO(skeswa): flesh this out.
 
-##### Traits
+#### Traits
 
 TODO(skeswa): flesh this out.
 
-##### Type Unions and Intersections
+#### Type Unions and Intersections
 
 TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
 Intersections (type | type).
 
-##### Enums
+#### Enums
 
 TODO(skeswa): flesh this out.
 
