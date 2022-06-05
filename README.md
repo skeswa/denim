@@ -117,7 +117,7 @@ Esper's primitives are mostly stolen from Go. It has:
 - `bool`\
   Boolean value that can be `true` or `false`.
 
-  `bool` literals look like `true` or `false`.
+  A `bool` literal is either `true` or `false`.
 
 - `byte`\
   An 8-bit unsigned integer, often in strings. NOTE: in the context of a `string`,
@@ -125,33 +125,33 @@ Esper's primitives are mostly stolen from Go. It has:
   encodings, like [UTF-8](https://developer.mozilla.org/en-US/docs/Glossary/UTF-8),
   a character may be expressed with more than one byte.
 
-  `byte` literals are just non-negative numbers like `128`.
+  A `byte` literal is just a non-negative number like `128`.
 
 - `double`\
   A 64-bit signed floating point number.
 
-  `double` literals are either dot-delimited decimal numbers like `-12.80001`,
+  A `double` literal is either dot-delimited decimal numbers like `-12.80001`,
   or scientific notation like `1.2e-12`.
 
 - `int`\
   A 64-bit signed integer number.
 
-  `int` literals are just numbers like `11` or `-7`. Esper does not support
-  binary, hex, or octal `int` literals.
+  An `int` literal is just a number like `11` or `-7`. Notably, Esper does not
+  support binary, hex, or octal `int` literals.
 
 - `rune`\
   A 32-bit unsigned integer number intended to represent the semantic concept of
   a "character" in strings.
 
-  `rune` literals are just characters like `'k'` or `'💩'`.
+  A `rune` literals is just a single-quoted character like `'k'` or `'💩'`.
 
 - `string`\
   A sequence of bytes semantically associated with text.
 
-  `string` literals are usually quoted spans of text like `"hello world"`, but
-  they come in other flavors too
+  A `string` literal is usually a quoted span of text like `"hello world"`, but
+  it comes in other flavors too.
 
-  ```
+  ```dart
   "\"With escaped characters\t";
 
   """A
@@ -160,7 +160,28 @@ Esper's primitives are mostly stolen from Go. It has:
 
   r#"
    a raw string where \n escaped characters are not a thing
-   ";
+   "#;
+  ```
+
+  Esper also supports Dart-style `string` concatentation. You can concatentate
+  string literals by declaring them adjacent to one another. Though many other
+  languages support it however, Esper will not support `string` concatentation
+  via the `+` operator.
+
+  ```dart
+  "this a long string that I'm' worried will end up exceeding the line limit, "
+  "but luckily I can just continue with another adjacent string on the "
+  "next line";
+  ```
+
+  `string` interpolation will look very familar to fans of
+  [ES2015+](https://babeljs.io/docs/en/learn/#template-strings) or
+  [Dart](https://dart.dev/guides/language/language-tour#strings).
+
+  ```dart
+  "${1 + 2 + 3 + 4 + 5} is fifteen";
+
+  "You can also reference $some_variable without the `{}`";
   ```
 
 ##### Special primitives
@@ -247,12 +268,13 @@ JavaScript's `Array`.
 // The type of `list` is inferred to be `List<int>` here.
 let list = [1, 2, 3];
 
-// You can also specify the inner type of a `List` when it
-// cannot be inferred.
-let another_list = mut <int>[];
+// You can also specify the inner type of a `List` when it cannot be inferred.
+//
+// Notice the `!` after `List`. In Esper, suffixing a type with `!` means that
+// it is mutable. We explain this in greater depth later.
+let another_list: List!<int> = [];
 
-// You can add and remove from the `List` (among other other
-// helper methods).
+// You can add and remove from the `List` (among other other helper methods).
 another_list.add(2);
 another_list.add(1);
 
@@ -262,7 +284,9 @@ print(another_list[0]); // Prints "2"
 
 another_list.remove(2); // Prints "[1]"
 
-<int>["this is not a number"]; // Compile-time error
+// `[]` can be also prefixed with a generic specifying its type (stolen from
+// Dart).
+<int>["this is not a number"]; // Compile-time error (`string` in a `List<int>`)
 ```
 
 #### Maps
@@ -288,7 +312,7 @@ Esper features the "usual suspects" for a C-family language:
 - `+`, `-`, `*`, `/`, and `%`\
   Arithmetic operators can only be applied to numbers of the same kind.
 - `**`, the exponentiation operator, is stolen from
-  [ES2017](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Exponentiation)
+  [Python](https://docs.python.org/3/reference/expressions.html#the-power-operator)
 - `~/`, the truncating division operator, is stolen from
   [Dart](https://api.flutter.dev/flutter/dart-core/num/operator_truncate_divide.html)
 
@@ -390,9 +414,8 @@ There is just one wrinkle with Esper functions - there are no positional
 arguments, only named arguments that can appear in any order. When a function is
 invoked, its arguments must be explicitly labeled at the call-site unless a
 variable is passed along sharing the name of an argument. There is one exception
-to this rule: if a function has just a single argument, no label is necessary.
-
-TODO(skeswa): `Optional` case, and then cover python problem Tom was talking about
+to this rule: **if a function has just a single argument, no label is
+necessary**.
 
 ```rust
 fn multiply_by_two(num: double) -> double {
@@ -410,23 +433,78 @@ print(multiply(a: 2, b: 5)); // prints "10"
 let b = 5;
 
 print(multiply(a: 2, b)); // prints "10"
+```
 
-// Oh! And one more thing, all you have to make an argument optional is give
-// it a default value:
+Esper functions can also have optional arguments. One way to accomplish this is
+to specify a default value for a parameter.
 
-fn i_cant_wait_to(action /* `: string` is inferred here */ = "take a nap") {
-  // Now seems like a good time to mention we stole string interpolation from
-  // Dart.
-  print("Time to $action!");
+```rust
+// Below Esper infers that `action` is a `string` from its default value.
+//
+// We explicitly specify a type for `times` because `= 1` would it an `int` by
+// default.
+//
+// NOTE: default values must be immutable.
+fn i_cant_wait_to(action = "take a nap", times: double = 1) {
+  print("Time to $action $times time(s)!");
 }
 
-print(i_cant_wait_to("eat donuts")); // prints "Time to eat donuts!"
-print(i_cant_wait_to()); // prints "Time to take a nap!"
+print(
+  i_cant_wait_to(
+    action: "eat donuts",
+  ), // prints "Time to eat donuts 1 time(s)!"
+);
+print(
+  i_cant_wait_to(
+    action: "eat donuts",
+    times: 1.5,
+  ), // prints "Time to eat donuts 1.5 times(s)!"
+);
+print(i_cant_wait_to()); // prints "Time to take a nap 1 times!"
+```
 
-// Esper even borrows Rust's syntax for lambda expressions (Rust calls them closures):
-let lambda_annotated = |i: i32| -> i32 { i + 1 };
+Another way to declare an optional argument is to make its type `Option<T>`.
+`Option<T>` represents an optional value of type `T`. We'll describe `Option<T>`
+in greater depth later, but it works identically to how Rust's
+[`Option<T>`](https://doc.rust-lang.org/std/option/) works.
+
+```rust
+fn measurement(scalar: double, unit: Option<string>) {
+  "$scalar"
+  // `Option::unwrap_or` is a method defined on any `Option<T>` that
+  // evaluates to the wrapped value of type `T`, if such a value exists, falling
+  // back to the specified value of type `T`. We'll cover `Option` and other
+  // enums like it a little later.
+  "${unit.unwrap_or("")}"
+}
+
+print(measurement(scalar: 12.5, unit: Some("px"))); // prints "12.5px"
+print(measurement(scalar: 12.5, unit: None)); // prints "12.5"
+```
+
+Esper also includes some syntactic sugar to make using this a little less
+verbose by allowing `Some` or `None` to be implied by the respective inclusion
+or exclusion of an argument.
+
+```rust
+print(measurement(scalar: 12.5)); // prints "12.5"
+print(measurement(scalar: 12.5, unit: "px")); // prints "12.5px"
+```
+
+Esper even borrows Rust's syntax for lambda functions.
+
+```rust
+let lambda_annotated = |i: int| -> int { i + 1 };
 let lambda_inferred  = |i     |          i + 1  ;
 ```
+
+#### Enums
+
+TODO(skeswa): flesh this out.
+
+##### Special enums
+
+TODO(skeswa): flesh this out (`Option`, `Result`).
 
 #### Modules
 
@@ -509,13 +587,18 @@ struct Car {
   // `self` is a special argument. Like in Rust, it means that this method is
   // attached to any instance of `Car`.
   fn drive(self: Car) {
-    // In Esper, strings can be concatenated together just by placing string
-    // literals adjacent to each other. Esper borrows this syntax from Dart and
-    // JavaScript.
     print(
       "A ${self.model} ${self.model} owned "
       "by ${self.owner.name} is driving",
     );
+  }
+
+  // Functions defined within a `struct` don't have to be attached to a
+  // particular instance of that struct. They can instead function like static
+  // methods in other languages. For instance, you would invoke this function
+  // with `Car::create_lemon_for(some_user)`.
+  fn create_lemon_for(owner: User) {
+    Car { make: "AMC", model: "Pacer", owner }
   }
 }
 ```
@@ -568,13 +651,12 @@ let my_car = Car {
 my_car.make = "Toyota"; // Compile-time error.
 ```
 
-The only way to create a mutable `struct` instance is to create it with the
-`mut` keyword.
-
-TODO(skeswa): perhaps left-hand mut should be distinct from right-hand mut.
+The only way to create a mutable `struct` instance is to create it with a `!`
+suffixing the `struct` type. In Esper, structs and traits with a `!` are
+internally mutable.
 
 ```rust
-let my_mut_car = mut Car {
+let my_mut_car = Car! {
   make: "Mazda",
   model: "Miata",
   owner: some_user,
@@ -583,8 +665,8 @@ let my_mut_car = mut Car {
 my_mut_car.make = "Toyota"; // 👍
 ```
 
-All Esper structs can be shallow cloned with `.fork`. Therafter, the shallow
-clone can be mutated by having the `mut` keyword in front of the expression.
+All Esper structs can be shallow cloned with `fork`. This useful when a field
+inside an immutable `struct` value should change.
 
 ```rust
 let my_car = Car {
@@ -593,33 +675,19 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = mut my_car.fork;
-
-my_car.make = "Toyota"; // 👍
-```
-
-Often when you `.fork` something, you want to change one or more fields of a
-`struct`. To make this a little more ergonomic, Esper ships with some helpful
-syntactic sugar.
-
-```rust
-let my_car = Car {
-  make: "Mazda",
-  model: "Miata",
-  owner: some_user,
-};
-
-let my_other_car = my_car.fork {
+let my_other_car = fork my_car {
   // `make` is changed, but all of the other fields stay the same.
   make: "Toyota",
 };
 
-my_car.make = "Toyota"; // Compile-time error (`my_car.fork` was not `mut`)
+print(my_car.make) // Prints "Mazda"
+print(my_other_car.make) // Prints "Toyota"
+
+my_other_car.make = "Toyota"; // Compile-time error (`my_other_car` is not a `Car!`)
 ```
 
-But what about when you need to `.fork` a `struct` instance within another
-`struct` instance? Given how frequently this is necessary, it felt like a good
-idea for Esper to ship with a dedicated syntax.
+But what if you need the forked `struct` instance to be internally mutable? This
+is made possible by suffixing `fork` with a `!`.
 
 ```rust
 let my_car = Car {
@@ -628,7 +696,23 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = my_other_car.fork {
+let my_other_car = fork! my_car;
+
+my_car.make = "Toyota"; // 👍
+```
+
+Sometimes you need to `fork` a `struct` instance nested within another `struct`
+instance. Given how frequently this is necessary, it felt like a good idea for
+Esper to ship with a dedicated syntax.
+
+```rust
+let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+let my_other_car = fork my_other_car {
   make: "Rivian",
   model: "R1T",
   user: fork {
@@ -638,14 +722,16 @@ let my_other_car = my_other_car.fork {
 };
 ```
 
-In some situations, you may want internal mutation: you way want to be able to
-directly mutate an inner `struct` instance within another `struct` instance.
-Esper supports this by declaring the inner `struct` field as `mut`.
+In some situations, you may want nested internal mutation: you way want to be
+able to directly mutate an inner `struct` instance nested within another
+`struct` instance. Esper supports this by declaring the inner `struct` field as
+mutable with `!`. Note that this nested internal mutablility is only accessible
+in situations where the surrounding type is itself mutable.
 
 ```rust
 struct House {
   address: Address;
-  owner: mut User;
+  owner: User!;
 }
 
 struct Address {
@@ -665,9 +751,9 @@ let a_house = House {
   },
 };
 
-a_house.owner.active = true; // Compile-time error (`a_house` is not a `mut House`)
+a_house.owner.active = true; // Compile-time error (`a_house` is not a `House!`)
 
-let another_house = mut House {
+let another_house = House! {
   address: {
     number: "221B",
     street: "Baker St",
@@ -680,7 +766,7 @@ let another_house = mut House {
 };
 
 a_house.owner.active = true; // 👍
-a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not `mut`)
+a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not an `Address!`)
 ```
 
 #### Traits
@@ -696,9 +782,7 @@ TODO(skeswa): flesh this out.
 TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
 Intersections (type | type).
 
-#### Enums
 
-TODO(skeswa): flesh this out.
 
 #### Pattern matching
 
