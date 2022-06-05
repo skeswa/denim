@@ -289,13 +289,76 @@ another_list.remove(2); // Prints "[1]"
 <int>["this is not a number"]; // Compile-time error (`string` in a `List<int>`)
 ```
 
+TODO(skeswa): spread notation
+
+```rust
+let x = [1, 2, 3];
+let y = [...x, 4, 5, 6];
+```
+
+TODO(skeswa): destructuring
+
+```rust
+let [first, second, ...everything_else] = y;
+```
+
 #### Maps
 
 TODO(skeswa): flesh this out (Dart Maps).
 
+```rust
+let x = {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+};
+let y = <int, unknown>{
+  1: "one",
+  2: [1, 2],
+  3: {"hello": "world"},
+};
+```
+
+TODO(skeswa): spread notation
+
+```rust
+let x = {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+};
+let y = {...x, "four": 4};
+```
+
+TODO(skeswa): destructuring
+
+```rust
+let {"one": one, "two": two, ...everything_else} = y;
+```
+
 #### Sets
 
 TODO(skeswa): flesh this out (Dart Sets).
+
+```rust
+let x = {"one", "two", "three"};
+let y = <double>{1, 2.2, 3};
+```
+
+TODO(skeswa): spread notation
+
+```rust
+let x = {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+};
+let y = {...x, "four": 4};
+```
+
+TODO(skeswa): no destructuring
+
+````
 
 #### Type Aliases
 
@@ -338,7 +401,7 @@ let abc /* this is an inline comment */ = /* stick these anywhere */ 123;
 /// 2. Dart-style `[]` code links
 ///    For example, [abc] references the variable created above explicitly.
 let forty_two = 42;
-```
+````
 
 #### Expressions and statements
 
@@ -522,29 +585,34 @@ packaging is a blend of
 [Go packages](https://www.golang-book.com/books/intro/11) and
 [ES modules](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/).
 
-TODO(skeswa): make imports absolute relative to the repo root
+Like Deno and Go, remote modules are fetched from source control with an
+accompanying version. Version is typically inferred from a tag or reference on
+the imported module repository.
 
 ```rust
-// Like Deno and Go, remote modules are fetched from source control with an
-// accompanying version. Version is typically inferred from a tag or reference
-// on the imported module repository.
 from "github.com/abc/xyz@v0.9.0" use { hello, world };
 // `as` lets you alias things you import or export.
 from "my.repo.com/foo/bar@v1.2.0-beta/nested/module" use * as module;
+```
 
-// Relative imports are a thing too. Notice how the version isn't specified -
-// this is because relatively imported modules always share the version of the
-// importing module.
+Esper allows imports from other modules in the same repository, too. These are
+called respository-relative imports. `~` always refers to the root of the
+repository containing the current module. Respository-relative imports do not
+specify a version because the version will always be the same as the current
+module.
 
-from "some/sub/module" use { something };
-from "../bing/bang" use { boom as büm };
+```rust
+from "~/bing/bang" use { boom as büm };
+from "~/some/sub/module" use { something };
+```
 
-// You can also re-export stuff using the `show` keyword.
+You can also re-export stuff using the `show` keyword.
 
+```rust
 from "github.com/abc/xyz@v0.9.0" show { hello };
 from "my.repo.com/foo/bar@v1.2.0-beta/nested/module" show *;
 
-from "../bing/bang" show { boom as büm };
+from "~/bing/bang" show { boom as büm };
 ```
 
 Like in Rust, you can export stuff from Esper modules with the `pub` keyword.
@@ -782,7 +850,9 @@ TODO(skeswa): flesh this out.
 TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
 Intersections (type | type).
 
+#### Destructuring
 
+TODO(skeswa): flesh this out.
 
 #### Pattern matching
 
@@ -791,6 +861,38 @@ TODO(skeswa): flesh this out.
 #### Concurrency
 
 TODO(skeswa): flesh this out. This is gonna be a spicy meatball.
+
+```rust
+// This blocks.
+let weather = fetch(url: "http://whatistheweather.com");
+
+// `async` makes the expression following it not block. `async` yields an
+// `Eventual<T>`.
+let x = async fetch(url: "http://google.com/favicon.ico");
+let y = async wait(Duration::new(milliseconds: 100));
+let z = async readFile(path: "./a/b/c.txt");
+
+// Promise.all(...)
+let (x, y, z) = parallel (
+  x,
+  y,
+  z
+);
+
+// Promise.allSettled(...)
+let (x, y, z) = parallel::settle (
+  x,
+  y,
+  z
+);
+
+// Promise.race(...)
+let (x, y, z) = parallel::race (
+  x,
+  y,
+  z
+);
+```
 
 ## Prototype
 
