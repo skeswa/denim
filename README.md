@@ -96,12 +96,15 @@ For Esper to be useful, in needs to be able to interop with most of the major
 languages with an established industrial presence. Esper is being developed with
 the following transpilation targets in mind:
 
-- [Dart](https://dart.dev/) for UIs
+- [Dart](https://dart.dev/) for Flutter
 - [Go](https://go.dev/) for Cloud and CLI
 - [Java](https://www.java.com/) for Android and Enterprise
 - [Python](https://www.python.org/) for Data Science
 - [Swift](https://www.python.org/) for Apple's ecosystem
 - [TypeScript](https://www.typescriptlang.org/) for Web
+
+Prototyping will likely focus on `Go` and `TypeScript` because they are
+sufficiently, popular, and generally useful.
 
 ### Tour
 
