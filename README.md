@@ -392,6 +392,8 @@ invoked, its arguments must be explicitly labeled at the call-site unless a
 variable is passed along sharing the name of an argument. There is one exception
 to this rule: if a function has just a single argument, no label is necessary.
 
+TODO(skeswa): `Optional` case, and then cover python problem Tom was talking about
+
 ```rust
 fn multiply_by_two(num: double) -> double {
   num * 2
@@ -441,6 +443,8 @@ exported by another Esper module. It might help to think of this style of
 packaging is a blend of
 [Go packages](https://www.golang-book.com/books/intro/11) and
 [ES modules](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/).
+
+TODO(skeswa): make imports absolute relative to the repo root
 
 ```rust
 // Like Deno and Go, remote modules are fetched from source control with an
@@ -566,6 +570,8 @@ my_car.make = "Toyota"; // Compile-time error.
 
 The only way to create a mutable `struct` instance is to create it with the
 `mut` keyword.
+
+TODO(skeswa): perhaps left-hand mut should be distinct from right-hand mut.
 
 ```rust
 let my_mut_car = mut Car {
