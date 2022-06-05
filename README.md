@@ -894,6 +894,17 @@ let (x, y, z) = parallel::race (
 );
 ```
 
+#### Interop
+
+TODO(skeswa): flesh this out.
+
+```rust
+#[link(go_package = "github.com/my/go@1.18/thing")]
+extern {
+  fn fetch(url: string) -> Eventual<Result<Response, FetchError>>;
+}
+```
+
 ## Prototype
 
 I think it might be a good idea to check out something like
