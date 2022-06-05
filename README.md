@@ -249,13 +249,16 @@ let list = [1, 2, 3];
 
 // You can also specify the inner type of a `List` when it
 // cannot be inferred.
-let mut another_list = <int>[];
+let another_list = mut <int>[];
 
 // You can add and remove from the `List` (among other other
 // helper methods).
 another_list.add(2);
 another_list.add(1);
+
 print(another_list); // Prints "[2, 1]"
+
+print(another_list[0]); // Prints "2"
 
 another_list.remove(2); // Prints "[1]"
 
