@@ -674,11 +674,11 @@ a_house.owner.active = true; // 👍
 a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not `mut`)
 ```
 
-##### Generics
+#### Traits
 
 TODO(skeswa): flesh this out.
 
-#### Traits
+##### Generics
 
 TODO(skeswa): flesh this out.
 
