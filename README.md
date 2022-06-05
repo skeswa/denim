@@ -574,8 +574,8 @@ let my_mut_car = mut Car {
 my_mut_car.make = "Toyota"; // 👍
 ```
 
-All Esper structs can be shallow cloned with `.mut`. Therafter, the shallow
-clone can be mutated.
+All Esper structs can be shallow cloned with `.fork`. Therafter, the shallow
+clone can be mutated by having the `mut` keyword in front of the expression.
 
 ```rust
 let my_car = Car {
@@ -584,12 +584,12 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = my_car.mut;
+let my_other_car = mut my_car.fork;
 
-my_other_car.make = "Toyota"; // 👍
+my_car.make = "Toyota"; // 👍
 ```
 
-Often when you `.mut` something, you want to change one or more fields of a
+Often when you `.fork` something, you want to change one or more fields of a
 `struct`. To make this a little more ergonomic, Esper ships with some helpful
 syntactic sugar.
 
@@ -600,15 +600,17 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = my_car.mut {
+let my_other_car = my_car.fork {
   // `make` is changed, but all of the other fields stay the same.
   make: "Toyota",
 };
+
+my_car.make = "Toyota"; // Compile-time error (`my_car.fork` was not `mut`)
 ```
 
-But what about when you need to change a `struct` instance within a `struct`
-instance? Given how frequently this is necessary, it felt like a good idea for
-Esper to ship with a dedicated syntax.
+But what about when you need to `.fork` a `struct` instance within another
+`struct` instance? Given how frequently this is necessary, it felt like a good
+idea for Esper to ship with a dedicated syntax.
 
 ```rust
 let my_car = Car {
@@ -617,15 +619,59 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = my_other_car.mut {
+let my_other_car = my_other_car.fork {
   make: "Rivian",
   model: "R1T",
-  user: mut {
+  user: fork {
     // `self` refers to the original value of this `User` field.
     coolness_rating: self.coolness_rating + 1,
   },
-  year: 2023,
 };
+```
+
+In some situations, you may want internal mutation: you way want to be able to
+directly mutate an inner `struct` instance within another `struct` instance.
+Esper supports this by declaring the inner `struct` field as `mut`.
+
+```rust
+struct House {
+  address: Address;
+  owner: mut User;
+}
+
+struct Address {
+  number: string;
+  street: string;
+}
+
+let a_house = House {
+  address: {
+    number: "42",
+    street: "Wallaby Way",
+  },
+  owner: {
+    active: false,
+    coolness_rating: -1,
+    name: "P. Sherman",
+  },
+};
+
+a_house.owner.active = true; // Compile-time error (`a_house` is not a `mut House`)
+
+let another_house = mut House {
+  address: {
+    number: "221B",
+    street: "Baker St",
+  },
+  owner: {
+    active: false,
+    coolness_rating: 99,
+    name: "S. Holmes",
+  },
+};
+
+a_house.owner.active = true; // 👍
+a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not `mut`)
 ```
 
 ##### Generics
