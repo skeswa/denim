@@ -100,7 +100,7 @@ the following transpilation targets in mind:
 - [Go](https://go.dev/) for Cloud and CLI
 - [Java](https://www.java.com/) for Android and Enterprise
 - [Python](https://www.python.org/) for Data Science
-- [Swift](https://www.python.org/) for Apple's ecosystem
+- [Swift](https://www.swift.org/) for Apple's ecosystem
 - [TypeScript](https://www.typescriptlang.org/) for Web
 
 Prototyping will likely focus on `Go` and `TypeScript` because they are
