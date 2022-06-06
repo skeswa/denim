@@ -87,8 +87,7 @@ programming languages/runtimes:
 - Testing is an hommage to [Dart](https://dart.dev/),
   [JavaScript](https://www.javascript.com/), and [Go](https://go.dev/)
 
-**tl;dr** "What if Rust were as easy to read/write as Dart, and as maintainable
-as Go".
+**tl;dr** "Dart with Rust syntax and Go's packaging model".
 
 ### Compatibility
 
