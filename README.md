@@ -320,10 +320,6 @@ print(list[2]); // Prints "3"
 print(mutable_list[0]); // Prints "2"
 
 mutable_list.remove(index: 2); // Prints "[1]"
-
-// `[]` can be also prefixed with a generic specifying its type (stolen from
-// Dart).
-<int>["this is not a number"]; // Compile-time error (`string` in a `[int]`)
 ```
 
 TODO(skeswa): spread notation
@@ -382,8 +378,8 @@ let {"one": one, "two": two, ...everything_else} = y;
 TODO(skeswa): flesh this out (Dart Sets).
 
 ```rust
-let x: {string} = {"one", "two", "three"};
-let y = <double>{1, 2.2, 3};
+let x = {"one", "two", "three"};
+let y: {double} = {1, 2.2, 3};
 ```
 
 TODO(skeswa): spread notation
