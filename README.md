@@ -56,9 +56,9 @@ user interface, backend API, system admin script, and smart fridge. Esper's
 guiding design principles, are to be maximally:
 
 - Simple,
-- Familar,
+- Familiar,
 - Practical, and
-- Compatible (with other languages)
+- Interoperable
 
 Esper should never feel as esoteric and ornate as Rust, but it should feel a
 smidge more expressive than Go. It should be easy to read, follow, and document
