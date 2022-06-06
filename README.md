@@ -262,33 +262,68 @@ print(tuple.7); // Compile-time error
 #### Lists
 
 Perhaps the most common collection in most languages is a `List`, an ordered
-group of values. In JavaScript, it is called `Array` while in Rust it is called
-`Vec`. Esper's `List` should look feel and behave like Dart's `List` or
-JavaScript's `Array`.
+sequence of values that supports random access. In JavaScript, it is called
+`Array` while in Rust it is called `Vec`. Esper lists should look feel and
+behave like Dart's `List` or JavaScript's `Array`.
 
 ```rust
-// The type of `list` is inferred to be `List<int>` here.
+// The type of `list` is inferred to be `[int]` here.
+let list = [1, 2, 3];
+```
+
+Like in other languages, Esper lists support random access by index with the
+`[]` operator.
+
+```rust
+// The type of `list` is inferred to be `[int]` here.
 let list = [1, 2, 3];
 
-// You can also specify the inner type of a `List` when it cannot be inferred.
-//
-// Notice the `!` after `List`. In Esper, suffixing a type with `!` means that
-// it is mutable. We explain this in greater depth later.
-let another_list: List!<int> = [];
+print(list[0]); // Prints "1"
+print(list[2]); // Prints "3"
 
-// You can add and remove from the `List` (among other other helper methods).
-another_list.add(2);
-another_list.add(1);
+print(list[17]); // Compile-time error
+```
 
-print(another_list); // Prints "[2, 1]"
+Need your list to be mutable? Prefix the literal with a `!`.
 
-print(another_list[0]); // Prints "2"
+```rust
+let mutable_list = ![1, 2, 3];
+```
 
-another_list.remove(2); // Prints "[1]"
+Sometimes when you have a mutable list, it starts empty. In this situation, the
+inner type of the list is ambiguous, so it falls back to `unknown` by default.
+You can help provide more type information on the variable or explicitly cast
+the array literal to correct his.
+
+```rust
+// Esper is able to infer that the list should be created mutably from its type
+// annotation, so the `!` prefix is not necessary on the list literal itself.
+let another_list: [string]! = [];
+// In Esper, like in Rust, you can cast a value with the `as` keyword.
+let yet_another_list = [] as [bool]!;
+```
+
+Esper lists have lots of helpful methods focused on mutation.
+
+```rust
+let some_list: [int]! = [];
+some_list.add(2);
+some_list.add(1);
+
+print(some_list); // Prints "[2, 1]"
+
+some_list.remove(at_index: 0);
+
+print(some_list); // Prints "[1]"
+
+print(list[2]); // Prints "3"
+print(mutable_list[0]); // Prints "2"
+
+mutable_list.remove(index: 2); // Prints "[1]"
 
 // `[]` can be also prefixed with a generic specifying its type (stolen from
 // Dart).
-<int>["this is not a number"]; // Compile-time error (`string` in a `List<int>`)
+<int>["this is not a number"]; // Compile-time error (`string` in a `[int]`)
 ```
 
 TODO(skeswa): spread notation
@@ -309,12 +344,16 @@ let [first, second, ...everything_else] = y;
 TODO(skeswa): flesh this out (Dart Maps).
 
 ```rust
+// Below, `x` is inferred to be of type `{string: int}`.
 let x = {
   "one": 1,
   "two": 2,
   "three": 3,
 };
-let y = <int, unknown>{
+
+// Below, `y` is inferred to be of type `{int: unknown}` since `unknown` is the
+// only common ancestor of `string`, `[int]`, and `{string: string}`.
+let y = {
   1: "one",
   2: [1, 2],
   3: {"hello": "world"},
@@ -343,7 +382,7 @@ let {"one": one, "two": two, ...everything_else} = y;
 TODO(skeswa): flesh this out (Dart Sets).
 
 ```rust
-let x = {"one", "two", "three"};
+let x: {string} = {"one", "two", "three"};
 let y = <double>{1, 2.2, 3};
 ```
 
@@ -360,11 +399,23 @@ let y = {...x, "four": 4};
 
 TODO(skeswa): no destructuring
 
-````
-
 #### Type Aliases
 
-TODO(skeswa): flesh this out (Rust Type Aliases).
+Esper allows you to come up with another name for an existing type using
+something called a type alias. Like Rust type aliases, Esper type aliases are
+declared with the keyword `type`. For example, the following defines the type
+`Point` as a synonym for the type `(int, int)`:
+
+```rust
+type Point = (int, int);
+
+let p: Point = (41, 68);
+```
+
+Type aliases can be useful to abbreviate long, verbose types. Type aliases also
+come in handy when attaching more semantic meaning or description to a common
+type, like a tuple in the case above, would make your code easier to reason
+about.
 
 #### Operators
 
@@ -403,7 +454,7 @@ let abc /* this is an inline comment */ = /* stick these anywhere */ 123;
 /// 2. Dart-style `[]` code links
 ///    For example, [abc] references the variable created above explicitly.
 let forty_two = 42;
-````
+```
 
 #### Expressions and statements
 
