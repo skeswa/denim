@@ -890,7 +890,17 @@ a_house.address.street = "Baker Street"; // Compile-time error (`House::address`
 
 TODO(skeswa): flesh this out.
 
-##### Generics
+#### Impls
+
+##### Importing impls
+
+TODO(skeswa): flesh this out.
+
+```rust
+from "a/b/c" use { Trait + OtherTrait for Thing, Thing::custom_impl_method };
+```
+
+#### Generics
 
 TODO(skeswa): flesh this out.
 
