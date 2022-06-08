@@ -1,6 +1,6 @@
-# Esper
+# Denim
 
-A programming language narrowly designed for code sharing across environments.
+A programming language for cross-environment code sharing.
 
 ## Pitch
 
@@ -20,9 +20,9 @@ can't we write most of our logic, constants, and types once, and use them
 anywhere? What if there was a language purely designed to be interoperable with
 other languages?
 
-Esper is that language.
+Denim is that language.
 
-The intent behind Esper is to incorporate the smallest set of common features
+The intent behind Denim is to incorporate the smallest set of common features
 from these garbage-collected languages sufficient to:
 
 - Create common types
@@ -32,27 +32,33 @@ from these garbage-collected languages sufficient to:
 Of course, it wouldn't hurt to end up with a language that is pleasant to use
 and maintain while we're at it.
 
-## Name
+## Why "Denim"?
 
-"Esper" is a contraction of
-["Esperanto"](https://en.wikipedia.org/wiki/Esperanto). Esperanto was originally
-intended to be a universal second language for international communication. In a
-sense, Esper aspires to a similar goal - just with programming languages
-instead.
+Well, because **"denim goes with everything"** _rimshot_.
+
+While our slogan is a little playful and intended to earn a few chuckles, I
+think it accurately embodies the vision of the language. Denim aims to be as
+comfortable and complementary as any well-worn pair of jeans. This is a language
+at its best as a part of your outfit (or codebase for that matter).
 
 ### Potential other names
 
 - **Creo**\
   Contraction of ["Creole language"](https://en.wikipedia.org/wiki/Creole_language)
   which this lanuage would be.
+- **Esper**\
+  "Esper" is a contraction of ["Esperanto"](https://en.wikipedia.org/wiki/Esperanto).
+  Esperanto was originally intended to be a universal second language for international
+  communication. In a sense, Denim aspires to a similar goal - just with programming
+  languages instead.
 - **Mutt**\
-  This language is a mix of the other ones and will live amongst them.
+  This language is a mix of a few other ones and will live amongst them.
 
 ## Design
 
-Esper is not designed to be fast, or sexy, or interesting, or well-suited for
+Denim is not designed to be fast, or sexy, or interesting, or well-suited for
 any specific domain. It should fit right into the source code powering any ol'
-user interface, backend API, system admin script, and smart fridge. Esper's
+user interface, backend API, system admin script, and smart fridge. Denim's
 guiding design principles, are to be maximally:
 
 - Simple,
@@ -60,7 +66,7 @@ guiding design principles, are to be maximally:
 - Practical, and
 - Interoperable
 
-Esper should never feel as esoteric and ornate as Rust, but it should feel a
+Denim should never feel as esoteric and ornate as Rust, but it should feel a
 smidge more expressive than Go. It should be easy to read, follow, and document
 like Java, getting out of your way and letting you solve the damn problem like
 Node.js.
@@ -74,7 +80,7 @@ Wish me luck.
 
 ### Inspiration
 
-As Esper is designed to feel familiar, it borrows heavily from some popular
+As Denim is designed to feel familiar, it borrows heavily from some popular
 programming languages/runtimes:
 
 - Dependency management from [Deno](https://deno.land/)
@@ -91,13 +97,14 @@ programming languages/runtimes:
 
 ### Compatibility
 
-For Esper to be useful, in needs to be able to interop with most of the major
-languages with an established industrial presence. Esper is being developed with
+For Denim to be useful, in needs to be able to interop with most of the major
+languages with an established industrial presence. Denim is being developed with
 the following transpilation targets in mind:
 
 - [Dart](https://dart.dev/) for Flutter
 - [Go](https://go.dev/) for Cloud and CLI
-- [Java](https://www.java.com/) for Android and Enterprise
+- [Kotlin](https://kotlinlang.org/) for Android and Enterprise Java
+  compatibility
 - [Python](https://www.python.org/) for Data Science
 - [Swift](https://www.swift.org/) for Apple's ecosystem
 - [TypeScript](https://www.typescriptlang.org/) for Web
@@ -107,14 +114,14 @@ sufficiently, popular, and generally useful.
 
 ### Tour
 
-There is always where you want to start with a new language - what will Esper
+There is always where you want to start with a new language - what will Denim
 look like? The answer is a lot like Rust. I just happen to think that Rust gets
 a lot of stuff right. That said, expect some deviations made in the interest of
-developer ergonomics and Esper's particular domain challenges.
+developer ergonomics and Denim's particular domain challenges.
 
 #### Primitives
 
-Esper's primitives are mostly stolen from Go. It has:
+Denim's primitives are mostly stolen from Go. It has:
 
 - `bool`\
   Boolean value that can be `true` or `false`.
@@ -138,7 +145,7 @@ Esper's primitives are mostly stolen from Go. It has:
 - `int`\
   A 64-bit signed integer number.
 
-  An `int` literal is just a number like `11` or `-7`. Notably, Esper does not
+  An `int` literal is just a number like `11` or `-7`. Notably, Denim does not
   support binary, hex, or octal `int` literals.
 
 - `rune`\
@@ -165,9 +172,9 @@ Esper's primitives are mostly stolen from Go. It has:
    "#;
   ```
 
-  Esper also supports Dart-style `string` concatentation. You can concatentate
+  Denim also supports Dart-style `string` concatentation. You can concatentate
   string literals by declaring them adjacent to one another. Though many other
-  languages support it however, Esper will not support `string` concatentation
+  languages support it however, Denim will not support `string` concatentation
   via the `+` operator.
 
   ```dart
@@ -188,8 +195,8 @@ Esper's primitives are mostly stolen from Go. It has:
 
 ##### Special primitives
 
-It is important to note that **Esper does not have a null-type like Go's
-`nil`**. The closest idea that Esper has in this regard is the `()` type also
+It is important to note that **Denim does not have a null-type like Go's
+`nil`**. The closest idea that Denim has in this regard is the `()` type also
 called "unit". Since this idea is wholly stolen from Rust, we can lean on the
 [Rust docs](https://doc.rust-lang.org/std/primitive.unit.html) for a
 description:
@@ -205,22 +212,22 @@ description:
 > fn short() {}
 > ```
 
-Esper also steals the `unknown` type from TypeScript. `unknown` represents all
+Denim also steals the `unknown` type from TypeScript. `unknown` represents all
 possible values. Every type is assignable to type `unknown`. Therefore the type
-`unknown` is a universal supertype of the type system. However, the Esper
+`unknown` is a universal supertype of the type system. However, the Denim
 compiler won't allow any operation on values typed `unknown` - the values must
 first be cast to a narrower type. For more on this concept, check out
 [some information on TypeScript's `unknown`](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html#new-unknown-top-type).
 
 #### Variables
 
-Esper steals variable declaration from Rust.
+Denim steals variable declaration from Rust.
 
 ```rust
 let abc = 123;
 ```
 
-Like in Rust, Esper's `let` creates immutable variables by default. This means
+Like in Rust, Denim's `let` creates immutable variables by default. This means
 that `abc` cannot by be assigned a new value.
 
 ```rust
@@ -236,7 +243,7 @@ let mut xyz = 123;
 xyz = 456; // 👍
 ```
 
-Importantly, Esper does not have a notion of `const`. Instead `let` is also used
+Importantly, Denim does not have a notion of `const`. Instead `let` is also used
 to declare constants at the top-level lexical scope,
 
 #### Tuples
@@ -244,11 +251,11 @@ to declare constants at the top-level lexical scope,
 Tuples are a fixed-size collection of different types. They can be helpful in
 situations where you want to group a few different pieces of data without
 creating a dedicated, named data structure for them. Rust Tuples are great. Why
-mess with a good thing? Esper Tuples are functionally identical.
+mess with a good thing? Denim Tuples are functionally identical.
 
 ```rust
 // Tuple of an `int`, a `string`, and a `bool`. By the way, `let` is how we
-// create variables in Esper. We'll elaborate in depth a little later.
+// create variables in Denim. We'll elaborate in depth a little later.
 let tuple = (123, "456", true);
 
 // You can read different parts of a Tuple with dot notation.
@@ -263,7 +270,7 @@ print(tuple.7); // Compile-time error
 
 Perhaps the most common collection in most languages is a `List`, an ordered
 sequence of values that supports random access. In JavaScript, it is called
-`Array` while in Rust it is called `Vec`. Esper lists should look feel and
+`Array` while in Rust it is called `Vec`. Denim lists should look feel and
 behave like Dart's `List` or JavaScript's `Array`.
 
 ```rust
@@ -271,7 +278,7 @@ behave like Dart's `List` or JavaScript's `Array`.
 let list = [1, 2, 3];
 ```
 
-Like in other languages, Esper lists support random access by index with the
+Like in other languages, Denim lists support random access by index with the
 `[]` operator.
 
 ```rust
@@ -296,14 +303,14 @@ You can help provide more type information on the variable or explicitly cast
 the array literal to correct his.
 
 ```rust
-// Esper is able to infer that the list should be created mutably from its type
+// Denim is able to infer that the list should be created mutably from its type
 // annotation, so the `!` prefix is not necessary on the list literal itself.
 let another_list: [string]! = [];
-// In Esper, like in Rust, you can cast a value with the `as` keyword.
+// In Denim, like in Rust, you can cast a value with the `as` keyword.
 let yet_another_list = [] as [bool]!;
 ```
 
-Esper lists have lots of helpful methods focused on mutation.
+Denim lists have lots of helpful methods focused on mutation.
 
 ```rust
 let some_list: [int]! = [];
@@ -397,8 +404,8 @@ TODO(skeswa): no destructuring
 
 #### Type Aliases
 
-Esper allows you to come up with another name for an existing type using
-something called a type alias. Like Rust type aliases, Esper type aliases are
+Denim allows you to come up with another name for an existing type using
+something called a type alias. Like Rust type aliases, Denim type aliases are
 declared with the keyword `type`. For example, the following defines the type
 `Point` as a synonym for the type `(int, int)`:
 
@@ -415,7 +422,7 @@ about.
 
 #### Operators
 
-Esper features the "usual suspects" for a C-family language:
+Denim features the "usual suspects" for a C-family language:
 
 - `&&`, `||`, `==`, and `!=`\
   Logical comparison operators work the way that you think they do. One thing to
@@ -454,7 +461,7 @@ let forty_two = 42;
 
 #### Expressions and statements
 
-Following Rust's lead, Esper is (mostly) an expression language.
+Following Rust's lead, Denim is (mostly) an expression language.
 [Rust's documentation](https://doc.rust-lang.org/reference/statements-and-expressions.html)
 does a good job describing what this means, and some of its implications:
 
@@ -468,13 +475,13 @@ does a good job describing what this means, and some of its implications:
 > sequence expression evaluation.
 
 The quoted description can be a bit difficult to fully understand, but it
-basically boils down to a simple mantra: in Esper, almost everything, including
+basically boils down to a simple mantra: in Denim, almost everything, including
 control flow like `if...else`, is an "expression" can be used like a value.
 Expressions can be terminated, and their values contained, by capping them with
 a `;` character. Loosely, a terminated expression _is_ a "statement".
 
 Perhaps the best way to visualize this is to demonstrate an example involving
-`if...else`, Esper's simplest branching control flow expression.
+`if...else`, Denim's simplest branching control flow expression.
 
 ```rust
 // Pretend that `some_random_int` is defined elsewhere and is a randomly
@@ -503,7 +510,7 @@ if !message.is_empty() {
 
 #### Functions
 
-Syntactically, Esper functions are very similar Rust functions.
+Syntactically, Denim functions are very similar Rust functions.
 
 ```rust
 // Functions can specify a return type using the `->` symbol.
@@ -522,7 +529,7 @@ fn print_hello_world() {
 }
 ```
 
-There is just one wrinkle with Esper functions - there are no positional
+There is just one wrinkle with Denim functions - there are no positional
 arguments, only named arguments that can appear in any order. When a function is
 invoked, its arguments must be explicitly labeled at the call-site unless a
 variable is passed along sharing the name of an argument. There is one exception
@@ -547,11 +554,11 @@ let b = 5;
 print(multiply(a: 2, b)); // prints "10"
 ```
 
-Esper functions can also have optional arguments. One way to accomplish this is
+Denim functions can also have optional arguments. One way to accomplish this is
 to specify a default value for a parameter.
 
 ```rust
-// Below Esper infers that `action` is a `string` from its default value.
+// Below Denim infers that `action` is a `string` from its default value.
 //
 // We explicitly specify a type for `times` because `= 1` would it an `int` by
 // default.
@@ -594,7 +601,7 @@ print(measurement(scalar: 12.5, unit: Some("px"))); // prints "12.5px"
 print(measurement(scalar: 12.5, unit: None)); // prints "12.5"
 ```
 
-Esper also includes some syntactic sugar to make using this a little less
+Denim also includes some syntactic sugar to make using this a little less
 verbose by allowing `Some` or `None` to be implied by the respective inclusion
 or exclusion of an argument.
 
@@ -603,7 +610,7 @@ print(measurement(scalar: 12.5)); // prints "12.5"
 print(measurement(scalar: 12.5, unit: "px")); // prints "12.5px"
 ```
 
-Esper even borrows Rust's syntax for lambda functions.
+Denim even borrows Rust's syntax for lambda functions.
 
 ```rust
 let lambda_annotated = |i: int| -> int { i + 1 };
@@ -620,16 +627,16 @@ TODO(skeswa): flesh this out (`Option`, `Result`).
 
 #### Modules
 
-Esper's core packaging primitive is called a "module". Modules designed to
+Denim's core packaging primitive is called a "module". Modules designed to
 define behavior, state, and types for a particular context or domain.
-Furthermore, Esper modules are intended to depend on each other through the
+Furthermore, Denim modules are intended to depend on each other through the
 import and export of behavior, state, and types.
 
-Esper modules are expressed a file system as a directory with Esper source
-files. Each source file in an Esper module has full visibility of everything
+Denim modules are expressed a file system as a directory with Denim source
+files. Each source file in an Denim module has full visibility of everything
 declared in the other source files of the module. Additionally, each source file
-can do its own importing and exporting. Esper source files can only import stuff
-exported by another Esper module. It might help to think of this style of
+can do its own importing and exporting. Denim source files can only import stuff
+exported by another Denim module. It might help to think of this style of
 packaging is a blend of
 [Go packages](https://www.golang-book.com/books/intro/11) and
 [ES modules](https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/).
@@ -644,7 +651,7 @@ from "github.com/abc/xyz@v0.9.0" use { hello, world };
 from "my.repo.com/foo/bar@v1.2.0-beta/nested/module" use * as module;
 ```
 
-Esper allows imports from other modules in the same repository, too. These are
+Denim allows imports from other modules in the same repository, too. These are
 called respository-relative imports. `~` always refers to the root of the
 repository containing the current module. Respository-relative imports do not
 specify a version because the version will always be the same as the current
@@ -664,7 +671,7 @@ from "my.repo.com/foo/bar@v1.2.0-beta/nested/module" show *;
 from "~/bing/bang" show { boom as büm };
 ```
 
-Like in Rust, you can export stuff from Esper modules with the `pub` keyword.
+Like in Rust, you can export stuff from Denim modules with the `pub` keyword.
 Anything not declared with a `pub` will only be visible to things in its own
 module.
 
@@ -675,7 +682,7 @@ pub let stuff_outside_of_this_module_can_see_me = true;
 #### Structs
 
 You may now be wondering how more complex data structures are created and
-managed in Esper. I'm sure you are _so_ shocked to find out that we (mostly)
+managed in Denim. I'm sure you are _so_ shocked to find out that we (mostly)
 stole Rust syntax here too.
 
 ```rust
@@ -691,7 +698,7 @@ pub struct User {
 
 You may notice that we opted to go with `;` to terminate field declarations
 instead of `,`. This is mostly to make adding methods to structs feel more
-natural. That's right! Esper sugarifies Rust's default `impl` by simply allowing
+natural. That's right! Denim sugarifies Rust's default `impl` by simply allowing
 you to declare methods within the `struct` itself. This should feel familiar to
 anyone coming from a language that makes heavy use of classes.
 
@@ -738,7 +745,7 @@ let my_car = Car {
 my_car.drive(); // Prints "A Mazda Miata owned by Some User is driving"
 ```
 
-Esper has some syntactic sugar to make this a little smoother.
+Denim has some syntactic sugar to make this a little smoother.
 
 ```rust
 let my_other_car = Car {
@@ -754,8 +761,8 @@ let my_other_car = Car {
 my_car.drive(); // Prints "A Nissan Altima owned by Another User is driving"
 ```
 
-One important thing to note here is that Esper structs, like most Esper data
-structures, are immutable by default. So, direct imperative mutation of Esper
+One important thing to note here is that Denim structs, like most Denim data
+structures, are immutable by default. So, direct imperative mutation of Denim
 structs won't work in all the cases that you may be used to.
 
 ```rust
@@ -769,7 +776,7 @@ my_car.make = "Toyota"; // Compile-time error.
 ```
 
 The only way to create a mutable `struct` instance is to create it with a `!`
-suffixing the `struct` type. In Esper, structs and traits with a `!` are
+suffixing the `struct` type. In Denim, structs and traits with a `!` are
 internally mutable.
 
 ```rust
@@ -782,7 +789,7 @@ let my_mut_car = Car! {
 my_mut_car.make = "Toyota"; // 👍
 ```
 
-All Esper structs can be shallow cloned with `fork`. This useful when a field
+All Denim structs can be shallow cloned with `fork`. This useful when a field
 inside an immutable `struct` value should change.
 
 ```rust
@@ -820,7 +827,7 @@ my_car.make = "Toyota"; // 👍
 
 Sometimes you need to `fork` a `struct` instance nested within another `struct`
 instance. Given how frequently this is necessary, it felt like a good idea for
-Esper to ship with a dedicated syntax.
+Denim to ship with a dedicated syntax.
 
 ```rust
 let my_car = Car {
@@ -841,7 +848,7 @@ let my_other_car = fork my_other_car {
 
 In some situations, you may want nested internal mutation: you way want to be
 able to directly mutate an inner `struct` instance nested within another
-`struct` instance. Esper supports this by declaring the inner `struct` field as
+`struct` instance. Denim supports this by declaring the inner `struct` field as
 mutable with `!`. Note that this nested internal mutablility is only accessible
 in situations where the surrounding type is itself mutable.
 
