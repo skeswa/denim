@@ -48,7 +48,7 @@ any specific domain. It should fit right into the source code powering any ol'
 user interface, backend API, system admin script, and smart fridge. Denim's
 guiding design principles, are to be maximally:
 
-- Simple,
+- Comfortable,
 - Familiar,
 - Practical, and
 - Interoperable
@@ -389,6 +389,14 @@ let y = {...x, "four": 4};
 
 TODO(skeswa): no destructuring
 
+#### Enums
+
+TODO(skeswa): flesh this out.
+
+##### Special enums
+
+TODO(skeswa): flesh this out (`Option`, `Result`).
+
 #### Type Aliases
 
 Denim allows you to come up with another name for an existing type using
@@ -597,20 +605,35 @@ print(measurement(scalar: 12.5)); // prints "12.5"
 print(measurement(scalar: 12.5, unit: "px")); // prints "12.5px"
 ```
 
-Denim even borrows Rust's syntax for lambda functions.
+Denim borrows Rust's syntax for lambda functions. Denim lambdas differ from
+functions declared with the keyword `fn` in two main ways:
+
+- Whereas typical functions cannot be anonymous, lambdas can
+- Lambda function arguments are plain-ol-positional-arguments. Calling lambda
+  functions with more than one argument does not require that the arguments be
+  labeled.
 
 ```rust
 let lambda_annotated = |i: int| -> int { i + 1 };
 let lambda_inferred  = |i     |          i + 1  ;
+
+let sum_three = |a: int, b: int, c: int| -> int { a + b + c };
+
+let also_sum_three: |int, int, int| -> int = |a, b, c| a + b + c;
+
+print(sum_three(1, 2, 3)); // Prints "6"
 ```
 
-#### Enums
+There are two ways to describe functions with types,
 
-TODO(skeswa): flesh this out.
-
-##### Special enums
-
-TODO(skeswa): flesh this out (`Option`, `Result`).
+1.  Lambda function types
+    ```rust
+    |int, int, int| -> int
+    ```
+2.  Named function types
+    ```rust
+    Fn(a: int, b: int, c: int) -> int
+    ```
 
 #### Modules
 
