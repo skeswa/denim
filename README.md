@@ -1,6 +1,6 @@
 # 👖 Denim
 
-A programming language for cross-environment code sharing.
+A programming language for cross-platform code sharing.
 
 ## Pitch
 
@@ -8,11 +8,12 @@ So, you know how pretty much every modern, garbage-collected language feels
 eerily like the others lately? I think we can blame this phenomenon on the fact
 that many of these languages are converging on the same features and concepts;
 how many languages have added first-class functions, co-routines, data classes,
-and language-level immutablity recently? The only _tangible_ differences between
-one language and another are the ecosystems and platforms that they can unlock
-for you. Go gets you into the cloud and terminal ecosystems, while JS/TS gets
-you into the browser and to the edge. Swift and Kotlin get you onto phones, and
-with C# you can ship on an Xbox.
+and language-level immutablity recently?
+
+The only _tangible_ differences between one language and another are the
+ecosystems and platforms that they can unlock for you. Go gets you into the
+cloud and terminal ecosystems, while JS/TS gets you into the browser and to the
+edge. Swift and Kotlin get you onto phones, and with C# you can ship on an Xbox.
 
 And it got me thinking: **if the languages we use to write our apps are this
 similar, why on earth are we writing the same logic over and over again?** Why
