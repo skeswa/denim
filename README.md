@@ -41,19 +41,6 @@ think it accurately embodies the vision of the language. Denim aims to be as
 comfortable and complementary as any well-worn pair of jeans. This is a language
 at its best as a part of your outfit (or codebase for that matter).
 
-### Potential other names
-
-- **Creo**\
-  Contraction of ["Creole language"](https://en.wikipedia.org/wiki/Creole_language)
-  which this lanuage would be.
-- **Esper**\
-  "Esper" is a contraction of ["Esperanto"](https://en.wikipedia.org/wiki/Esperanto).
-  Esperanto was originally intended to be a universal second language for international
-  communication. In a sense, Denim aspires to a similar goal - just with programming
-  languages instead.
-- **Mutt**\
-  This language is a mix of a few other ones and will live amongst them.
-
 ## Design
 
 Denim is not designed to be fast, or sexy, or interesting, or well-suited for
