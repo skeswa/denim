@@ -284,10 +284,10 @@ print(list[2]); // Prints "3"
 print(list[17]); // Compile-time error
 ```
 
-Need your list to be mutable? Prefix the literal with a `!`.
+Need your list to be mutable? Suffix the literal with a `!`.
 
 ```rust
-let mutable_list = ![1, 2, 3];
+let mutable_list = [1, 2, 3]!;
 ```
 
 Sometimes when you have a mutable list, it starts empty. In this situation, the
