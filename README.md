@@ -1,4 +1,4 @@
-# Denim
+# 👖 Denim
 
 A programming language for cross-environment code sharing.
 
