@@ -254,11 +254,30 @@ print(tuple.2); // Prints "true"
 print(tuple.7); // Compile-time error
 ```
 
+While Denim Tuples are always immutable, they can be quite ergonomic to use and
+manipulate. Tuples can be composed together via the `...` operator, and split
+apart in a similar way through de-structuring.
+
+```rust
+let x = (1.2e-3, 'e', false);
+let y = ("yo", ...x, x.1);
+
+print(y); // Prints "(yo, 0.0012, e, false, e)"
+
+let (first, ...middle_stuff, last) = y;
+
+print(first); // Prints "yo"
+print(third); // Prints "e"
+
+// NOTE: `middle_stuff` is itself a Tuple.
+print(middle_stuff); // Prints "(0.0012, e, false)"
+```
+
 #### Array
 
 Perhaps the most common collection in most languages is an array - an ordered
 sequence of values that supports random access. In JavaScript, it is called
-`Array` while in Rust it is called `Vec`. Denim arrays should look feel and
+`Array` while in Rust it is called `Vec`. Denim Arrays should look feel and
 behave like Dart's `List` or JavaScript's `Array`.
 
 ```rust
@@ -266,7 +285,7 @@ behave like Dart's `List` or JavaScript's `Array`.
 let array = [1, 2, 3];
 ```
 
-Like in other languages, Denim arrays support random access by index with the
+Like in other languages, Denim Arrays support random access by index with the
 `[]` operator.
 
 ```rust
@@ -279,26 +298,26 @@ print(array[2]); // Prints "3"
 print(array[17]); // Compile-time error
 ```
 
-Need your array to be mutable? Suffix the literal with a `!`.
+Need your Array to be mutable? Suffix the literal with a `!`.
 
 ```rust
 let mutable_array = [1, 2, 3]!;
 ```
 
-Sometimes when you have a mutable array, it starts empty. In this situation, the
-inner type of the array is ambiguous, so it falls back to `unknown` by default.
+Sometimes when you have a mutable Array, it starts empty. In this situation, the
+inner type of the Array is ambiguous, so it falls back to `unknown` by default.
 You can help provide more type information on the variable or explicitly cast
-the array literal to correct his.
+the Array literal to correct his.
 
 ```rust
-// Denim is able to infer that the array should be created mutably from its type
-// annotation, so the `!` prefix is not necessary on the array literal itself.
+// Denim is able to infer that the Array should be created mutably from its type
+// annotation, so the `!` prefix is not necessary on the Array literal itself.
 let another_array: [string]! = [];
 // In Denim, like in Rust, you can cast a value with the `as` keyword.
 let yet_another_array = [] as [bool]!;
 ```
 
-Denim arrays have lots of helpful methods focused on mutation.
+Denim Arrays have lots of helpful methods focused on mutation.
 
 ```rust
 let some_array: [int]! = [];
@@ -315,7 +334,7 @@ print(array[2]); // Prints "3"
 print(mutable_array[0]); // Prints "2"
 ```
 
-Denim arrays are spreadable with `...` just like JavaScript arrays.
+Denim Arrays are spreadable with `...` just like JavaScript arrays.
 
 ```rust
 let x = [1, 2, 3];
@@ -323,7 +342,7 @@ let y = [...x, 4, 5, 6];
 ```
 
 Denim allows for ergonomic slicing and dicing of arrays via de-structuring.
-Denim array de-structuring is very similar to JavaScript `Array` de-structuring.
+Denim Array de-structuring is very similar to JavaScript `Array` de-structuring.
 
 ```rust
 let y = [1, 2, 3, 4, 5, 6];
