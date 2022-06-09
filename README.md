@@ -756,11 +756,52 @@ stole Rust syntax here too.
 // We can make some or even all of the `struct` or its fields visible to
 // external modules using the `pub` keyword.
 pub struct User {
-  /// You can put doc comments on fields like this.
-  active: bool;
+  active = false;
+  /// You can put doc comments directly on `struct` fields.
   coolness_rating: int;
   pub name: string;
+  pub nickname: Option<string>;
 }
+```
+
+We can instantiate and use `struct` like this:
+
+```rust
+let some_user = User {
+  active: true,
+  coolness_rating: 42,
+  name: "Some User",
+  nickname: None,
+};
+```
+
+In the `User` `struct` above, two fields are optional - `active` and `nickname`.
+`active` is made optional by the specification of a default value for it,
+`false`. `nickname` is optional because it is of type `Option<T>`. Optional
+fields may be excluded when a struct is instantiated.
+
+```rust
+let sam = User {
+  coolness_rating: 11,
+  name: "Sam",
+  // Since `nickname` is an `Option<string>` we can simply specify a `string`.
+  nickname: "S-money",
+};
+
+let tria = User {
+  active: true,
+  coolness_rating: 12,
+  name: "Tria",
+};
+
+print(tria.nickname); // Prints "None".
+
+let jen = User {
+  active: true,
+  coolness_rating: 13,
+  name: "Jen",
+  nickname: Some("Jenners"),
+};
 ```
 
 You may notice that we opted to go with `;` to terminate field declarations
@@ -792,11 +833,7 @@ struct Car {
     Car { make: "AMC", model: "Pacer", owner }
   }
 }
-```
 
-We can instantiate and use `struct` like this:
-
-```rust
 let some_user = User {
   active: true,
   coolness_rating: 42,
@@ -812,7 +849,8 @@ let my_car = Car {
 my_car.drive(); // Prints "A Mazda Miata owned by Some User is driving"
 ```
 
-Denim has some syntactic sugar to make this a little smoother.
+As structs a big part of the language, Denim has some syntactic sugar to make
+instantiating nested structs ergonomic.
 
 ```rust
 let my_other_car = Car {
@@ -936,7 +974,6 @@ let a_house = House {
     street: "Wallaby Way",
   },
   owner: {
-    active: false,
     coolness_rating: -1,
     name: "P. Sherman",
   },
@@ -950,7 +987,6 @@ let another_house = House! {
     street: "Baker St",
   },
   owner: {
-    active: false,
     coolness_rating: 99,
     name: "S. Holmes",
   },
@@ -983,9 +1019,39 @@ TODO(skeswa): flesh this out.
 TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
 Intersections (type | type).
 
-#### Destructuring
+#### Error handling
 
 TODO(skeswa): flesh this out.
+
+```rust
+let csv_file_path = "a/b/c.csv";
+
+let csv_data = read_file(csv_file_path);
+
+// `parsed_csv` is a `Result<string>` because the last expression evaluates to a
+// `Result<string>`.
+let parsed_csv = try "opening CSV file $csv_file_path" {
+  // Inside `try` terminating an expression of type `Result<T>` with a `try`
+  // unwraps it.
+  let csv_data = read_file(csv_file_path);
+
+  parse_csv(csv_data)
+};
+
+// `x` is a `Result<()>` because
+let x = try "dancing a serious jig" {
+  basic_dance_move();
+  advanced_dance_move();
+  basic_dance_move();
+};
+```
+
+```rust
+struct Error<Kind> {
+  pub kind: Option<Kind>;
+  pub message: string;
+}
+```
 
 #### Pattern matching
 
