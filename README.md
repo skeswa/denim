@@ -281,7 +281,7 @@ sequence of values that supports random access. In JavaScript, it is called
 behave like Dart's `List` or JavaScript's `Array`.
 
 ```rust
-// The type of `array` is inferred to be `[int]` here.
+c
 let array = [1, 2, 3];
 ```
 
@@ -326,7 +326,7 @@ some_array.add(1);
 
 print(some_array); // Prints "[2, 1]"
 
-some_array.remove(at_index: 0);
+some_array.remove_at(0);
 
 print(some_array); // Prints "[1]"
 
@@ -338,7 +338,9 @@ Denim Arrays are spreadable with `...` just like JavaScript arrays.
 
 ```rust
 let x = [1, 2, 3];
-let y = [...x, 4, 5, 6];
+let y = [...x, 4, 5, ...x, 6];
+
+print(y); // Prints "[1, 2, 3, 4, 5, 1, 2, 3, 6]"
 ```
 
 Denim allows for ergonomic slicing and dicing of arrays via de-structuring.
@@ -351,9 +353,19 @@ let [first, second, ...middle_stuff, last] = y;
 
 print(first); // Prints "1"
 print(second); // Prints "2"
-print(middle_stuff); // Prints "3, 4, 5"
 print(last); // Prints "6"
+
+// NOTE: `middle_stuff` is itself an Array.
+print(middle_stuff); // Prints "[3, 4, 5]"
 ```
+
+#### Enums
+
+TODO(skeswa): flesh this out.
+
+##### Special enums
+
+TODO(skeswa): flesh this out (`Option`, `Result`).
 
 #### Maps
 
@@ -367,13 +379,39 @@ let x = {
   "three": 3,
 };
 
-// Below, `y` is inferred to be of type `{int: unknown}` since `unknown` is the
-// only common ancestor of `string`, `[int]`, and `{string: string}`.
-let y = {
+let y: {string: unknown} = {
   1: "one",
   2: [1, 2],
   3: {"hello": "world"},
 };
+
+print(x["one"]); // Prints "Some(1)"
+print(y[2]); // Prints "Some([1, 2])"
+
+print(x["four"]); // Prints "None"
+print(y[7]); // Prints "None"
+```
+
+Denim Maps, like other Denim data structures, are made mutable with a `!`
+suffix.
+
+```rust
+let mutable_map = {"one": 1, "two": 2}!;
+```
+
+Mutable Denim Maps feature useful methods and operators stolen from the Maps of
+other languages.
+
+```rust
+let mutable_map: {string: string}! = {};
+mutable_map["hello"] = "world";
+mutable_map["foo"] = "bar";
+
+print(mutable_map); // Prints "{hello: world, foo: bar}"
+
+mutable_map.remove_key("hello");
+
+print(mutable_map); // Prints "{foo: bar}"
 ```
 
 TODO(skeswa): spread notation
@@ -398,6 +436,7 @@ let {"one": one, "two": two, ...everything_else} = y;
 TODO(skeswa): flesh this out (Dart Sets).
 
 ```rust
+// The type of `x` is inferred to be `[string]` here.
 let x = {"one", "two", "three"};
 let y: {double} = {1, 2.2, 3};
 ```
@@ -414,14 +453,6 @@ let y = {...x, "four": 4};
 ```
 
 TODO(skeswa): no destructuring
-
-#### Enums
-
-TODO(skeswa): flesh this out.
-
-##### Special enums
-
-TODO(skeswa): flesh this out (`Option`, `Result`).
 
 #### Type Aliases
 
@@ -976,26 +1007,15 @@ let z: Eventual<Result<string>> = async readFile(path: "./a/b/c.txt");
 
 let foregrounded_x: Response = await x;
 
-// Promise.all(...)
-let (x, y, z) = wait (
+// Special blocking syntax.
+let (x, y, z) = parallel {
   x,
   y,
-  z
-); // or Iterable<Eventual<T>|T>
+  z,
+};
 
-// Promise.allSettled(...)
-let (x, y, z) = settle (
-  x,
-  y,
-  z
-); // or Iterable<Eventual<T>|T>
-
-// Promise.race(...)
-let (x, y, z) = race (
-  x,
-  y,
-  z
-); // or Iterable<Eventual<T>|T>
+let results: [Result<Response>] = await [x, x, x].all();
+let result: Result<Response> = await [x, x, x].race();
 ```
 
 #### Interop
@@ -1015,8 +1035,3 @@ extern {
 #### Testing
 
 TODO(skeswa): flesh this out.
-
-## Prototype
-
-I think it might be a good idea to check out something like
-[lalrpop](http://lalrpop.github.io/lalrpop/).
