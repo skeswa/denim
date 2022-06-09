@@ -254,80 +254,86 @@ print(tuple.2); // Prints "true"
 print(tuple.7); // Compile-time error
 ```
 
-#### Lists
+#### Array
 
-Perhaps the most common collection in most languages is a `List`, an ordered
+Perhaps the most common collection in most languages is an array - an ordered
 sequence of values that supports random access. In JavaScript, it is called
-`Array` while in Rust it is called `Vec`. Denim lists should look feel and
+`Array` while in Rust it is called `Vec`. Denim arrays should look feel and
 behave like Dart's `List` or JavaScript's `Array`.
 
 ```rust
-// The type of `list` is inferred to be `[int]` here.
-let list = [1, 2, 3];
+// The type of `array` is inferred to be `[int]` here.
+let array = [1, 2, 3];
 ```
 
-Like in other languages, Denim lists support random access by index with the
+Like in other languages, Denim arrays support random access by index with the
 `[]` operator.
 
 ```rust
-// The type of `list` is inferred to be `[int]` here.
-let list = [1, 2, 3];
+// The type of `array` is inferred to be `[int]` here.
+let array = [1, 2, 3];
 
-print(list[0]); // Prints "1"
-print(list[2]); // Prints "3"
+print(array[0]); // Prints "1"
+print(array[2]); // Prints "3"
 
-print(list[17]); // Compile-time error
+print(array[17]); // Compile-time error
 ```
 
-Need your list to be mutable? Suffix the literal with a `!`.
+Need your array to be mutable? Suffix the literal with a `!`.
 
 ```rust
-let mutable_list = [1, 2, 3]!;
+let mutable_array = [1, 2, 3]!;
 ```
 
-Sometimes when you have a mutable list, it starts empty. In this situation, the
-inner type of the list is ambiguous, so it falls back to `unknown` by default.
+Sometimes when you have a mutable array, it starts empty. In this situation, the
+inner type of the array is ambiguous, so it falls back to `unknown` by default.
 You can help provide more type information on the variable or explicitly cast
 the array literal to correct his.
 
 ```rust
-// Denim is able to infer that the list should be created mutably from its type
-// annotation, so the `!` prefix is not necessary on the list literal itself.
-let another_list: [string]! = [];
+// Denim is able to infer that the array should be created mutably from its type
+// annotation, so the `!` prefix is not necessary on the array literal itself.
+let another_array: [string]! = [];
 // In Denim, like in Rust, you can cast a value with the `as` keyword.
-let yet_another_list = [] as [bool]!;
+let yet_another_array = [] as [bool]!;
 ```
 
-Denim lists have lots of helpful methods focused on mutation.
+Denim arrays have lots of helpful methods focused on mutation.
 
 ```rust
-let some_list: [int]! = [];
-some_list.add(2);
-some_list.add(1);
+let some_array: [int]! = [];
+some_array.add(2);
+some_array.add(1);
 
-print(some_list); // Prints "[2, 1]"
+print(some_array); // Prints "[2, 1]"
 
-some_list.remove(at_index: 0);
+some_array.remove(at_index: 0);
 
-print(some_list); // Prints "[1]"
+print(some_array); // Prints "[1]"
 
-print(list[2]); // Prints "3"
-print(mutable_list[0]); // Prints "2"
-
-mutable_list.remove(index: 2); // Prints "[1]"
+print(array[2]); // Prints "3"
+print(mutable_array[0]); // Prints "2"
 ```
 
-TODO(skeswa): spread notation
+Denim arrays are spreadable with `...` just like JavaScript arrays.
 
 ```rust
 let x = [1, 2, 3];
 let y = [...x, 4, 5, 6];
 ```
 
-TODO(skeswa): destructuring
+Denim allows for ergonomic slicing and dicing of arrays via de-structuring.
+Denim array de-structuring is very similar to JavaScript `Array` de-structuring.
 
 ```rust
-let [first, second, ...everything_else] = y;
+let y = [1, 2, 3, 4, 5, 6];
+
+let [first, second, ...middle_stuff, last] = y;
+
+print(first); // Prints "1"
+print(second); // Prints "2"
+print(middle_stuff); // Prints "3, 4, 5"
+print(last); // Prints "6"
 ```
 
 #### Maps
@@ -945,30 +951,32 @@ let weather = fetch(url: "http://whatistheweather.com");
 
 // `async` makes the expression following it not block. `async` yields an
 // `Eventual<T>`.
-let x = async fetch(url: "http://google.com/favicon.ico");
-let y = async wait(Duration::new(milliseconds: 100));
-let z = async readFile(path: "./a/b/c.txt");
+let x: Eventual<Result<Response>> = async fetch(url: "http://google.com/favicon.ico");
+let y: Eventual<()> = async pause(Duration::new(milliseconds: 100));
+let z: Eventual<Result<string>> = async readFile(path: "./a/b/c.txt");
+
+let foregrounded_x: Response = await x;
 
 // Promise.all(...)
-let (x, y, z) = parallel (
+let (x, y, z) = wait (
   x,
   y,
   z
-);
+); // or Iterable<Eventual<T>|T>
 
 // Promise.allSettled(...)
-let (x, y, z) = parallel::settle (
+let (x, y, z) = settle (
   x,
   y,
   z
-);
+); // or Iterable<Eventual<T>|T>
 
 // Promise.race(...)
-let (x, y, z) = parallel::race (
+let (x, y, z) = race (
   x,
   y,
   z
-);
+); // or Iterable<Eventual<T>|T>
 ```
 
 #### Interop
@@ -976,11 +984,18 @@ let (x, y, z) = parallel::race (
 TODO(skeswa): flesh this out.
 
 ```rust
-#[link(go_package = "github.com/my/go@1.18/thing")]
+#[link(
+  go_package: "~/path/to/go/package",
+  ts_module: "~/path/to/ts/file",
+)]
 extern {
   fn fetch(url: string) -> Eventual<Result<Response, FetchError>>;
 }
 ```
+
+#### Testing
+
+TODO(skeswa): flesh this out.
 
 ## Prototype
 
