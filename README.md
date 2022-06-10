@@ -234,6 +234,28 @@ xyz = 456; // 👍
 Importantly, Denim does not have a notion of `const`. Instead `let` is also used
 to declare constants at the top-level lexical scope,
 
+#### Printing
+
+Denim ships with two main ways to print out to the console, `print` and
+`eprint`.
+
+`print` is a function (explained in greater depth later) that takes a `string`
+which it prints to its own line in the console. In the browser, this means it
+calls `console.log(...)` under the hood. Outside of the browser, it appends a
+line to stdout.
+
+```rust
+print("hello world"); // Prints "hello world" on its own line.
+```
+
+`eprint` is another version of `print` intended for warnings, log messages, and
+errors. In the browser, this means it calls `console.warn(...)` under the hood.
+Outside of the browser, it appends a line to `stderr`.
+
+```rust
+eprint("uh oh"); // Prints "uh oh" on its own line.
+```
+
 #### Tuples
 
 Tuples are a fixed-size collection of different types. They can be helpful in
@@ -1050,8 +1072,8 @@ TODO(skeswa): flesh this out.
 
 ```rust
 trait Error {
-  pub cause: Option<Error>;
-  pub message: string;
+  pub cause(self: Error) -> Option<Error>;
+  pub message(self: Error) -> string;
 }
 ```
 
@@ -1072,6 +1094,13 @@ TODO(skeswa): flesh this out. This is gonna be a spicy meatball.
 ```rust
 // This blocks.
 let weather = fetch(url: "http://whatistheweather.com");
+
+// Special blocking syntax for stuff that should happen at all once.
+let (x, y, z) = parallel {
+  fetch(url: "http://google.com/favicon.ico"),
+  pause(Duration::new(milliseconds: 100)),
+  readFile(path: "./a/b/c.txt"),
+};
 
 // `async` makes the expression following it not block. `async` yields an
 // `Eventual<T>`.
