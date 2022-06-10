@@ -1038,7 +1038,7 @@ let parsed_csv = try "opening CSV file $csv_file_path" {
   parse_csv(csv_data)
 };
 
-// `x` is a `Result<()>` because
+// `x` is a `Result<()>` because the block does not terminate in an expression.
 let x = try "dancing a serious jig" {
   basic_dance_move();
   advanced_dance_move();
@@ -1046,11 +1046,19 @@ let x = try "dancing a serious jig" {
 };
 ```
 
+TODO(skeswa): flesh this out.
+
 ```rust
-struct Error<Kind> {
-  pub kind: Option<Kind>;
+trait Error {
+  pub cause: Option<Error>;
   pub message: string;
 }
+```
+
+TODO(skeswa): flesh this out.
+
+```rust
+panic("Oh no! We cannot recover from this!");
 ```
 
 #### Pattern matching
