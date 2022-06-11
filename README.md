@@ -480,14 +480,6 @@ print(
 ); // Prints "false"
 ```
 
-One common use case when dealing with enums is enumerating every `enum` variant.
-Denim allows for this with the `.variants()` method implemented for every
-`enum`.
-
-```rust
-print(Triangle::variants()); // Prints "[Triangle::Equilateral, Triangle::Isoceles, Triangle::Scalene]"
-```
-
 ##### Special enums
 
 TODO(skeswa): flesh this out (`Option`, `Result`).
