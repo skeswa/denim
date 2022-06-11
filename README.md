@@ -303,7 +303,6 @@ sequence of values that supports random access. In JavaScript, it is called
 behave like Dart's `List` or JavaScript's `Array`.
 
 ```rust
-c
 let array = [1, 2, 3];
 ```
 
@@ -356,6 +355,14 @@ print(array[2]); // Prints "3"
 print(mutable_array[0]); // Prints "2"
 ```
 
+Denim Arrays ship with special syntax to instantiate arrays with a fixed number
+of identical values.
+
+```rust
+let eight_zeroes = [0; 8]; // `eight_zeroes` is an `[int]`
+let four_strings = [""; 4]; // `eight_zeroes` is an `[string]`
+```
+
 Denim Arrays are spreadable with `...` just like JavaScript arrays.
 
 ```rust
@@ -383,7 +390,103 @@ print(middle_stuff); // Prints "[3, 4, 5]"
 
 #### Enums
 
-TODO(skeswa): flesh this out.
+Enums are a great way to model data that is best described in categories. For
+example, the concept of "days of the week" _could_ be accurately described a
+`string`, but since there are only seven kinds of them, `enum` is a better fit.
+`enum` allows you to explicitly enumerate each variant.
+
+```rust
+enum DayOfTheWeek {
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+  Sunday,
+}
+```
+
+Broadly speaking, explicit enumeration via `enum` makes validation and pattern
+matching over your data more ergnomic and less error prone. Sometimes, it makes
+sense to also attach data to each variant, allowing `enum` to function more like
+structs or classes in other languages.
+
+```rust
+enum IpAddress {
+  // V4 IP addresses look like "192.168.1.1".
+  //
+  // Each `IpAddress::V4` has a `segments` field of type `[int]`.
+  V4(segments: [int]),
+  // V6 IP addresses look like "2001:db8::2:1".
+  //
+  // Each `IpAddress::V6` has a `segments` field of type `string` and a
+  // `segment_count` of type `int`.
+  V6(segments: string, segment_count: int),
+}
+
+// `segments` does not need to be explicitly specified since it is the only
+// field of `IpAddress::V4`.
+let some_v4_address = IpAddress::V4([192, 168, 1, 1]);
+
+print(some_v4_address.segments); // Prints "[192, 168, 1, 1]"
+
+// `segments` does not need to be explicitly specified since it is the only
+// field of `IpAddress::V4`.
+let some_v4_address = IpAddress::V4(
+  segments: "2001:db8::2:1",
+  segment_count: 5,
+);
+
+print(some_v6_address.segments); // Prints "2001:db8::2:1"
+print(some_v6_address.segment_count); // Prints "5"
+```
+
+Denim `enum` variants are comparable by the `==` operator. Two `enum` variant
+values are only found to be equivalent if their respective fields are
+equivalent.
+
+```rust
+enum Triangle {
+  Equilateral,
+  Isoceles(double_angle: double, single_angle: double),
+  Scalene(angle_1: double, angle_2: double),
+}
+
+print(
+  Triangle::Equilateral == Triangle::Equilateral,
+); // Prints "true"
+print(
+  Triangle::Scalene(
+    double_angle: 40,
+    single_angle: 100,
+  ) == Triangle::Scalene(
+    double_angle: 40,
+    single_angle: 100,
+  ),
+); // Prints "true"
+
+print(
+  Triangle::Equilateral == Triangle::Isoceles(
+    double_angle: 40,
+    single_angle: 100,
+  ),
+); // Prints "false"
+print(
+  Triangle::Isoceles(double_angle: 40, single_angle: 100) == Triangle::Isoceles(
+    double_angle: 80,
+    single_angle: 20,
+  ),
+); // Prints "false"
+```
+
+One common use case when dealing with enums is enumerating every `enum` variant.
+Denim allows for this with the `.variants()` method implemented for every
+`enum`.
+
+```rust
+print(Triangle::variants()); // Prints "[Triangle::Equilateral, Triangle::Isoceles, Triangle::Scalene]"
+```
 
 ##### Special enums
 
