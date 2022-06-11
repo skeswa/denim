@@ -482,7 +482,7 @@ print(
 
 ##### Special enums
 
-TODO(skeswa): flesh this out (`Option`, `Result`).
+TODO(skeswa): flesh this out by copying (`Option`, `Result`) from rust.
 
 #### Maps
 
