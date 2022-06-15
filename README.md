@@ -1071,7 +1071,7 @@ let my_other_car = fork my_other_car {
 In some situations, you may want nested internal mutation: you way want to be
 able to directly mutate an inner `struct` instance nested within another
 `struct` instance. Denim supports this by declaring the inner `struct` field as
-mutable with `!`. Note that this nested internal mutablility is only accessible
+mutable with `!`. Note that this nested internal mutability is only accessible
 in situations where the surrounding type is itself mutable.
 
 ```rust
@@ -1203,7 +1203,7 @@ let x: Eventual<Result<Response>> = async fetch(url: "http://google.com/favicon.
 let y: Eventual<()> = async pause(Duration::new(milliseconds: 100));
 let z: Eventual<Result<string>> = async readFile(path: "./a/b/c.txt");
 
-let foregrounded_x: Response = await x;
+let foregrounded_x: Response = x.await;
 
 // Special blocking syntax.
 let (x, y, z) = parallel {
@@ -1233,3 +1233,24 @@ extern {
 #### Testing
 
 TODO(skeswa): flesh this out.
+
+In any *_test.denim:
+
+```rust
+// :/
+describe "Something" {
+  before {
+
+  }
+
+  test "Something" {
+    
+  }
+
+  if !skip {
+    test "Something" {
+      
+    }
+  }
+}
+```
