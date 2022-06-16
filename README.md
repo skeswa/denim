@@ -1234,10 +1234,11 @@ extern {
 
 TODO(skeswa): flesh this out.
 
-In any *_test.denim:
+In any "*.spec.denim" file:
+
+`describe`, `before`, `test` are all keywords that only apply to tests.
 
 ```rust
-// :/
 describe "Something" {
   before {
 
@@ -1247,7 +1248,12 @@ describe "Something" {
     
   }
 
-  if !skip {
+  #[timeout(seconds: 500)]
+  test "Something" {
+    
+  }
+
+  if !is_dev {
     test "Something" {
       
     }
