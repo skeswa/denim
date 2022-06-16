@@ -1021,7 +1021,7 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = fork my_car {
+let my_other_car = my_car.fork {
   // `make` is changed, but all of the other fields stay the same.
   make: "Toyota",
 };
@@ -1042,7 +1042,7 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = fork! my_car;
+let my_other_car = my_car.fork!;
 
 my_car.make = "Toyota"; // 👍
 ```
@@ -1058,7 +1058,7 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = fork my_other_car {
+let my_other_car = my_other_car.fork {
   make: "Rivian",
   model: "R1T",
   user: fork {
@@ -1141,34 +1141,22 @@ Intersections (type | type).
 TODO(skeswa): flesh this out.
 
 ```rust
-let csv_file_path = "a/b/c.csv";
-
-let csv_data = read_file(csv_file_path);
-
-// `parsed_csv` is a `Result<string>` because the last expression evaluates to a
-// `Result<string>`.
-let parsed_csv = try "opening CSV file $csv_file_path" {
-  // Inside `try` terminating an expression of type `Result<T>` with a `try`
-  // unwraps it.
-  let csv_data = read_file(csv_file_path);
-
-  parse_csv(csv_data)
-};
-
-// `x` is a `Result<()>` because the block does not terminate in an expression.
-let x = try "dancing a serious jig" {
-  basic_dance_move();
-  advanced_dance_move();
-  basic_dance_move();
-};
+fn do_a_thing(): Result<()> {
+  let csv_file_path = "a/b/c.csv";
+  
+  let csv_data = read_file(csv_file_path)?;
+  
+  basic_dance_move().context("tried to bust a move")?;
+}
 ```
 
 TODO(skeswa): flesh this out.
 
 ```rust
-trait Error {
-  pub cause(self: Error) -> Option<Error>;
-  pub message(self: Error) -> string;
+pub struct Error<ErrorKind = unknown> {
+  pub cause: Option<Error>;
+  pub kind: ErrorKind;
+  pub message: string;
 }
 ```
 
@@ -1212,8 +1200,8 @@ let (x, y, z) = parallel {
   z,
 };
 
-let results: [Result<Response>] = await [x, x, x].all();
-let result: Result<Response> = await [x, x, x].race();
+let results: [Result<Response>] = [x, x, x].all().await;
+let result: Result<Response> = [x, x, x].race().await;
 ```
 
 #### Interop
