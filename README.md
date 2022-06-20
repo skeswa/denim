@@ -484,6 +484,17 @@ print(
 
 TODO(skeswa): flesh this out by copying (`Option`, `Result`) from rust.
 
+```rust
+pub enum Option<ValueType> {
+  None,
+  Some(value: ValueType),
+}
+
+pub enum Result<ErrorKind = unknown, ValueType = ()> {
+  Err(error: Error),
+  Ok(value: T),
+}
+```
 #### Maps
 
 TODO(skeswa): flesh this out (Dart Maps).
@@ -1143,9 +1154,9 @@ TODO(skeswa): flesh this out.
 ```rust
 fn do_a_thing(): Result<()> {
   let csv_file_path = "a/b/c.csv";
-  
+
   let csv_data = read_file(csv_file_path)?;
-  
+
   basic_dance_move().context("tried to bust a move")?;
 }
 ```
@@ -1233,17 +1244,17 @@ describe "Something" {
   }
 
   test "Something" {
-    
+
   }
 
   #[timeout(seconds: 500)]
   test "Something" {
-    
+
   }
 
   if !is_dev {
     test "Something" {
-      
+
     }
   }
 }
