@@ -946,7 +946,7 @@ struct Car {
 
   // `self` is a special argument. Like in Rust, it means that this method is
   // attached to any instance of `Car`.
-  fn drive(self: Car) {
+  fn drive(self) {
     print(
       "A ${self.model} ${self.model} owned "
       "by ${self.owner.name} is driving",
@@ -1128,16 +1128,59 @@ a_house.address.street = "Baker Street"; // Compile-time error (`House::address`
 
 TODO(skeswa): flesh this out.
 
-#### Impls
-
-##### Importing impls
-
-TODO(skeswa): flesh this out.
-
 ```rust
-from "a/b/c" use { Trait + OtherTrait for Thing, Thing::custom_impl_method };
+pub trait Summary {
+  fn summarize(self) -> string;
+}
+
+pub trait Tweak {
+  fn tweak(self!, some_other_arg: string) -> Self;
+}
+
+pub trait DefaultImpl {
+  fn foo(self!) -> string {
+    "bar"
+  }
+}
+
+pub trait MethodGeneric {
+  fn some_method<T>(self) -> T;
+}
 ```
 
+##### Extensions
+
+Doing it this way because Rust-style `impl` is not ergonomically importable.
+
+```rust
+// non-public
+ext of A impl B {
+  fn b(self) {
+    print("b");
+  }
+}
+
+// non-public
+ext of X impl Y {
+  fn y(self) {
+    print("y");
+  }
+}
+
+// non-public
+ext of X {
+  fn new_functionality_for_x(self) {
+    print("that newnew");
+  }
+}
+
+// non-public
+pub ext XCanEat of X {
+  fn eat(self) {
+    print("omnomnom");
+  }
+}
+```
 #### Generics
 
 TODO(skeswa): flesh this out.
@@ -1146,6 +1189,49 @@ TODO(skeswa): flesh this out.
 
 TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
 Intersections (type | type).
+
+```rust
+type IntOrString = int | string;
+
+fn do_a_thing(data: IntOrString) {
+  if data is int {
+    print("it is an int")
+    return;
+  }
+
+  print("it is a string")
+}
+
+fn do_another_thing(data: int | string | byte) {
+  match data.type {
+    int => print("it is an int"),
+    string => print("it is an int"),
+    _ => print("it is a byte"),
+  }
+}
+
+trait Foo {
+  bar(self) -> int;
+  baz(self) -> bool;
+}
+
+trait Ping {
+  bar(self) -> int;
+  pong(self) -> ();
+}
+
+fn do_one_more_thing(data: Foo | Ping) {
+  print(data.bar())
+}
+
+type FooAndPing = Foo & Ping;
+
+fn do_one_last_thing(data: FooAndPing) {
+  data.pong();
+
+  print(data.bar())
+}
+```
 
 #### Error handling
 
