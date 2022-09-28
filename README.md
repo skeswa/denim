@@ -223,10 +223,10 @@ let abc = 123;
 abc = 321; // Compile-time error
 ```
 
-To create a mutable variable, you need to use the `mut` keyword too.
+To create a mutable variable, you need to add a `!` suffix to the `let` keyword.
 
 ```rust
-let mut xyz = 123;
+let! xyz = 123;
 
 xyz = 456; // 👍
 ```
@@ -495,6 +495,15 @@ pub enum Result<ErrorKind = unknown, ValueType = ()> {
   Ok(value: T),
 }
 ```
+
+We have special syntactic sugar for `Option`:
+
+```rust
+// This:
+let x: Option<string>;
+// Is the same as this:
+let x: string?;
+```
 #### Maps
 
 TODO(skeswa): flesh this out (Dart Maps).
@@ -688,6 +697,44 @@ if !message.is_empty() {
 }
 ```
 
+#### Keywords
+
+TODO(skeswa): list all of them here
+
+##### Suffixing
+
+In Denim, where possible, keywords can be applied as suffixes with `.` notation:
+
+```rust
+if 123 > 12 {
+  print("its bigger")
+} else {
+  print("its _not_ bigger")
+}
+
+(123 > 12).if {
+  print("its bigger")
+} else {
+  print("its _not_ bigger")
+}
+
+123.match {
+  1..=122 => print("nope"),
+  123 => print("yep"),
+  _ => print("nope"),
+}
+
+match 123 {
+  1..=122 => print("nope"),
+  123 => print("yep"),
+  _ => print("nope"),
+}
+
+print(await some_future);
+
+print(some_future.await);
+```
+
 #### Functions
 
 Syntactically, Denim functions are very similar Rust functions.
@@ -762,19 +809,16 @@ print(
 print(i_cant_wait_to()); // prints "Time to take a nap 1 times!"
 ```
 
-Another way to declare an optional argument is to make its type `Option<T>`.
-`Option<T>` represents an optional value of type `T`. We'll describe `Option<T>`
+Another way to declare an optional argument is to make its type `T?`.
+`T?` represents an optional value of type `T`. We'll describe `T?`
 in greater depth later, but it works identically to how Rust's
 [`Option<T>`](https://doc.rust-lang.org/std/option/) works.
 
 ```rust
-fn measurement(scalar: double, unit: Option<string>) {
-  "$scalar"
-  // `Option::unwrap_or` is a method defined on any `Option<T>` that
-  // evaluates to the wrapped value of type `T`, if such a value exists, falling
-  // back to the specified value of type `T`. We'll cover `Option` and other
-  // enums like it a little later.
-  "${unit.unwrap_or("")}"
+fn measurement(scalar: double, unit: string?) {
+  let lowercase_unit = unit?.to_lower() ?? "";
+
+  "$scalar $lowercase_unit"
 }
 
 print(measurement(scalar: 12.5, unit: Some("px"))); // prints "12.5px"
@@ -842,8 +886,6 @@ the imported module repository.
 
 ```rust
 from "github.com/abc/xyz@v0.9.0" use { hello, world };
-// `as` lets you alias things you import or export.
-from "my.repo.com/foo/bar@v1.2.0-beta/nested/module" use * as module;
 ```
 
 Denim allows imports from other modules in the same repository, too. These are
@@ -861,7 +903,6 @@ You can also re-export stuff using the `show` keyword.
 
 ```rust
 from "github.com/abc/xyz@v0.9.0" show { hello };
-from "my.repo.com/foo/bar@v1.2.0-beta/nested/module" show *;
 
 from "~/bing/bang" show { boom as büm };
 ```
@@ -1148,39 +1189,61 @@ pub trait MethodGeneric {
 }
 ```
 
-##### Extensions
+##### Impls
 
-Doing it this way because Rust-style `impl` is not ergonomically importable.
+Declaration:
 
 ```rust
 // non-public
-ext of A impl B {
+impl B for A {
   fn b(self) {
     print("b");
   }
 }
 
 // non-public
-ext of X impl Y {
+impl Y for X {
   fn y(self) {
     print("y");
   }
 }
+impl A + Z for X {
+  fn a(self) {
+    print("a");
+  }
+
+  fn z(self) {
+    print("z");
+  }
+}
 
 // non-public
-ext of X {
+impl X {
   fn new_functionality_for_x(self) {
     print("that newnew");
   }
 }
 
 // non-public
-pub ext XCanEat of X {
+pub impl X {
   fn eat(self) {
     print("omnomnom");
   }
 }
 ```
+
+Importing:
+
+```rust
+from "~/foo/bar" use {
+  B for A,
+  Y + Z for X,
+  X,
+  A,
+  X::new_functionality_for_x,
+};
+```
+
 #### Generics
 
 TODO(skeswa): flesh this out.
@@ -1241,9 +1304,9 @@ TODO(skeswa): flesh this out.
 fn do_a_thing(): Result<()> {
   let csv_file_path = "a/b/c.csv";
 
-  let csv_data = read_file(csv_file_path)?;
+  let csv_data = read_file(csv_file_path)^.to_utf8();
 
-  basic_dance_move().context("tried to bust a move")?;
+  basic_dance_move().context("tried to bust a move")^;
 }
 ```
 
