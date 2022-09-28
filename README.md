@@ -1165,6 +1165,23 @@ a_house.owner.active = true; // 👍
 a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not an `Address!`)
 ```
 
+#### "Selfification" (a.k.a Functions as Methods)
+
+```rust
+fn authenticate(environment: Environment, user: User) -> bool {
+  // ...
+}
+
+// `@` is the secret sauce here
+fn do_stuff(environment: Environment, user: User?) {
+  user?.authenticate(environment, user: @).if {
+    print("yes!");
+  } else {
+    print("no!");
+  };
+}
+```
+
 #### Traits
 
 TODO(skeswa): flesh this out.
