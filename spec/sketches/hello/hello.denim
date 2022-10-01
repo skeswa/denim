@@ -1,0 +1,16 @@
+from "github.com/skeswa/denim/std@1/fmt" use { print };
+
+/// Runs the "Hello World" program.
+pub fn main(args: [string]) -> int {
+  // De-structuring an array with inner type `T` yields variables of type `T?`.
+  let [raw_subject] = args;
+
+  let subject = raw_subject.match {
+    Some(subject) => subject,
+    None => "stranger",
+  };
+
+  print("Hello, $subject!");
+
+  0
+}
