@@ -1,0 +1,195 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Denim",
+  "scopeName": "source.denim",
+  "patterns": [
+    {
+      "include": "#comment"
+    }
+  ],
+  "repository": {
+    "bool": {
+      "comment": "Describes a boolean literal",
+      "name": "constant.language.boolean.denim",
+      "match": "\\b(true|false)\\b"
+    },
+    "comment": {
+      "patterns": [
+        {
+          "include": "#comment__block"
+        },
+        {
+          "include": "#comment__doc"
+        },
+        {
+          "include": "#comment__line"
+        }
+      ]
+    },
+    "comment__block": {
+      "comment": "Describes `/* block comments */`",
+      "name": "comment.block.denim",
+      "begin": "/\\*",
+      "end": "\\*/",
+      "patterns": [
+        {
+          "comment": "This recursion is necessary because, otherwise `/*/**/*/` would break at the first `*/`",
+          "include": "#comment__block"
+        }
+      ]
+    },
+    "comment__doc": {
+      "comment": "Describes `/// doc comments`",
+      "name": "comment.block.documentation.denim",
+      "begin": "///",
+      "while": "^\\s*///",
+      "patterns": [
+        {
+          "include": "#comments__doc--code-snippet"
+        },
+        {
+          "include": "#comments__doc--code-reference"
+        }
+      ]
+    },
+    "comment__doc--code-reference": {
+      "comment": "Labels `stuffInTickMarks` as a reference to source code",
+      "match": "(`.*?`)",
+      "captures": {
+        "0": {
+          "name": "variable.name.source.denim"
+        }
+      }
+    },
+    "comment__doc--code-snippet": {
+      "comment": "Describes ```code snippets``` in doc comments",
+      "contentName": "variable.other.source.denim",
+      "begin": "```.*?$",
+      "end": "```"
+    },
+    "comment__line": {
+      "comment": "Describes a `// single-line comment`",
+      "name": "comment.line.double-slash.denim",
+      "begin": "//(?!/)",
+      "end": "$"
+    },
+    "double--canonical": {
+      "comment": "Describes a canonical decimal literal",
+      "name": "constant.numeric.integer.decimal.denim",
+      "match": "\\b[0-9][0-9_]*([ui](8|16|32|64|128|s|size))?\\b"
+    },
+    "int": {
+      "comment": "Describes an integer literal",
+      "name": "constant.numeric.integer.decimal.denim",
+      "match": "\\b[0-9][0-9_]*([ui](8|16|32|64|128|s|size))?\\b"
+    },
+    "expression": {
+      "comment": "Describes every kind of expression",
+      "patterns": [
+        {
+          "include": "#string"
+        }
+      ]
+    },
+    "string": {
+      "comment": "Describes every kind of string literal",
+      "patterns": [
+        {
+          "include": "#string__canonical"
+        },
+        {
+          "include": "#string__multi-line"
+        },
+        {
+          "include": "#string__raw"
+        }
+      ]
+    },
+    "string__canonical": {
+      "comment": "Describes a canonical string literal (the pattern negative look-behind to make sure it isn't escaped or a raw string)",
+      "name": "string.interpolated.double.denim",
+      "begin": "(?<!\\|#)\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "include": "#string__escaped-character"
+        },
+        {
+          "include": "#string__invalid-newline"
+        },
+        {
+          "include": "#string__interpolation"
+        }
+      ]
+    },
+    "string__escaped-character": {
+      "comment": "Describes an escaped character within a string",
+      "name": "constant.character.escape.denim",
+      "match": "\\\\(x[0-9A-Fa-f]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)"
+    },
+    "string__interpolation": {
+      "comment": "Describes an ${interpolation} within a string literal",
+      "patterns": [
+        {
+          "include": "string__interpolation--expression"
+        },
+        {
+          "include": "string__interpolation--variable"
+        }
+      ]
+    },
+    "string__interpolation--expression": {
+      "comment": "Describes an ${expression()} interpolated within a string literal",
+      "name": "string.interpolated.expression.denim",
+      "begin": "\\$\\{",
+      "end": "\\}",
+      "patterns": [
+        {
+          "include": "#expression",
+          "name": "variable.parameter.denim"
+        },
+        {
+          "include": "#string"
+        },
+        {
+          "name": "variable.parameter.denim",
+          "match": "[a-zA-Z0-9_]+"
+        }
+      ]
+    },
+    "string__interpolation--variable": {
+      "comment": "Describes an $variable interpolated within a string literal",
+      "match": "\\$([a-zA-Z0-9_]+)",
+      "captures": {
+        "1": {
+          "name": "variable.parameter.denim"
+        }
+      }
+    },
+    "string__invalid-newline": {
+      "comment": "Describes a line break in a string literal that is not allowed",
+      "name": "invalid.string.newline",
+      "match": "\\n"
+    },
+    "string__multi-line": {
+      "comment": "Describes a multi-line string literal (the pattern negative look-behind to make sure it isn't escaped or a raw string)",
+      "name": "string.interpolated.triple.denim",
+      "begin": "(?<!\\|#)\"\"\"",
+      "end": "\"\"\"(?!\")",
+      "patterns": [
+        {
+          "include": "#string__escaped-character"
+        },
+        {
+          "include": "#string__interpolation"
+        }
+      ]
+    },
+    "string__raw": {
+      "comment": "Describes a canonical string literal (the pattern negative look-behind to make sure it isn't escaped or a raw string)",
+      "name": "string.interpolated.double.denim",
+      "begin": "b?r(#*)\"",
+      "end": "\"\\1"
+    }
+  }
+}
