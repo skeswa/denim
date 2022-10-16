@@ -1,0 +1,16 @@
+pub fn main(args: [string]) -> int {
+  let! a = A {
+    b: { d: 1, e: "E" },
+    c: { f: true },
+  };
+
+  a.c = { f: true }; // impossible
+
+  let aa = a.fork!;
+
+  aa.c.f = false; // impossible
+
+  aa.c.f = false; // this is fine
+
+  aa.b.d = 2; // impossible
+}

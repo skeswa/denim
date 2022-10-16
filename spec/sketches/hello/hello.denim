@@ -1,4 +1,4 @@
-from "github.com/skeswa/denim/std@1/fmt" use { print };
+from "github.com/skeswa/denim/std@1/fmt/colors" use { blue };
 
 /// Runs the "Hello World" program.
 pub fn main(args: [string]) -> int {
@@ -10,7 +10,7 @@ pub fn main(args: [string]) -> int {
     None => "stranger",
   };
 
-  print("Hello, $subject!");
+  print("Hello, ${blue(subject)}!");
 
   0
 }
