@@ -183,6 +183,8 @@ Denim's primitives are mostly stolen from Go. It has:
 
 ##### Special primitives
 
+TODO: perhaps `void`/`Void` instead of `()`
+
 It is important to note that **Denim does not have a null-type like Go's
 `nil`**. The closest idea that Denim has in this regard is the `()` type also
 called "unit". Since this idea is wholly stolen from Rust, we can lean on the
@@ -703,36 +705,46 @@ TODO(skeswa): list all of them here
 
 ##### Suffixing
 
-In Denim, where possible, keywords can be applied as suffixes with `.` notation:
+In Denim,some keywords can be applied as suffixes with `.` notation. Namely, `await`, `fork`, `if`, and `match`.
 
 ```rust
-if 123 > 12 {
-  print("its bigger")
-} else {
-  print("its _not_ bigger")
-}
-
-(123 > 12).if {
-  print("its bigger")
-} else {
-  print("its _not_ bigger")
-}
-
-123.match {
-  1..=122 => print("nope"),
-  123 => print("yep"),
-  _ => print("nope"),
-}
-
-match 123 {
-  1..=122 => print("nope"),
-  123 => print("yep"),
-  _ => print("nope"),
-}
-
 print(await some_future);
 
 print(some_future.await);
+
+fork some_struct {
+  some_field: "123",
+};
+
+some_struct.fork {
+  some_field: "123",
+};
+
+if some_bool_expression {
+  print("its bigger")
+} else {
+  print("its _not_ bigger")
+}
+
+some_bool_expression.if {
+  print("its bigger")
+} else {
+  print("its _not_ bigger")
+}
+
+some_number.match {
+  1..=122 => print("nope"),
+  123 => print("yep"),
+  _ => print("nope"),
+}
+
+match some_number {
+  1..=122 => print("nope"),
+  123 => print("yep"),
+  _ => print("nope"),
+}
+
+
 ```
 
 #### Functions
@@ -834,35 +846,53 @@ print(measurement(scalar: 12.5)); // prints "12.5"
 print(measurement(scalar: 12.5, unit: "px")); // prints "12.5px"
 ```
 
-Denim borrows Rust's syntax for lambda functions. Denim lambdas differ from
-functions declared with the keyword `fn` in two main ways:
-
-- Whereas typical functions cannot be anonymous, lambdas can
-- Lambda function arguments are plain-ol-positional-arguments. Calling lambda
-  functions with more than one argument does not require that the arguments be
-  labeled.
+Denim also has a convenient alternate syntax for anonymous functions,
+called lamba functions, that it borrows from Rust closures. Unlike Rust closures however, Denim lambda functions are just plain ol'
+functions with no extra or special behaviors.
 
 ```rust
-let lambda_annotated = |i: int| -> int { i + 1 };
-let lambda_inferred  = |i     |          i + 1  ;
+fn sum_three(a: int, b: int, c: int) -> int {
+  a + b + c;
+}
 
-let sum_three = |a: int, b: int, c: int| -> int { a + b + c };
-
-let also_sum_three: |int, int, int| -> int = |a, b, c| a + b + c;
-
-print(sum_three(1, 2, 3)); // Prints "6"
+let sum_three_as_a_lambda = |a: int, b: int, c: int| a + b + c;
 ```
 
-There are two ways to describe functions with types,
+The argument types of a lambda can be inferred if enough information is provided at the call site.
 
-1.  Lambda function types
-    ```rust
-    |int, int, int| -> int
-    ```
-2.  Named function types
-    ```rust
-    Fn(a: int, b: int, c: int) -> int
-    ```
+```rust
+let inferred: fn(a: int) -> int = |a| a + 1;
+```
+
+By the way, function types look like this:
+
+```rust
+fn(a: A, b: B, c: C) -> D;
+```
+
+Denim has a special syntax for functions that receive an inlined anonymous function as an argument. This common when passing callbacks
+and in embedded DSLs. Any function argument named `block` can have an
+inline block after its invocation that works like a lambda function.
+
+```rust
+fn element(name: string, block: Option<fn() -> Element>) -> Element {
+  Element { name, child: block() }
+}
+
+// This:
+element(name: "div", block: || {
+  element(name: "button", block: || {
+    span("click me")
+  })
+})
+
+// Is the same as this:
+element("div") {
+  element("button") {
+    span("click me")
+  }
+}
+```
 
 #### Modules
 
@@ -1362,6 +1392,13 @@ let (x, y, z) = parallel {
   readFile(path: "./a/b/c.txt"),
 };
 
+// It is really just syntax sugar for this:
+let (x, y, z) = (
+  async fetch(url: "http://google.com/favicon.ico"),
+  async pause(Duration::new(milliseconds: 100)),
+  async readFile(path: "./a/b/c.txt"),
+).join().await;
+
 // `async` makes the expression following it not block. `async` yields an
 // `Eventual<T>`.
 let x: Eventual<Result<Response>> = async fetch(url: "http://google.com/favicon.ico");
@@ -1399,7 +1436,7 @@ extern {
 
 TODO(skeswa): flesh this out.
 
-In any "*.spec.denim" file:
+In any "*.(spec|test).denim" file:
 
 `describe`, `before`, `test` are all keywords that only apply to tests.
 
