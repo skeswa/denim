@@ -1269,6 +1269,32 @@ print(foo.baz); // prints "28"
 
 ```
 
+#### Autoboxing
+
+Given the prevalance and importance of special enums `Option<T>` and `Result<T>`
+in Denim, you might find yourself wrapping things in `Some(..)` and `Ok(..)` alot. To sweeten this syntax a little bit, Denim will automatically infer a `T`
+as `Some(T)` or a `Ok(T)` depending on context; this is called "autoboxing".
+
+```rust
+// Why do this:
+fn foo() -> string? {
+  Some("bar")
+}
+
+// when you could simply do this:
+fn autoboxed_foo() -> string? {
+  "bar"
+}
+
+// `Result` is also autoboxable:
+let! x: Result<int> = Ok(1);
+x = 2;
+
+// Autoboxing works in structs too!
+struct X(Option<int>);
+let x = X(1234);
+```
+
 #### Traits
 
 TODO(skeswa): flesh this out.
@@ -1278,7 +1304,9 @@ pub trait Summary {
   fn summarize(self) -> string;
 }
 
-pub trait Tweak {
+pub trait Tweak<T> {
+  tweakable: T?;
+
   fn tweak(self!, some_other_arg: string) -> Self;
 }
 
@@ -1496,25 +1524,25 @@ TODO(skeswa): flesh this out.
 
 In any "\*.(spec|test).denim" file:
 
-`describe`, `before`, `test` are all keywords that only apply to tests.
+`describe`, `before`, `test` are all functions that only apply to tests.
 
 ```rust
-describe "Something" {
+describe("Something") {
   before {
 
   }
 
-  test "Something" {
+  test("Something") {
 
   }
 
   #[timeout(seconds: 500)]
-  test "Something" {
+  test("Something") {
 
   }
 
   if !is_dev {
-    test "Something" {
+    test("Something") {
 
     }
   }
