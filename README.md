@@ -447,13 +447,13 @@ print(some_v6_address.segment_count); // Prints "5"
 TODO(skeswa): flesh this out by copying (`Option`, `Result`) from rust.
 
 ```rust
-pub enum Option<ValueType> {
+pub enum Option<T> {
   None,
-  Some(value: ValueType),
+  Some(value: T),
 }
 
-pub enum Result<ErrorKind = unknown, ValueType = ()> {
-  Err(error: Error),
+pub enum Result<T, E> where E = Error {
+  Err(error: E),
   Ok(value: T),
 }
 ```
@@ -667,7 +667,7 @@ TODO(skeswa): list all of them here
 ##### Suffixing
 
 In Denim,some keywords can be applied as suffixes with `.` notation. Namely,
-`await`, `fork`, `if`, and `match`.
+`await`, `fork`, `if`, `match`, and `try`.
 
 ```rust
 print(await some_future);
@@ -705,7 +705,6 @@ match some_number {
   123 => print("yep"),
   _ => print("nope"),
 }
-
 
 ```
 
@@ -1391,13 +1390,16 @@ fn do_one_last_thing(data: FooAndPing) {
 
 #### Error handling
 
+You can hoist the error out of returned `Result` within a function that returns
+`Result` with the `try` keyword.
+
 TODO(skeswa): flesh this out.
 
 ```rust
 fn do_a_thing(): Result<()> {
   let csv_file_path = "a/b/c.csv";
 
-  let csv_data = read_file(csv_file_path)^.to_utf8();
+  let csv_data = read_file(csv_file_path).try.to_utf8();
 
   basic_dance_move().context("tried to bust a move")^;
 }
@@ -1469,12 +1471,44 @@ let result: Result<Response> = [x, x, x].race().await;
 TODO(skeswa): flesh this out.
 
 ```rust
-#[link(
-  go_package: "~/path/to/go/package",
-  ts_module: "~/path/to/ts/file",
-)]
-extern {
-  fn fetch(url: string) -> Eventual<Result<Response, FetchError>>;
+trait Pluralizer {
+  fn pluralize(self, text: string) -> string;
+}
+
+extern(go) {
+  // Automatically compiles a Denim-friendly interface.
+  from(go) "github.com/gertd/go-pluralize@0.2" use {...pluralize};
+
+  struct GoPluralizer {
+    client: pluralize.Client
+  }
+
+  impl Pluralizer for GoPluralizer {
+    fn pluralize(self, text: string) -> string {
+      self.client.plural(text)
+    }
+  }
+
+  pub fn new_pluralizer() -> impl Pluralizer {
+    GoPluralizer { client: pluralize.NewClient() }
+  }
+}
+
+extern(ts) {
+  // @deno-types="npm:@types/pluralize@0.0.29"
+  from(ts) "npm:pluralize@8.0.0" use {pluralize};
+
+  struct TsPluralizer {}
+
+  impl Pluralizer for TsPluralizer {
+    fn pluralize(self, text: string) -> string {
+      pluralize(text)
+    }
+  }
+
+  pub fn new_pluralizer() -> impl Pluralizer {
+    TsPluralizer {}
+  }
 }
 ```
 
