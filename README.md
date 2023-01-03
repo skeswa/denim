@@ -418,68 +418,28 @@ structs or classes in other languages.
 enum IpAddress {
   // V4 IP addresses look like "192.168.1.1".
   //
-  // Each `IpAddress::V4` has a `segments` field of type `[int]`.
-  V4(segments: [int]),
+  // Each `IpAddress::V4` has an inner field of type `[int]`.
+  V4([int]),
   // V6 IP addresses look like "2001:db8::2:1".
   //
   // Each `IpAddress::V6` has a `segments` field of type `string` and a
   // `segment_count` of type `int`.
-  V6(segments: string, segment_count: int),
+  V6 { segments: string, segment_count: int },
 }
 
-// `segments` does not need to be explicitly specified since it is the only
-// field of `IpAddress::V4`.
 let some_v4_address = IpAddress::V4([192, 168, 1, 1]);
 
-print(some_v4_address.segments); // Prints "[192, 168, 1, 1]"
+print(some_v4_address.0); // Prints "[192, 168, 1, 1]"
 
 // `segments` does not need to be explicitly specified since it is the only
 // field of `IpAddress::V4`.
-let some_v4_address = IpAddress::V4(
+let some_v4_address = IpAddress::V6 {
   segments: "2001:db8::2:1",
   segment_count: 5,
-);
+};
 
 print(some_v6_address.segments); // Prints "2001:db8::2:1"
 print(some_v6_address.segment_count); // Prints "5"
-```
-
-Denim `enum` variants are comparable by the `==` operator. Two `enum` variant
-values are only found to be equivalent if their respective fields are
-equivalent.
-
-```rust
-enum Triangle {
-  Equilateral,
-  Isoceles(double_angle: double, single_angle: double),
-  Scalene(angle_1: double, angle_2: double),
-}
-
-print(
-  Triangle::Equilateral == Triangle::Equilateral,
-); // Prints "true"
-print(
-  Triangle::Scalene(
-    double_angle: 40,
-    single_angle: 100,
-  ) == Triangle::Scalene(
-    double_angle: 40,
-    single_angle: 100,
-  ),
-); // Prints "true"
-
-print(
-  Triangle::Equilateral == Triangle::Isoceles(
-    double_angle: 40,
-    single_angle: 100,
-  ),
-); // Prints "false"
-print(
-  Triangle::Isoceles(double_angle: 40, single_angle: 100) == Triangle::Isoceles(
-    double_angle: 80,
-    single_angle: 20,
-  ),
-); // Prints "false"
 ```
 
 ##### Special enums
