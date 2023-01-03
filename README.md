@@ -899,6 +899,24 @@ element("div") {
 }
 ```
 
+Thanks to "getterification", we can make this syntax even sweeter:
+
+```rust
+fn button(block: Option<fn() -> Element>) -> Element {
+  element("button", block)
+}
+
+fn div(block: Option<fn() -> Element>) -> Element {
+  element("div", block)
+}
+
+div {
+  button {
+    span("click me")
+  }
+}
+```
+
 #### Modules
 
 Denim's core packaging primitive is called a "module". Modules designed to
