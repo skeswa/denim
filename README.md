@@ -925,8 +925,12 @@ specify a version because the version will always be the same as the current
 module.
 
 ```rust
-from "~/bing/bang" use { boom as büm };
+from "~/bing/bang" use { boom: büm }; // Aliases `boom` to `büm`.
 from "~/some/sub/module" use { something };
+
+// You can use ... syntax to import "everything else".
+from "github.com/foo/bar@v4.2" use { Foo, bar, ...foo_bar };
+from "github.com/bing/bong@latest" use { ...bing_bong };
 ```
 
 You can also re-export stuff using the `show` keyword.
@@ -959,7 +963,7 @@ pub struct User {
   /// You can put doc comments directly on `struct` fields.
   coolness_rating: int;
   pub name: string;
-  pub nickname: Option<string>;
+  pub nickname: string?;
 }
 ```
 
@@ -976,7 +980,7 @@ let some_user = User {
 
 In the `User` `struct` above, two fields are optional - `active` and `nickname`.
 `active` is made optional by the specification of a default value for it,
-`false`. `nickname` is optional because it is of type `Option<T>`. Optional
+`false`. `nickname` is optional because it is of type `Option<string>`. Optional
 fields may be excluded when a struct is instantiated.
 
 ```rust
@@ -999,7 +1003,8 @@ let jen = User {
   active: true,
   coolness_rating: 13,
   name: "Jen",
-  nickname: Some("Jenners"),
+  // Below, `"Jenners"` is automatically wrapped in a `Some(..)`.
+  nickname: "Jenners",
 };
 ```
 
@@ -1249,16 +1254,17 @@ impl B for A {
 }
 
 // non-public
+impl A for X {
+  fn a(self) {
+    print("a");
+  }
+}
 impl Y for X {
   fn y(self) {
     print("y");
   }
 }
-impl A + Z for X {
-  fn a(self) {
-    print("a");
-  }
-
+impl Z for X {
   fn z(self) {
     print("z");
   }
