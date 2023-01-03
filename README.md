@@ -506,6 +506,7 @@ let x: Option<string>;
 // Is the same as this:
 let x: string?;
 ```
+
 #### Maps
 
 TODO(skeswa): flesh this out (Dart Maps).
@@ -705,7 +706,8 @@ TODO(skeswa): list all of them here
 
 ##### Suffixing
 
-In Denim,some keywords can be applied as suffixes with `.` notation. Namely, `await`, `fork`, `if`, and `match`.
+In Denim,some keywords can be applied as suffixes with `.` notation. Namely,
+`await`, `fork`, `if`, and `match`.
 
 ```rust
 print(await some_future);
@@ -821,9 +823,9 @@ print(
 print(i_cant_wait_to()); // prints "Time to take a nap 1 times!"
 ```
 
-Another way to declare an optional argument is to make its type `T?`.
-`T?` represents an optional value of type `T`. We'll describe `T?`
-in greater depth later, but it works identically to how Rust's
+Another way to declare an optional argument is to make its type `T?`. `T?`
+represents an optional value of type `T`. We'll describe `T?` in greater depth
+later, but it works identically to how Rust's
 [`Option<T>`](https://doc.rust-lang.org/std/option/) works.
 
 ```rust
@@ -846,9 +848,10 @@ print(measurement(scalar: 12.5)); // prints "12.5"
 print(measurement(scalar: 12.5, unit: "px")); // prints "12.5px"
 ```
 
-Denim also has a convenient alternate syntax for anonymous functions,
-called lamba functions, that it borrows from Rust closures. Unlike Rust closures however, Denim lambda functions are just plain ol'
-functions with no extra or special behaviors.
+Denim also has a convenient alternate syntax for anonymous functions, called
+lamba functions, that it borrows from Rust closures. Unlike Rust closures
+however, Denim lambda functions are just plain ol' functions with no extra or
+special behaviors.
 
 ```rust
 fn sum_three(a: int, b: int, c: int) -> int {
@@ -858,7 +861,8 @@ fn sum_three(a: int, b: int, c: int) -> int {
 let sum_three_as_a_lambda = |a: int, b: int, c: int| a + b + c;
 ```
 
-The argument types of a lambda can be inferred if enough information is provided at the call site.
+The argument types of a lambda can be inferred if enough information is provided
+at the call site.
 
 ```rust
 let inferred: fn(a: int) -> int = |a| a + 1;
@@ -870,9 +874,10 @@ By the way, function types look like this:
 fn(a: A, b: B, c: C) -> D;
 ```
 
-Denim has a special syntax for functions that receive an inlined anonymous function as an argument. This common when passing callbacks
-and in embedded DSLs. Any function argument named `block` can have an
-inline block after its invocation that works like a lambda function.
+Denim has a special syntax for functions that receive an inlined anonymous
+function as an argument. This common when passing callbacks and in embedded
+DSLs. Any function argument named `block` can have an inline block after its
+invocation that works like a lambda function.
 
 ```rust
 fn element(name: string, block: Option<fn() -> Element>) -> Element {
@@ -1202,6 +1207,13 @@ a_house.address.street = "Baker Street"; // Compile-time error (`House::address`
 
 #### "Selfification" (a.k.a Functions as Methods)
 
+Here, we take:
+
+- "function" to mean a subroutine **without** a `self` reference to some piece
+  of state
+- "method" to mean a subroutine **with** a `self` reference to some piece of
+  state
+
 ```rust
 fn authenticate(environment: Environment, user: User) -> bool {
   // ...
@@ -1215,6 +1227,28 @@ fn do_stuff(environment: Environment, user: User?) {
     print("no!");
   };
 }
+```
+
+#### "Getterification" (a.k.a Functions as Fields)
+
+In Denim, functions can be treated as fields if they are not passed any
+arguments.
+
+```rust
+struct Foo {
+  bar: int,
+
+  pub fn baz(self, extra = 0) -> int {
+    self.bar + extra + 1
+  }
+}
+
+let foo = Foo { bar: 27 };
+
+print(foo.baz(2)); // prints "30"
+print(foo.baz()); // prints "28"
+print(foo.baz); // prints "28"
+
 ```
 
 #### Traits
@@ -1442,7 +1476,7 @@ extern {
 
 TODO(skeswa): flesh this out.
 
-In any "*.(spec|test).denim" file:
+In any "\*.(spec|test).denim" file:
 
 `describe`, `before`, `test` are all keywords that only apply to tests.
 
