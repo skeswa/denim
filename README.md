@@ -183,24 +183,19 @@ Denim's primitives are mostly stolen from Go. It has:
 
 ##### Special primitives
 
-TODO: perhaps `void`/`Void` instead of `()`
-
 It is important to note that **Denim does not have a null-type like Go's
-`nil`**. The closest idea that Denim has in this regard is the `()` type also
-called "unit". Since this idea is wholly stolen from Rust, we can lean on the
-[Rust docs](https://doc.rust-lang.org/std/primitive.unit.html) for a
-description:
+`nil`**. The closest idea that Denim has in this regard is the `void`. The
+`void` type has exactly one value, `void`, and is used when there is no other
+meaningful value that could be returned. `void`, much like Rust's `()`, is most
+commonly seen implicitly: functions without a `-> ...` implicitly have a `void`
+return type.
 
-> The `()` type has exactly one value `()`, and is used when there is no other
-> meaningful value that could be returned. `()` is most commonly seen
-> implicitly: functions without a `-> ...` implicitly have return type `()`,
-> that is, these are equivalent:
+```rust
+// The functions below are equivalent:
 
-> ```rust
-> fn long() -> () {}
->
-> fn short() {}
-> ```
+fn long() -> void {}
+fn short() {}
+```
 
 Denim also steals the `unknown` type from TypeScript. `unknown` represents all
 possible values. Every type is assignable to type `unknown`. Therefore the type
@@ -1367,13 +1362,13 @@ fn do_another_thing(data: int | string | byte) {
 }
 
 trait Foo {
-  bar(self) -> int;
-  baz(self) -> bool;
+  fn bar(self) -> int;
+  fn baz(self) -> bool;
 }
 
 trait Ping {
-  bar(self) -> int;
-  pong(self) -> ();
+  fn bar(self) -> int;
+  fn pong(self);
 }
 
 fn do_one_more_thing(data: Foo | Ping) {
@@ -1397,12 +1392,12 @@ You can hoist the error out of returned `Result` within a function that returns
 TODO(skeswa): flesh this out.
 
 ```rust
-fn do_a_thing(): Result<()> {
+fn do_a_thing() -> Result<void> {
   let csv_file_path = "a/b/c.csv";
 
   let csv_data = read_file(csv_file_path).try.to_utf8();
 
-  basic_dance_move().context("tried to bust a move")^;
+  basic_dance_move().context("tried to bust a move").try;
 }
 ```
 
