@@ -1231,7 +1231,8 @@ print(foo.baz); // prints "28"
 #### Autoboxing
 
 Given the prevalance and importance of special enums `Option<T>` and `Result<T>`
-in Denim, you might find yourself wrapping things in `Some(..)` and `Ok(..)` alot. To sweeten this syntax a little bit, Denim will automatically infer a `T`
+in Denim, you might find yourself wrapping things in `Some(..)` and `Ok(..)`
+alot. To sweeten this syntax a little bit, Denim will automatically infer a `T`
 as `Some(T)` or a `Ok(T)` depending on context; this is called "autoboxing".
 
 ```rust
@@ -1427,43 +1428,96 @@ TODO(skeswa): flesh this out.
 
 #### Concurrency
 
-TODO(skeswa): flesh this out. This is gonna be a spicy meatball.
+In Denim, function invocations work differently than in other languages - they
+do not "block" by default. Instead, Denim functions work like
+[co-routines](https://en.wikipedia.org/wiki/Coroutine), suspending themselves
+while invoking other functions, and resuming when they return.
 
 ```rust
-// This blocks.
-let weather = fetch(url: "http://whatistheweather.com");
+// This call to `fetch` blocks, meaning that "done" will not be printed until
+// the fetch is finished.
+let weather = fetch(url: "http://get.theweather.com");
+print("done");
 
-// Special blocking syntax for stuff that should happen at all once.
-let (x, y, z) = parallel {
-  fetch(url: "http://google.com/favicon.ico"),
-  pause(Duration::new(milliseconds: 100)),
-  readFile(path: "./a/b/c.txt"),
-};
+// The code below:
+// 1. Prints "a"
+// 2. Waits for the first thing to be fetched
+// 3. Prints "b"
+// 4. Waits for the second thing to be fetched
+// 5. Prints "c"
 
-// It is really just syntax sugar for this:
-let (x, y, z) = (
-  async fetch(url: "http://google.com/favicon.ico"),
-  async pause(Duration::new(milliseconds: 100)),
-  async readFile(path: "./a/b/c.txt"),
-).join().await;
+print("a");
+let first_thing = fetch(url: "http://first.thing.com");
+print("b");
+let second_thing = fetch(url: "http://second.thing.com");
+print("c");
+```
+To call a function concurrently, use the `async` keyword. Using `async` on a
+function invocation wraps its return value in a special type called `Eventual`, like `Future` or `Promise` in other languages, is a concurrency
+monad that allows you to subscribe to the completion of an asynchronous operation.
 
-// `async` makes the expression following it not block. `async` yields an
-// `Eventual<T>`.
-let x: Eventual<Result<Response>> = async fetch(url: "http://google.com/favicon.ico");
-let y: Eventual<()> = async pause(Duration::new(milliseconds: 100));
-let z: Eventual<Result<string>> = async readFile(path: "./a/b/c.txt");
+```rust
+// This logic prints "a" then "b" then "c", printing the time in joburg and in
+// nyc (in no particular order) when the fetches complete later on.
 
-let foregrounded_x: Response = x.await;
+print("a");
+let time_in_joburg = fetch(url: "http://worldtime.com/in/joburg").async;
+print("b");
+let time_in_nyc = fetch(url: "http://worldtime.com/in/nyc").async;
+print("c");
 
-// Special blocking syntax.
-let (x, y, z) = parallel {
-  x,
-  y,
-  z,
-};
+time_in_joburg.then(|time| print("time in joburg: $time"));
+time_in_nyc.then(|time| print("time in nyc: $time_in_nyc"));
+```
 
-let results: [Result<Response>] = [x, x, x].all().await;
-let result: Result<Response> = [x, x, x].race().await;
+Denim provides a way to "wait" for the `Eventual` values returned by `async` functions - the `await` keyword. With `await`, working with asynchronous
+operations can be quite ergonomic.
+
+```rust
+// This logic:
+// 1. Starts fetching the time in atlanta
+// 2. Prints "a"
+// 3. Waits for the time in atlanta to be available before printing it
+// 4. Prints "b"
+
+let time_in_atlanta = fetch(url: "http://worldtime.com/in/atlanta").async;
+
+print("a");
+print(time_in_atlanta.await);
+print("b");
+```
+
+There are a garden variety of helpful ways to wait on multiple asynchronous
+operations at once in Denim.
+
+```rust
+// Tuples are the best way to wait on `Eventual` values with different types.
+//
+// Any tuple of `Eventual` values has a method called `.after_all()` that waits
+// for every `Eventual` to complete.
+let (google_icon, _, c_text) = (
+  fetch(url: "http://google.com/favicon.ico").async,
+  pause(Duration::new(milliseconds: 100)).async,
+  readFile(path: "./a/b/c.txt").async,
+).after_all().await;
+
+// Arrays of `Eventual` also support `.after_all()`.
+let icons = [
+  fetch(url: "http://nba.com/favicon.ico").async,
+  fetch(url: "http://nhl.com/favicon.ico").async,
+  fetch(url: "http://mlb.com/favicon.ico").async,
+].after_all().await;
+
+// Both tuples and arrays of `Eventual` support `.race()` to wait for the first
+// `Eventual` to complete, wrapping values in `Option::None` to mark `Eventual`
+// values that lost the race.
+let results = [
+  fetch(url: "http://later.com").async,
+  fetch(url: "http://now.com").async,
+  fetch(url: "http://way.later.com").async,
+].race().await;
+
+print("$results"); // Prints "[None, Some(data), None]"
 ```
 
 #### Interop
