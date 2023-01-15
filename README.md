@@ -1660,8 +1660,11 @@ describe("Something") {
   - `while`
     - Suffixable
 - Stolen from Dart
+  - `show`
   - `try`
   - `void`
+- Stolen from Python
+  - `from`
 - Stolen from TypeScript
   - `unknown`
 - Originals
