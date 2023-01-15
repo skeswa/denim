@@ -1571,7 +1571,7 @@ extern(ts) {
 
 TODO(skeswa): flesh this out.
 
-In any "\*.(spec|test).denim" file:
+In any "\*.(spec|test).denim" file (spec = unit test, test = integeration test):
 
 `describe`, `before`, `test` are all functions that only apply to tests.
 
