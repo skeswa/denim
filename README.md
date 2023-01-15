@@ -581,6 +581,9 @@ Denim features the "usual suspects" for a C-family language:
   [Python](https://docs.python.org/3/reference/expressions.html#the-power-operator)
 - `~/`, the truncating division operator, is stolen from
   [Dart](https://api.flutter.dev/flutter/dart-core/num/operator_truncate_divide.html)
+- `+=`, `-=`, `*=`, `/=`\
+  Arithmetic assignment operators, like in other languages, apply an arithmetic operator
+  to a variable and reassign the resulting value to the variable
 
 You might be wondering where the bitwise operators are - there are none! Looking
 for operator overloads? You won't find them here.
@@ -662,7 +665,7 @@ TODO(skeswa): list all of them here
 ##### Suffixing
 
 In Denim,some keywords can be applied as suffixes with `.` notation. Namely,
-`async`, `await`, `fork`, `if`, `match`, and `try`.
+`async`, `await`, `fork`, `if`, `match`, `try`, and `while`.
 
 ```rust
 let some_eventual_function_value = async some_function("abc");
@@ -705,6 +708,25 @@ match some_number {
   _ => print("nope"),
 }
 
+fn x() -> Result {
+  something_that_can_fail(123).try;
+  try {
+    let! a = 123;
+    a = a * 2;
+
+    something_that_can_fail(123)
+  }
+}
+
+let! i = 0;
+while i < 3 {
+  print("i is $i");
+}
+
+let! is_done = false;
+is_done.while {
+  is_done = true;
+}
 ```
 
 #### Functions
@@ -1597,3 +1619,51 @@ describe("Something") {
   }
 }
 ```
+
+#### Keywords
+
+- Stolen from Rust
+  - `as`
+  - `async`
+    - Suffixable
+  - `await`
+    - Suffixable
+  - `break`
+  - `continue`
+  - `else`
+  - `enum`
+  - `extern`
+  - `false`
+  - `fn`
+  - `for`
+  - `if`
+    - Suffixable
+  - `impl`
+  - `in`
+  - `let`
+  - `loop`
+  - `match`
+    - Suffixable
+  - `mod`
+  - `pub`
+    - `pub(pkg)` instead of `pub(crate)`
+  - `return`
+  - `self`
+  - `Self`
+    - Special type
+  - `struct`
+  - `trait`
+  - `true`
+  - `type`
+  - `use`
+  - `where`
+  - `while`
+    - Suffixable
+- Stolen from Dart
+  - `try`
+  - `void`
+- Stolen from TypeScript
+  - `unknown`
+- Originals
+  - `fork`
+    - Suffixable
