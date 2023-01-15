@@ -60,7 +60,7 @@ like Java, getting out of your way and letting you solve the damn problem like
 Node.js.
 
 Described above is a language that will be difficult to design, and even harder
-to implement. My hope in all of this, at the very least, is to move the
+to implement. Our hope in all of this, at the very least, is to move the
 [Overton window](https://en.wikipedia.org/wiki/Overton_window) in a direction
 that we bet the programming world would enjoy.
 
@@ -223,7 +223,7 @@ abc = 321; // Compile-time error
 To create a mutable variable, you need to add a `!` suffix to the `let` keyword.
 
 ```rust
-let! xyz = 123;
+let xyz! = 123;
 
 xyz = 456; // 👍
 ```
@@ -711,19 +711,19 @@ match some_number {
 fn x() -> Result {
   something_that_can_fail(123).try;
   try {
-    let! a = 123;
+    let a! = 123;
     a = a * 2;
 
     something_that_can_fail(123)
   }
 }
 
-let! i = 0;
+let i! = 0;
 while i < 3 {
   print("i is $i");
 }
 
-let! is_done = false;
+let is_done! = false;
 is_done.while {
   is_done = true;
 }
@@ -1272,7 +1272,7 @@ fn autoboxed_foo() -> string? {
 }
 
 // `Result` is also autoboxable:
-let! x: Result<int> = Ok(1);
+let x!: Result<int> = Ok(1);
 x = 2;
 
 // Autoboxing works in structs too!

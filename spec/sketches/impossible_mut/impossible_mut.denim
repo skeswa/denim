@@ -1,5 +1,5 @@
 pub fn main(args: [string]) -> int {
-  let! a = A {
+  let a! = A {
     b: { d: 1, e: "E" },
     c: { f: true },
   };
