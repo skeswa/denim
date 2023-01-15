@@ -1201,6 +1201,12 @@ a_house.owner.active = true; // 👍
 a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not an `Address!`)
 ```
 
+### Control Flow
+
+TODO(skeswa): document branching
+TODO(skeswa): document loops
+TODO(skeswa): document loob labels (https://doc.rust-lang.org/rust-by-example/flow_control/loop/nested.html)
+
 #### "Selfification" (a.k.a Functions as Methods)
 
 Here, we take:
