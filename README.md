@@ -13,7 +13,7 @@ and language-level immutablity recently?
 The only _tangible_ differences between one language and another are the
 ecosystems and platforms that they can unlock for you. Go gets you into the
 cloud and terminal ecosystems, while JS/TS gets you into the browser and to the
-edge. Swift and Kotlin get you onto phones, and with C# you can ship on an Xbox.
+edge. Swift and Java get you onto phones, and with C# you can ship on an Xbox.
 
 And it got me thinking: **if the languages we use to write our apps are this
 similar, why on earth are we writing the same logic over and over again?** Why
@@ -91,14 +91,17 @@ the following transpilation targets in mind:
 
 - [Dart](https://dart.dev/) for Flutter
 - [Go](https://go.dev/) for Cloud and CLI
-- [Kotlin](https://kotlinlang.org/) for Android and Enterprise Java
-  compatibility
+- [Java](https://www.java.com/) for Android and legacy codebases
 - [Python](https://www.python.org/) for Data Science
 - [Swift](https://www.swift.org/) for Apple's ecosystem
 - [TypeScript](https://www.typescriptlang.org/) for Web
 
-Prototyping will likely focus on `Go` and `TypeScript` because they are
+Prototyping will likely focus on **Go** and **TypeScript** because they are
 sufficiently, popular, and generally useful.
+
+Thereafter, since I suspect that Denim's "killer app" will be code sharing
+between client-side and server-side codebases, it would make sense to target
+**Swift** and **Java**.
 
 ### Tour
 
@@ -1203,9 +1206,9 @@ a_house.address.street = "Baker Street"; // Compile-time error (`House::address`
 
 ### Control Flow
 
-TODO(skeswa): document branching
-TODO(skeswa): document loops
-TODO(skeswa): document loop labels (https://doc.rust-lang.org/rust-by-example/flow_control/loop/nested.html)
+TODO(skeswa): document branching TODO(skeswa): document loops TODO(skeswa):
+document loop labels
+(https://doc.rust-lang.org/rust-by-example/flow_control/loop/nested.html)
 
 #### "Selfification" (a.k.a Functions as Methods)
 
