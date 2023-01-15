@@ -1578,7 +1578,7 @@ extern(go) {
 }
 
 extern(ts) {
-  // @deno-types="npm:@types/pluralize@0.0.29"
+  #[deno_types("npm:@types/pluralize@0.0.29")]
   from(ts) "npm:pluralize@8.0.0" use {pluralize};
 
   struct TsPluralizer {}
