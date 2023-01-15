@@ -1205,7 +1205,7 @@ a_house.address.street = "Baker Street"; // Compile-time error (`House::address`
 
 TODO(skeswa): document branching
 TODO(skeswa): document loops
-TODO(skeswa): document loob labels (https://doc.rust-lang.org/rust-by-example/flow_control/loop/nested.html)
+TODO(skeswa): document loop labels (https://doc.rust-lang.org/rust-by-example/flow_control/loop/nested.html)
 
 #### "Selfification" (a.k.a Functions as Methods)
 
@@ -1668,6 +1668,7 @@ describe("Something") {
 - Stolen from Dart
   - `show`
   - `try`
+    - Suffixable
   - `void`
 - Stolen from Python
   - `from`
