@@ -187,7 +187,7 @@ It is important to note that **Denim does not have a null-type like Go's
 `nil`**. The closest idea that Denim has in this regard is the `void`. The
 `void` type has exactly one value, `void`, and is used when there is no other
 meaningful value that could be returned. `void`, much like Rust's `()`, is most
-commonly seen implicitly: functions without a `-> ...` implicitly have a `void`
+commonly seen implicitly: functions without a `->` implicitly have a `void`
 return type.
 
 ```rust
@@ -662,12 +662,16 @@ TODO(skeswa): list all of them here
 ##### Suffixing
 
 In Denim,some keywords can be applied as suffixes with `.` notation. Namely,
-`await`, `fork`, `if`, `match`, and `try`.
+`async`, `await`, `fork`, `if`, `match`, and `try`.
 
 ```rust
-print(await some_future);
+let some_eventual_function_value = async some_function("abc");
 
-print(some_future.await);
+let some_other_eventual_function_value = some_other_function("abc").async;
+
+print(await some_eventual_function_value);
+
+print(some_other_eventual_function_value.await);
 
 fork some_struct {
   some_field: "123",
@@ -936,11 +940,11 @@ stole Rust syntax here too.
 // We can make some or even all of the `struct` or its fields visible to
 // external modules using the `pub` keyword.
 pub struct User {
-  active = false;
+  active = false,
   /// You can put doc comments directly on `struct` fields.
-  coolness_rating: int;
-  pub name: string;
-  pub nickname: string?;
+  coolness_rating: int,
+  pub name: string,
+  pub nickname: string?,
 }
 ```
 
@@ -985,17 +989,15 @@ let jen = User {
 };
 ```
 
-You may notice that we opted to go with `;` to terminate field declarations
-instead of `,`. This is mostly to make adding methods to structs feel more
-natural. That's right! Denim sugarifies Rust's default `impl` by simply allowing
-you to declare methods within the `struct` itself. This should feel familiar to
-anyone coming from a language that makes heavy use of classes.
+Denim sugarifies Rust's default `impl` by simply allowing you to declare methods
+within the `struct` itself. This should feel familiar to anyone coming from a
+language that makes heavy use of classes.
 
 ```rust
 struct Car {
-  make: string;
-  model: string;
-  owner: User;
+  make: string,
+  model: string,
+  owner: User,
 
   // `self` is a special argument. Like in Rust, it means that this method is
   // attached to any instance of `Car`.
@@ -1140,13 +1142,13 @@ in situations where the surrounding type is itself mutable.
 
 ```rust
 struct House {
-  address: Address;
-  owner: User!;
+  address: Address,
+  owner: User!,
 }
 
 struct Address {
-  number: string;
-  street: string;
+  number: string,
+  street: string,
 }
 
 let a_house = House {
@@ -1336,6 +1338,8 @@ from "~/foo/bar" use {
 
 TODO(skeswa): flesh this out.
 
+TODO(skeswa): `where`.
+
 #### Type Unions and Intersections
 
 TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
@@ -1404,10 +1408,9 @@ fn do_a_thing() -> Result<void> {
 TODO(skeswa): flesh this out.
 
 ```rust
-pub struct Error<ErrorKind = unknown> {
-  pub cause: Option<Error>;
+pub struct Error<ErrorKind> {
+  pub cause: Error?;
   pub kind: ErrorKind;
-  pub message: string;
 }
 ```
 
@@ -1431,7 +1434,7 @@ while invoking other functions, and resuming when they return.
 ```rust
 // This call to `fetch` blocks, meaning that "done" will not be printed until
 // the fetch is finished.
-let weather = fetch(url: "http://get.theweather.com");
+let weather = fetch(url: "https://get.theweather.com");
 print("done");
 
 // The code below:
@@ -1442,30 +1445,33 @@ print("done");
 // 5. Prints "c"
 
 print("a");
-let first_thing = fetch(url: "http://first.thing.com");
+let first_thing = fetch(url: "https://first.thing.com");
 print("b");
-let second_thing = fetch(url: "http://second.thing.com");
+let second_thing = fetch(url: "https://second.thing.com");
 print("c");
 ```
+
 To call a function concurrently, use the `async` keyword. Using `async` on a
-function invocation wraps its return value in a special type called `Eventual`, like `Future` or `Promise` in other languages, is a concurrency
-monad that allows you to subscribe to the completion of an asynchronous operation.
+function invocation wraps its return value in a special type called `Eventual`,
+like `Future` or `Promise` in other languages, is a concurrency monad that
+allows you to subscribe to the completion of an asynchronous operation.
 
 ```rust
 // This logic prints "a" then "b" then "c", printing the time in joburg and in
 // nyc (in no particular order) when the fetches complete later on.
 
 print("a");
-let time_in_joburg = fetch(url: "http://worldtime.com/in/joburg").async;
+let time_in_joburg = fetch(url: "https://worldtime.com/in/joburg").async;
 print("b");
-let time_in_nyc = fetch(url: "http://worldtime.com/in/nyc").async;
+let time_in_nyc = fetch(url: "https://worldtime.com/in/nyc").async;
 print("c");
 
 time_in_joburg.then(|time| print("time in joburg: $time"));
 time_in_nyc.then(|time| print("time in nyc: $time_in_nyc"));
 ```
 
-Denim provides a way to "wait" for the `Eventual` values returned by `async` functions - the `await` keyword. With `await`, working with asynchronous
+Denim provides a way to "wait" for the `Eventual` values returned by `async`
+functions - the `await` keyword. With `await`, working with asynchronous
 operations can be quite ergonomic.
 
 ```rust
@@ -1475,7 +1481,7 @@ operations can be quite ergonomic.
 // 3. Waits for the time in atlanta to be available before printing it
 // 4. Prints "b"
 
-let time_in_atlanta = fetch(url: "http://worldtime.com/in/atlanta").async;
+let time_in_atlanta = fetch(url: "https://worldtime.com/in/atlanta").async;
 
 print("a");
 print(time_in_atlanta.await);
@@ -1491,25 +1497,25 @@ operations at once in Denim.
 // Any tuple of `Eventual` values has a method called `.after_all()` that waits
 // for every `Eventual` to complete.
 let (google_icon, _, c_text) = (
-  fetch(url: "http://google.com/favicon.ico").async,
+  fetch(url: "https://google.com/favicon.ico").async,
   pause(Duration::new(milliseconds: 100)).async,
   readFile(path: "./a/b/c.txt").async,
 ).after_all().await;
 
 // Arrays of `Eventual` also support `.after_all()`.
 let icons = [
-  fetch(url: "http://nba.com/favicon.ico").async,
-  fetch(url: "http://nhl.com/favicon.ico").async,
-  fetch(url: "http://mlb.com/favicon.ico").async,
+  fetch(url: "https://nba.com/favicon.ico").async,
+  fetch(url: "https://nhl.com/favicon.ico").async,
+  fetch(url: "https://mlb.com/favicon.ico").async,
 ].after_all().await;
 
 // Both tuples and arrays of `Eventual` support `.race()` to wait for the first
 // `Eventual` to complete, wrapping values in `Option::None` to mark `Eventual`
 // values that lost the race.
 let results = [
-  fetch(url: "http://later.com").async,
-  fetch(url: "http://now.com").async,
-  fetch(url: "http://way.later.com").async,
+  fetch(url: "https://later.com").async,
+  fetch(url: "https://now.com").async,
+  fetch(url: "https://way.later.com").async,
 ].race().await;
 
 print("$results"); // Prints "[None, Some(data), None]"
@@ -1529,7 +1535,7 @@ extern(go) {
   from(go) "github.com/gertd/go-pluralize@0.2" use {...pluralize};
 
   struct GoPluralizer {
-    client: pluralize.Client
+    client: pluralize.Client,
   }
 
   impl Pluralizer for GoPluralizer {
