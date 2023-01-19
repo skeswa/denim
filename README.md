@@ -584,9 +584,6 @@ Denim features the "usual suspects" for a C-family language:
   [Python](https://docs.python.org/3/reference/expressions.html#the-power-operator)
 - `~/`, the truncating division operator, is stolen from
   [Dart](https://api.flutter.dev/flutter/dart-core/num/operator_truncate_divide.html)
-- `+=`, `-=`, `*=`, `/=`\
-  Arithmetic assignment operators, like in other languages, apply an arithmetic operator
-  to a variable and reassign the resulting value to the variable
 
 You might be wondering where the bitwise operators are - there are none! Looking
 for operator overloads? You won't find them here.
@@ -1397,13 +1394,13 @@ fn do_another_thing(data: int | string | byte) {
 }
 
 trait Foo {
-  fn bar(self) -> int;
-  fn baz(self) -> bool;
+  fn bar(self) -> int,
+  fn baz(self) -> bool,
 }
 
 trait Ping {
-  fn bar(self) -> int;
-  fn pong(self);
+  fn bar(self) -> int,
+  fn pong(self),
 }
 
 fn do_one_more_thing(data: Foo | Ping) {
@@ -1669,6 +1666,8 @@ describe("Something") {
   - `while`
     - Suffixable
 - Stolen from Dart
+  - `is`
+    - Used for Dart-style type checking
   - `show`
   - `try`
     - Suffixable
