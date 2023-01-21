@@ -25,11 +25,11 @@ import "github.com/skeswa/denim/lang/ast"
 // certain Go compiler optimization passes, so it has been removed and replaced
 // with this more error-prone approach that doesn't use "unsafe".
 type MaybeSubstring struct {
+	// Contents of the substring.
+	String string
 	// First index of the substring.
 	//
 	// Invalid value (the zero value) if `String` is not a substring of
 	// `source.Contents`.
 	Start ast.Index32
-	// Contents of the substring.
-	String string
 }

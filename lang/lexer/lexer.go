@@ -1,9 +1,9 @@
 package lexer
 
 import (
-	"strings"
 	"unicode/utf8"
 
+	"github.com/skeswa/denim/lang/ast"
 	"github.com/skeswa/denim/lang/logger"
 )
 
@@ -75,15 +75,11 @@ type Lexer struct {
 	// ???
 	prevErrorLoc logger.Loc
 	// ???
-	json JSONFlavor
-	// ???
 	Token T
 	// ???
 	HasNewlineBefore bool
 	// ???
 	HasPureCommentBefore bool
-	// ???
-	PrevTokenWasAwaitKeyword bool
 	// ???
 	rescanCloseBraceAsTemplateToken bool
 	// ???
@@ -101,7 +97,6 @@ func NewLexer(log logger.Log, source logger.Source) Lexer {
 		tracker:           logger.MakeLineColumnTracker(&source),
 		prevErrorLoc:      logger.Loc{Start: -1},
 		FnOrArrowStartLoc: logger.Loc{Start: -1},
-		json:              NotJSON,
 	}
 	lexer.step()
 	lexer.Next()
@@ -112,7 +107,6 @@ func NewLexer(log logger.Log, source logger.Source) Lexer {
 func (lexer *Lexer) Next() {
 	lexer.HasNewlineBefore = lexer.end == 0
 	lexer.HasPureCommentBefore = false
-	lexer.PrevTokenWasAwaitKeyword = false
 	lexer.LegalCommentsBeforeToken = lexer.LegalCommentsBeforeToken[:0]
 	lexer.CommentsBeforeToken = lexer.CommentsBeforeToken[:0]
 
@@ -124,43 +118,21 @@ func (lexer *Lexer) Next() {
 		case -1: // This indicates the end of the file
 			lexer.Token = TEndOfFile
 
-		case '#':
-			if lexer.start == 0 && strings.HasPrefix(lexer.source.Contents, "#!") {
-				// "#!/usr/bin/env node"
-				lexer.Token = THashbang
-			hashbang:
-				for {
-					lexer.step()
-					switch lexer.codePoint {
-					case '\r', '\n', '\u2028', '\u2029':
-						break hashbang
+		// case '#':
+		// 	// TODO(skeswa): this is where we would learn how to parse attributes.
+		// 	//
+		// 	// "#foo"
+		// 	lexer.step()
+		// 	if !ast.IsIdentifierStart(lexer.codePoint) {
+		// 		lexer.SyntaxError()
+		// 	}
+		// 	lexer.step()
+		// 	for ast.IsIdentifierContinue(lexer.codePoint) {
+		// 		lexer.step()
+		// 	}
+		// 	lexer.Identifier = lexer.rawIdentifier()
 
-					case -1: // This indicates the end of the file
-						break hashbang
-					}
-				}
-				lexer.Identifier = lexer.rawIdentifier()
-			} else {
-				// "#foo"
-				lexer.step()
-				if lexer.codePoint == '\\' {
-					lexer.Identifier, _ = lexer.scanIdentifierWithEscapes(privateIdentifier)
-				} else {
-					if !js_ast.IsIdentifierStart(lexer.codePoint) {
-						lexer.SyntaxError()
-					}
-					lexer.step()
-					for js_ast.IsIdentifierContinue(lexer.codePoint) {
-						lexer.step()
-					}
-					if lexer.codePoint == '\\' {
-						lexer.Identifier, _ = lexer.scanIdentifierWithEscapes(privateIdentifier)
-					} else {
-						lexer.Identifier = lexer.rawIdentifier()
-					}
-				}
-				lexer.Token = TPrivateIdentifier
-			}
+		// 	lexer.Token = TPrivateIdentifier
 
 		case '\r', '\n', '\u2028', '\u2029':
 			lexer.step()
@@ -211,189 +183,82 @@ func (lexer *Lexer) Next() {
 			lexer.step()
 			lexer.Token = TAt
 
-		case '~':
-			lexer.step()
-			lexer.Token = TTilde
-
 		case '?':
-			// '?' or '?.' or '??' or '??='
+			// '?.' or '??'
 			lexer.step()
 			switch lexer.codePoint {
 			case '?':
 				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TQuestionQuestionEquals
-				default:
-					lexer.Token = TQuestionQuestion
-				}
+				lexer.Token = TQuestionQuestion
 			case '.':
-				lexer.Token = TQuestion
-				current := lexer.current
-				contents := lexer.source.Contents
-
-				// Lookahead to disambiguate with 'a?.1:b'
-				if current < len(contents) {
-					c := contents[current]
-					if c < '0' || c > '9' {
-						lexer.step()
-						lexer.Token = TQuestionDot
-					}
-				}
+				lexer.Token = TQuestionDot
 			default:
-				lexer.Token = TQuestion
+				// Standalone `?` is not a thing
+				lexer.Unexpected()
 			}
 
 		case '%':
-			// '%' or '%='
 			lexer.step()
-			switch lexer.codePoint {
-			case '=':
-				lexer.step()
-				lexer.Token = TPercentEquals
-			default:
-				lexer.Token = TPercent
-			}
+			lexer.Token = TPercent
 
 		case '&':
-			// '&' or '&=' or '&&' or '&&='
+			// '&' or '&&'
 			lexer.step()
 			switch lexer.codePoint {
-			case '=':
-				lexer.step()
-				lexer.Token = TAmpersandEquals
 			case '&':
 				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TAmpersandAmpersandEquals
-				default:
-					lexer.Token = TAmpersandAmpersand
-				}
+				lexer.Token = TAmpersandAmpersand
 			default:
 				lexer.Token = TAmpersand
 			}
 
 		case '|':
-			// '|' or '|=' or '||' or '||='
+			// '|' or '||'
 			lexer.step()
 			switch lexer.codePoint {
-			case '=':
-				lexer.step()
-				lexer.Token = TBarEquals
 			case '|':
 				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TBarBarEquals
-				default:
-					lexer.Token = TBarBar
-				}
+				lexer.Token = TBarBar
 			default:
 				lexer.Token = TBar
-			}
-
-		case '^':
-			// '^' or '^='
-			lexer.step()
-			switch lexer.codePoint {
-			case '=':
-				lexer.step()
-				lexer.Token = TCaretEquals
-			default:
-				lexer.Token = TCaret
 			}
 
 		case '+':
 			// '+' or '+=' or '++'
 			lexer.step()
-			switch lexer.codePoint {
-			case '=':
-				lexer.step()
-				lexer.Token = TPlusEquals
-			case '+':
-				lexer.step()
-				lexer.Token = TPlusPlus
-			default:
-				lexer.Token = TPlus
-			}
+			lexer.Token = TPlus
 
 		case '-':
-			// '-' or '-=' or '--' or '-->'
+			// '-' or '->'
 			lexer.step()
 			switch lexer.codePoint {
-			case '=':
+			case '>':
 				lexer.step()
-				lexer.Token = TMinusEquals
-			case '-':
-				lexer.step()
-
-				// Handle legacy HTML-style comments
-				if lexer.codePoint == '>' && lexer.HasNewlineBefore {
-					lexer.step()
-					lexer.LegacyHTMLCommentRange = lexer.Range()
-					lexer.log.AddID(logger.MsgID_JS_HTMLCommentInJS, logger.Warning, &lexer.tracker, lexer.Range(),
-						"Treating \"-->\" as the start of a legacy HTML single-line comment")
-				singleLineHTMLCloseComment:
-					for {
-						switch lexer.codePoint {
-						case '\r', '\n', '\u2028', '\u2029':
-							break singleLineHTMLCloseComment
-
-						case -1: // This indicates the end of the file
-							break singleLineHTMLCloseComment
-						}
-						lexer.step()
-					}
-					continue
-				}
-
-				lexer.Token = TMinusMinus
+				lexer.Token = TMinusGreaterThan
 			default:
 				lexer.Token = TMinus
-				if lexer.json == JSON && lexer.codePoint != '.' && (lexer.codePoint < '0' || lexer.codePoint > '9') {
-					lexer.Unexpected()
-				}
 			}
 
 		case '*':
-			// '*' or '*=' or '**' or '**='
+			// '*' or '**'
 			lexer.step()
 			switch lexer.codePoint {
-			case '=':
-				lexer.step()
-				lexer.Token = TAsteriskEquals
-
 			case '*':
 				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TAsteriskAsteriskEquals
-
-				default:
-					lexer.Token = TAsteriskAsterisk
-				}
+				lexer.Token = TAsteriskAsterisk
 
 			default:
 				lexer.Token = TAsterisk
 			}
 
 		case '/':
-			// '/' or '/=' or '//' or '/* ... */'
+			// '/' '//' or '/* ... */'
 			lexer.step()
 			if lexer.forGlobalName {
 				lexer.Token = TSlash
 				break
 			}
 			switch lexer.codePoint {
-			case '=':
-				lexer.step()
-				lexer.Token = TSlashEquals
-
 			case '/':
 			singleLineComment:
 				for {
@@ -405,9 +270,6 @@ func (lexer *Lexer) Next() {
 					case -1: // This indicates the end of the file
 						break singleLineComment
 					}
-				}
-				if lexer.json == JSON {
-					lexer.addRangeError(lexer.Range(), "JSON does not support comments")
 				}
 				lexer.scanCommentText()
 				continue
@@ -439,9 +301,6 @@ func (lexer *Lexer) Next() {
 						lexer.step()
 					}
 				}
-				if lexer.json == JSON {
-					lexer.addRangeError(lexer.Range(), "JSON does not support comments")
-				}
 				lexer.scanCommentText()
 				continue
 
@@ -450,7 +309,7 @@ func (lexer *Lexer) Next() {
 			}
 
 		case '=':
-			// '=' or '=>' or '==' or '==='
+			// '=' or '=>' or '=='
 			lexer.step()
 			switch lexer.codePoint {
 			case '>':
@@ -458,120 +317,54 @@ func (lexer *Lexer) Next() {
 				lexer.Token = TEqualsGreaterThan
 			case '=':
 				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TEqualsEqualsEquals
-				default:
-					lexer.Token = TEqualsEquals
-				}
+				lexer.Token = TEqualsEquals
 			default:
 				lexer.Token = TEquals
 			}
 
 		case '<':
-			// '<' or '<<' or '<=' or '<<=' or '<!--'
+			// '<' or '<='
 			lexer.step()
 			switch lexer.codePoint {
 			case '=':
 				lexer.step()
 				lexer.Token = TLessThanEquals
-			case '<':
-				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TLessThanLessThanEquals
-				default:
-					lexer.Token = TLessThanLessThan
-				}
-
-				// Handle legacy HTML-style comments
-			case '!':
-				if strings.HasPrefix(lexer.source.Contents[lexer.start:], "<!--") {
-					lexer.step()
-					lexer.step()
-					lexer.step()
-					lexer.LegacyHTMLCommentRange = lexer.Range()
-					lexer.log.AddID(logger.MsgID_JS_HTMLCommentInJS, logger.Warning, &lexer.tracker, lexer.Range(),
-						"Treating \"<!--\" as the start of a legacy HTML single-line comment")
-				singleLineHTMLOpenComment:
-					for {
-						switch lexer.codePoint {
-						case '\r', '\n', '\u2028', '\u2029':
-							break singleLineHTMLOpenComment
-
-						case -1: // This indicates the end of the file
-							break singleLineHTMLOpenComment
-						}
-						lexer.step()
-					}
-					continue
-				}
-
-				lexer.Token = TLessThan
 
 			default:
 				lexer.Token = TLessThan
 			}
 
 		case '>':
-			// '>' or '>>' or '>>>' or '>=' or '>>=' or '>>>='
+			// '>' or '>='
 			lexer.step()
 			switch lexer.codePoint {
 			case '=':
 				lexer.step()
 				lexer.Token = TGreaterThanEquals
-			case '>':
-				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TGreaterThanGreaterThanEquals
-				case '>':
-					lexer.step()
-					switch lexer.codePoint {
-					case '=':
-						lexer.step()
-						lexer.Token = TGreaterThanGreaterThanGreaterThanEquals
-					default:
-						lexer.Token = TGreaterThanGreaterThanGreaterThan
-					}
-				default:
-					lexer.Token = TGreaterThanGreaterThan
-				}
 			default:
 				lexer.Token = TGreaterThan
 			}
 
 		case '!':
-			// '!' or '!=' or '!=='
+			// '!' or '!='
 			lexer.step()
 			switch lexer.codePoint {
 			case '=':
 				lexer.step()
-				switch lexer.codePoint {
-				case '=':
-					lexer.step()
-					lexer.Token = TExclamationEqualsEquals
-				default:
-					lexer.Token = TExclamationEquals
-				}
+				lexer.Token = TExclamationEquals
 			default:
 				lexer.Token = TExclamation
 			}
 
-		case '\'', '"', '`':
+		case '\'', '"':
 			quote := lexer.codePoint
 			needsSlowPath := false
 			suffixLen := 1
 
-			if quote != '`' {
-				lexer.Token = TStringLiteral
-			} else if lexer.rescanCloseBraceAsTemplateToken {
-				lexer.Token = TTemplateTail
+			if quote != '\'' {
+				lexer.Token = TRuneLiteral
 			} else {
-				lexer.Token = TNoSubstitutionTemplateLiteral
+				lexer.Token = TStringLiteral
 			}
 			lexer.step()
 
@@ -583,7 +376,7 @@ func (lexer *Lexer) Next() {
 					lexer.step()
 
 					// Handle Windows CRLF
-					if lexer.codePoint == '\r' && lexer.json != JSON {
+					if lexer.codePoint == '\r' {
 						lexer.step()
 						if lexer.codePoint == '\n' {
 							lexer.step()
@@ -595,31 +388,36 @@ func (lexer *Lexer) Next() {
 					lexer.addRangeError(logger.Range{Loc: logger.Loc{Start: int32(lexer.end)}}, "Unterminated string literal")
 					panic(LexerPanic{})
 
-				case '\r':
-					if quote != '`' {
-						lexer.addRangeError(logger.Range{Loc: logger.Loc{Start: int32(lexer.end)}}, "Unterminated string literal")
-						panic(LexerPanic{})
-					}
+				// // TODO(skeswa): multiline (""") string support.
+				// // TODO(skeswa): raw (r#""#) string support.
+				//
+				// case '\r':
+				// 	if quote != '`' {
+				// 		lexer.addRangeError(logger.Range{Loc: logger.Loc{Start: int32(lexer.end)}}, "Unterminated string literal")
+				// 		panic(LexerPanic{})
+				// 	}
 
-					// Template literals require newline normalization
-					needsSlowPath = true
+				// 	// Template literals require newline normalization
+				// 	needsSlowPath = true
 
-				case '\n':
-					if quote != '`' {
-						lexer.addRangeError(logger.Range{Loc: logger.Loc{Start: int32(lexer.end)}}, "Unterminated string literal")
-						panic(LexerPanic{})
-					}
+				// case '\n':
+				// 	if quote != '`' {
+				// 		lexer.addRangeError(logger.Range{Loc: logger.Loc{Start: int32(lexer.end)}}, "Unterminated string literal")
+				// 		panic(LexerPanic{})
+				// 	}
 
 				case '$':
-					if quote == '`' {
+					if quote == '"' {
+						// TODO(skeswa): dart-style string interpolation support.
+
 						lexer.step()
 						if lexer.codePoint == '{' {
 							suffixLen = 2
 							lexer.step()
 							if lexer.rescanCloseBraceAsTemplateToken {
-								lexer.Token = TTemplateMiddle
+								lexer.Token = TStringInterpolationMiddle
 							} else {
-								lexer.Token = TTemplateHead
+								lexer.Token = TStringInterpolationHead
 							}
 							break stringLiteral
 						}
@@ -634,8 +432,6 @@ func (lexer *Lexer) Next() {
 					// Non-ASCII strings need the slow path
 					if lexer.codePoint >= 0x80 {
 						needsSlowPath = true
-					} else if lexer.json == JSON && lexer.codePoint < 0x20 {
-						lexer.SyntaxError()
 					}
 				}
 				lexer.step()
@@ -658,10 +454,6 @@ func (lexer *Lexer) Next() {
 				lexer.decodedStringLiteralOrNil = copy
 			}
 
-			if quote == '\'' && (lexer.json == JSON || lexer.json == TSConfigJSON) {
-				lexer.addRangeError(lexer.Range(), "JSON strings must use double quotes")
-			}
-
 		// Note: This case is hot in profiles
 		case '_', '$',
 			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -669,8 +461,8 @@ func (lexer *Lexer) Next() {
 			'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z':
 			// This is a fast path for long ASCII identifiers. Doing this in a loop
-			// first instead of doing "step()" and "js_ast.IsIdentifierContinue()" like we
-			// do after this is noticeably faster in the common case of ASCII-only
+			// first instead of doing "step()" and "ast.IsIdentifierContinue()" like
+			// we do after this is noticeably faster in the common case of ASCII-only
 			// text. For example, doing this sped up end-to-end consuming of a large
 			// TypeScript type declaration file from 97ms to 79ms (around 20% faster).
 			contents := lexer.source.Contents
@@ -688,16 +480,9 @@ func (lexer *Lexer) Next() {
 			// Now do the slow path for any remaining non-ASCII identifier characters
 			lexer.step()
 			if lexer.codePoint >= 0x80 {
-				for js_ast.IsIdentifierContinue(lexer.codePoint) {
+				for ast.IsIdentifierContinue(lexer.codePoint) {
 					lexer.step()
 				}
-			}
-
-			// If there's a slash, then we're in the extra-slow (and extra-rare) case
-			// where the identifier has embedded escapes
-			if lexer.codePoint == '\\' {
-				lexer.Identifier, lexer.Token = lexer.scanIdentifierWithEscapes(normalIdentifier)
-				break
 			}
 
 			// Otherwise (if there was no escape) we can slice the code verbatim
@@ -707,30 +492,24 @@ func (lexer *Lexer) Next() {
 				lexer.Token = TIdentifier
 			}
 
-		case '\\':
-			lexer.Identifier, lexer.Token = lexer.scanIdentifierWithEscapes(normalIdentifier)
-
 		case '.', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9':
 			lexer.parseNumericLiteralOrDot()
 
 		default:
 			// Check for unusual whitespace characters
-			if js_ast.IsWhitespace(lexer.codePoint) {
+			if ast.IsWhitespace(lexer.codePoint) {
 				lexer.step()
 				continue
 			}
 
-			if js_ast.IsIdentifierStart(lexer.codePoint) {
+			if ast.IsIdentifierStart(lexer.codePoint) {
 				lexer.step()
-				for js_ast.IsIdentifierContinue(lexer.codePoint) {
+				for ast.IsIdentifierContinue(lexer.codePoint) {
 					lexer.step()
 				}
-				if lexer.codePoint == '\\' {
-					lexer.Identifier, lexer.Token = lexer.scanIdentifierWithEscapes(normalIdentifier)
-				} else {
-					lexer.Token = TIdentifier
-					lexer.Identifier = lexer.rawIdentifier()
-				}
+
+				lexer.Token = TIdentifier
+				lexer.Identifier = lexer.rawIdentifier()
 				break
 			}
 

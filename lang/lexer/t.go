@@ -16,6 +16,11 @@ const (
 	TRuneLiteral   // Contents are in lexer.RuneLiteral (uint16)
 	TStringLiteral // Contents are in lexer.StringLiteral ([]uint16)
 
+	// Pseudo-literals
+	TStringInterpolationHead   // Contents are in lexer.StringLiteral ([]uint16)
+	TStringInterpolationMiddle // Contents are in lexer.StringLiteral ([]uint16)
+	TStringInterpolationTail   // Contents are in lexer.StringLiteral ([]uint16)
+
 	// Punctuation
 	TAmpersand
 	TAmpersandAmpersand
