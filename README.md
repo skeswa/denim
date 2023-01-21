@@ -248,14 +248,6 @@ line to stdout.
 print("hello world"); // Prints "hello world" on its own line.
 ```
 
-`eprint` is another version of `print` intended for warnings, log messages, and
-errors. In the browser, this means it calls `console.warn(...)` under the hood.
-Outside of the browser, it appends a line to `stderr`.
-
-```rust
-eprint("uh oh"); // Prints "uh oh" on its own line.
-```
-
 #### Tuples
 
 Tuples are a fixed-size collection of different types. They can be helpful in
