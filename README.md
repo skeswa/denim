@@ -1,6 +1,6 @@
 # 👖 Denim
 
-A programming language for cross-platform code sharing.
+A comfortable, familiar programming language designed for interoperability.
 
 ## Pitch
 
