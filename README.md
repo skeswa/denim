@@ -236,8 +236,7 @@ to declare constants at the top-level lexical scope,
 
 #### Printing
 
-Denim ships with two main ways to print out to the console, `print` and
-`eprint`.
+Denim ships with one main way to print out to the console - `print`.
 
 `print` is a function (explained in greater depth later) that takes a `string`
 which it prints to its own line in the console. In the browser, this means it
@@ -247,6 +246,9 @@ line to stdout.
 ```rust
 print("hello world"); // Prints "hello world" on its own line.
 ```
+
+It is worth noting that more sophisticated logging facilities are available via
+library.
 
 #### Tuples
 
