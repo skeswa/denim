@@ -654,12 +654,64 @@ if !message.is_empty() {
 
 #### Keywords
 
-TODO(skeswa): list all of them here
+- Stolen from Rust
+  - `as`
+  - `async`
+    - Suffixable
+  - `await`
+    - Suffixable
+  - `break`
+  - `continue`
+  - `else`
+  - `enum`
+  - `extern`
+  - `false`
+  - `fn`
+  - `for`
+  - `if`
+    - Suffixable
+  - `impl`
+  - `in`
+  - `let`
+  - `loop`
+  - `match`
+    - Suffixable
+  - `mod`
+  - `pub`
+    - `pub(pkg)` instead of `pub(crate)`
+  - `return`
+  - `self`
+  - `Self`
+    - Special type
+  - `struct`
+  - `trait`
+  - `true`
+  - `type`
+  - `use`
+  - `where`
+  - `while`
+    - Suffixable
+- Stolen from Dart
+  - `is`
+    - Used for Dart-style type checking
+  - `show`
+  - `try`
+    - Suffixable
+  - `void`
+- Stolen from Python
+  - `from`
+- Stolen from TypeScript
+  - `unknown`
+- Originals
+  - `fork`
+    - Suffixable
+  - `tandem`
+    - Suffixable
 
 ##### Suffixing
 
 In Denim,some keywords can be applied as suffixes with `.` notation. Namely,
-`async`, `await`, `fork`, `if`, `match`, `try`, and `while`.
+`async`, `await`, `fork`, `if`, `match`, `tandem`, `try`, and `while`.
 
 ```rust
 let some_eventual_function_value = async some_function("abc");
@@ -1511,11 +1563,10 @@ print("b");
 ```
 
 There are a garden variety of helpful ways to wait on multiple asynchronous
-operations at once in Denim.
+operations at once in Denim. In particular, tuples are a great way to wait on
+`Eventual` values with different types.
 
 ```rust
-// Tuples are the best way to wait on `Eventual` values with different types.
-//
 // Any tuple of `Eventual` values has a method called `.after_all()` that waits
 // for every `Eventual` to complete.
 let (google_icon, _, c_text) = (
@@ -1530,10 +1581,48 @@ let icons = [
   fetch(url: "https://nhl.com/favicon.ico").async,
   fetch(url: "https://mlb.com/favicon.ico").async,
 ].after_all().await;
+```
 
-// Both tuples and arrays of `Eventual` support `.race()` to wait for the first
-// `Eventual` to complete, wrapping values in `Option::None` to mark `Eventual`
-// values that lost the race.
+Since this is quite a common pattern in Denim, there is a special syntax for it
+enabled by the `tandem` keyword. `tandem` is simply syntactic sugar for the
+concurrent invocation of multiple potentially asynchronous functions normally
+enabled by the combined usage of `.async` and `.after_all().await`.
+
+```rust
+let (google_icon, _, c_text) = tandem (
+  fetch(url: "https://google.com/favicon.ico"),
+  pause(Duration::new(milliseconds: 100)),
+  readFile(path: "./a/b/c.txt"),
+);
+
+let icons = tandem [
+  fetch(url: "https://nba.com/favicon.ico"),
+  fetch(url: "https://nhl.com/favicon.ico"),
+  fetch(url: "https://mlb.com/favicon.ico"),
+];
+```
+
+The `tandem` keyword is also suffixable, just like `async` and `await`.
+
+```rust
+let (google_icon, _, c_text) = (
+  fetch(url: "https://google.com/favicon.ico"),
+  pause(Duration::new(milliseconds: 100)),
+  readFile(path: "./a/b/c.txt"),
+).tandem;
+
+let icons = [
+  fetch(url: "https://nba.com/favicon.ico"),
+  fetch(url: "https://nhl.com/favicon.ico"),
+  fetch(url: "https://mlb.com/favicon.ico"),
+].tandem;
+```
+
+Both tuples and arrays of `Eventual` support `.race()` to wait for the first
+`Eventual` to complete, wrapping values in `Option::None` to mark `Eventual`
+values that lost the race.
+
+```rust
 let results = [
   fetch(url: "https://later.com").async,
   fetch(url: "https://now.com").async,
@@ -1619,57 +1708,3 @@ describe("Something") {
   }
 }
 ```
-
-#### Keywords
-
-- Stolen from Rust
-  - `as`
-  - `async`
-    - Suffixable
-  - `await`
-    - Suffixable
-  - `break`
-  - `continue`
-  - `else`
-  - `enum`
-  - `extern`
-  - `false`
-  - `fn`
-  - `for`
-  - `if`
-    - Suffixable
-  - `impl`
-  - `in`
-  - `let`
-  - `loop`
-  - `match`
-    - Suffixable
-  - `mod`
-  - `pub`
-    - `pub(pkg)` instead of `pub(crate)`
-  - `return`
-  - `self`
-  - `Self`
-    - Special type
-  - `struct`
-  - `trait`
-  - `true`
-  - `type`
-  - `use`
-  - `where`
-  - `while`
-    - Suffixable
-- Stolen from Dart
-  - `is`
-    - Used for Dart-style type checking
-  - `show`
-  - `try`
-    - Suffixable
-  - `void`
-- Stolen from Python
-  - `from`
-- Stolen from TypeScript
-  - `unknown`
-- Originals
-  - `fork`
-    - Suffixable
