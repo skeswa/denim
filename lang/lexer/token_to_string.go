@@ -77,6 +77,7 @@ var tokenToString = map[T]string{
 	TSelfType: "\"selftype\"",
 	TShow:     "\"show\"",
 	TStruct:   "\"struct\"",
+	TTandem:   "\"tandem\"",
 	TTrait:    "\"trait\"",
 	TTrue:     "\"true\"",
 	TTry:      "\"try\"",

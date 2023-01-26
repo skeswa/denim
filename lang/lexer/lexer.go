@@ -3,8 +3,9 @@ package lexer
 import (
 	"unicode/utf8"
 
-	"github.com/skeswa/denim/lang/ast"
+	"github.com/skeswa/denim/lang/identifier"
 	"github.com/skeswa/denim/lang/logger"
+	"github.com/skeswa/denim/lang/optimizations"
 )
 
 // Converts a source file to a stream of tokens.
@@ -26,7 +27,7 @@ type Lexer struct {
 	// ???
 	CommentsBeforeToken []logger.Range
 	// ???
-	Identifier MaybeSubstring
+	Identifier optimizations.MaybeSubstring
 	// ???
 	LegalCommentsBeforeToken []logger.Range
 	// ???
@@ -480,7 +481,7 @@ func (lexer *Lexer) Next() {
 			// Now do the slow path for any remaining non-ASCII identifier characters
 			lexer.step()
 			if lexer.codePoint >= 0x80 {
-				for ast.IsIdentifierContinue(lexer.codePoint) {
+				for identifier.IsContinuation(lexer.codePoint) {
 					lexer.step()
 				}
 			}
@@ -497,14 +498,14 @@ func (lexer *Lexer) Next() {
 
 		default:
 			// Check for unusual whitespace characters
-			if ast.IsWhitespace(lexer.codePoint) {
+			if isWhitespace(lexer.codePoint) {
 				lexer.step()
 				continue
 			}
 
-			if ast.IsIdentifierStart(lexer.codePoint) {
+			if identifier.IsStart(lexer.codePoint) {
 				lexer.step()
-				for ast.IsIdentifierContinue(lexer.codePoint) {
+				for identifier.IsContinuation(lexer.codePoint) {
 					lexer.step()
 				}
 

@@ -1630,7 +1630,7 @@ trait Pluralizer {
 
 extern(go) {
   // Automatically compiles a Denim-friendly interface.
-  from(go) "github.com/gertd/go-pluralize@0.2" use {...pluralize};
+  from(go) "github.com/gertd/go-pluralize@0.2" use { ...pluralize };
 
   struct GoPluralizer {
     client: pluralize.Client,
@@ -1649,7 +1649,7 @@ extern(go) {
 
 extern(ts) {
   #[deno_types("npm:@types/pluralize@0.0.29")]
-  from(ts) "npm:pluralize@8.0.0" use {pluralize};
+  from(ts) "npm:pluralize@8.0.0" use { pluralize };
 
   struct TsPluralizer {}
 

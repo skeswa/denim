@@ -1,6 +1,4 @@
-package lexer
-
-import "github.com/skeswa/denim/lang/ast"
+package optimizations
 
 // Represents a string that is maybe a substring of the current file's
 // "source.Contents" string; the point of doing this is that if it is a
@@ -31,5 +29,5 @@ type MaybeSubstring struct {
 	//
 	// Invalid value (the zero value) if `String` is not a substring of
 	// `source.Contents`.
-	Start ast.Index32
+	Start Index32
 }

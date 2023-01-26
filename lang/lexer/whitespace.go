@@ -1,9 +1,9 @@
-package ast
+package lexer
 
 // Returns `true` if `codePoint` is whitespace.
 //
 // See the "White Space Code Points" table in the ECMAScript standard.
-func IsWhitespace(codePoint rune) bool {
+func isWhitespace(codePoint rune) bool {
 	switch codePoint {
 	case
 		'\u0009', // character tabulation

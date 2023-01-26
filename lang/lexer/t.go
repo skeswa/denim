@@ -91,6 +91,7 @@ const (
 	TSelfType
 	TShow
 	TStruct
+	TTandem
 	TTrait
 	TTrue
 	TTry

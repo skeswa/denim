@@ -3,7 +3,6 @@ package lexer
 import (
 	"unicode/utf8"
 
-	"github.com/skeswa/denim/lang/ast"
 	"github.com/skeswa/denim/lang/logger"
 )
 
@@ -29,10 +28,10 @@ func scanForPragmaArg(kind pragmaArg, start int, pragma string, text string) (lo
 	// One or more whitespace characters
 	c, width := utf8.DecodeRuneInString(text)
 	if kind == pragmaSkipSpaceFirst {
-		if !ast.IsWhitespace(c) {
+		if !isWhitespace(c) {
 			return logger.Span{}, false
 		}
-		for ast.IsWhitespace(c) {
+		for isWhitespace(c) {
 			text = text[width:]
 			start += width
 			if text == "" {
@@ -44,13 +43,13 @@ func scanForPragmaArg(kind pragmaArg, start int, pragma string, text string) (lo
 
 	// One or more non-whitespace characters
 	i := 0
-	for !ast.IsWhitespace(c) {
+	for !isWhitespace(c) {
 		i += width
 		if i >= len(text) {
 			break
 		}
 		c, width = utf8.DecodeRuneInString(text[i:])
-		if ast.IsWhitespace(c) {
+		if isWhitespace(c) {
 			break
 		}
 	}

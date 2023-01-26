@@ -1,4 +1,4 @@
-package ast
+package optimizations
 
 // Stores a 32-bit index where the zero value is an invalid index.
 //

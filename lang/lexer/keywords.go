@@ -30,6 +30,7 @@ var Keywords = map[string]T{
 	"selftype": TSelfType,
 	"show":     TShow,
 	"struct":   TStruct,
+	"tandem":   TTandem,
 	"trait":    TTrait,
 	"true":     TTrue,
 	"try":      TTry,

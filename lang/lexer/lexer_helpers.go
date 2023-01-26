@@ -4,8 +4,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/skeswa/denim/lang/ast"
+	"github.com/skeswa/denim/lang/identifier"
 	"github.com/skeswa/denim/lang/logger"
+	"github.com/skeswa/denim/lang/optimizations"
 )
 
 // Returns the position currently being lexed.
@@ -238,7 +239,7 @@ func (lexer *Lexer) parseNumericLiteralOrDot() {
 					bytes = append(bytes, c)
 				}
 			}
-			text = MaybeSubstring{String: string(bytes)}
+			text = optimizations.MaybeSubstring{String: string(bytes)}
 		}
 
 		// TODO(skeswa): we can be smarter about knowing "1.215e2" is a `double`,
@@ -276,14 +277,14 @@ func (lexer *Lexer) parseNumericLiteralOrDot() {
 	// }
 
 	// Identifiers can't occur immediately after numbers
-	if ast.IsIdentifierStart(lexer.codePoint) {
+	if identifier.IsStart(lexer.codePoint) {
 		lexer.SyntaxError()
 	}
 }
 
 // Returns the stretch of text currently being lexed as an identifier.
-func (lexer *Lexer) rawIdentifier() MaybeSubstring {
-	return MaybeSubstring{lexer.Raw(), ast.MakeIndex32(uint32(lexer.start))}
+func (lexer *Lexer) rawIdentifier() optimizations.MaybeSubstring {
+	return optimizations.MaybeSubstring{String: lexer.Raw(), Start: optimizations.MakeIndex32(uint32(lexer.start))}
 }
 
 // Lexes an entire stretch of commentary that starts with the current position.
