@@ -1,4 +1,4 @@
-package logger
+package text
 
 // Points to a spot in a file or piece of text.
 type Loc struct {

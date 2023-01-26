@@ -1,4 +1,4 @@
-package logger
+package text
 
 // Reference to some stretch of text.
 type Span struct {

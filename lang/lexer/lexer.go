@@ -6,6 +6,7 @@ import (
 	"github.com/skeswa/denim/lang/identifier"
 	"github.com/skeswa/denim/lang/logger"
 	"github.com/skeswa/denim/lang/optimizations"
+	"github.com/skeswa/denim/lang/text"
 )
 
 // Converts a source file to a stream of tokens.
@@ -23,19 +24,19 @@ import (
 // accurately.
 type Lexer struct {
 	// ???
-	AllComments []logger.Range
+	AllComments []text.Range
 	// ???
-	CommentsBeforeToken []logger.Range
+	CommentsBeforeToken []text.Range
 	// ???
 	Identifier optimizations.MaybeSubstring
 	// ???
-	LegalCommentsBeforeToken []logger.Range
+	LegalCommentsBeforeToken []text.Range
 	// ???
 	log logger.Log
 	// ???
 	source logger.Source
 	// ???
-	SourceMappingURL logger.Span
+	SourceMappingURL text.Span
 
 	// Escape sequences in string literals are decoded lazily because they are
 	// not interpreted inside tagged templates, and tagged templates can contain
@@ -64,17 +65,17 @@ type Lexer struct {
 	// ???
 	ApproximateNewlineCount int
 	// ???
-	AwaitKeywordLoc logger.Loc
+	AwaitKeywordLoc text.Loc
 	// ???
-	FnOrArrowStartLoc logger.Loc
+	FnOrArrowStartLoc text.Loc
 	// ???
-	PreviousBackslashQuoteInJSX logger.Range
+	PreviousBackslashQuoteInJSX text.Range
 	// ???
-	LegacyHTMLCommentRange logger.Range
+	LegacyHTMLCommentRange text.Range
 	// ???
 	codePoint rune
 	// ???
-	prevErrorLoc logger.Loc
+	prevErrorLoc text.Loc
 	// ???
 	Token T
 	// ???
@@ -96,8 +97,8 @@ func NewLexer(log logger.Log, source logger.Source) Lexer {
 		log:               log,
 		source:            source,
 		tracker:           logger.MakeLineColumnTracker(&source),
-		prevErrorLoc:      logger.Loc{Start: -1},
-		FnOrArrowStartLoc: logger.Loc{Start: -1},
+		prevErrorLoc:      text.Loc{Start: -1},
+		FnOrArrowStartLoc: text.Loc{Start: -1},
 	}
 	lexer.step()
 	lexer.Next()
@@ -294,7 +295,7 @@ func (lexer *Lexer) Next() {
 
 					case -1: // This indicates the end of the file
 						lexer.start = lexer.end
-						lexer.AddRangeErrorWithNotes(logger.Range{Loc: lexer.Loc()}, "Expected \"*/\" to terminate multi-line comment",
+						lexer.AddRangeErrorWithNotes(text.Range{Loc: lexer.Loc()}, "Expected \"*/\" to terminate multi-line comment",
 							[]logger.MsgData{lexer.tracker.MsgData(startRange, "The multi-line comment starts here:")})
 						panic(LexerPanic{})
 
@@ -386,7 +387,7 @@ func (lexer *Lexer) Next() {
 					}
 
 				case -1: // This indicates the end of the file
-					lexer.addRangeError(logger.Range{Loc: logger.Loc{Start: int32(lexer.end)}}, "Unterminated string literal")
+					lexer.addRangeError(text.Range{Loc: text.Loc{Start: int32(lexer.end)}}, "Unterminated string literal")
 					panic(LexerPanic{})
 
 				// // TODO(skeswa): multiline (""") string support.
@@ -498,7 +499,7 @@ func (lexer *Lexer) Next() {
 
 		default:
 			// Check for unusual whitespace characters
-			if isWhitespace(lexer.codePoint) {
+			if text.IsWhitespace(lexer.codePoint) {
 				lexer.step()
 				continue
 			}

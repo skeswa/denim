@@ -1,6 +1,10 @@
 package logger
 
-import "unicode/utf8"
+import (
+	"unicode/utf8"
+
+	"github.com/skeswa/denim/lang/text"
+)
 
 // A "bookmark" of sorts that helps us remember where we left off while scanning
 // for warnings.
@@ -60,7 +64,7 @@ func MakeLineColumnTracker(source *Source) LineColumnTracker {
 }
 
 // Creates a new `MsgData` out of `text` referring to the specified range `r`.
-func (tracker *LineColumnTracker) MsgData(r Range, text string) MsgData {
+func (tracker *LineColumnTracker) MsgData(r text.Range, text string) MsgData {
 	return MsgData{
 		Text:     text,
 		Location: tracker.MsgLocationOrNil(r),
@@ -69,7 +73,7 @@ func (tracker *LineColumnTracker) MsgData(r Range, text string) MsgData {
 
 // Tries to return a `MsgLocation` for the given range `r`, returning `nil` if
 // that isn't possible for whatever reason.
-func (tracker *LineColumnTracker) MsgLocationOrNil(r Range) *MsgLocation {
+func (tracker *LineColumnTracker) MsgLocationOrNil(r text.Range) *MsgLocation {
 	if tracker == nil || !tracker.hasSource {
 		return nil
 	}

@@ -5,18 +5,18 @@ import (
 	"strings"
 
 	"github.com/skeswa/denim/lang/identifier"
-	"github.com/skeswa/denim/lang/logger"
 	"github.com/skeswa/denim/lang/optimizations"
+	"github.com/skeswa/denim/lang/text"
 )
 
 // Returns the position currently being lexed.
-func (lexer *Lexer) Loc() logger.Loc {
-	return logger.Loc{Start: int32(lexer.start)}
+func (lexer *Lexer) Loc() text.Loc {
+	return text.Loc{Start: int32(lexer.start)}
 }
 
 // Returns the `Range` currently being lexed.
-func (lexer *Lexer) Range() logger.Range {
-	return logger.Range{Loc: logger.Loc{Start: int32(lexer.start)}, Len: int32(lexer.end - lexer.start)}
+func (lexer *Lexer) Range() text.Range {
+	return text.Range{Loc: text.Loc{Start: int32(lexer.start)}, Len: int32(lexer.end - lexer.start)}
 }
 
 // Returns the stretch of text currently being lexed.

@@ -6,6 +6,7 @@ import (
 	"unicode/utf8"
 
 	"github.com/skeswa/denim/lang/logger"
+	"github.com/skeswa/denim/lang/text"
 )
 
 // `struct` that gets emitted when the `Lexer` panics.
@@ -13,7 +14,7 @@ type LexerPanic struct{}
 
 // Logs an error message pertaining to the source at the specified range `r`
 // along with additional details.
-func (lexer *Lexer) AddRangeErrorWithNotes(r logger.Range, text string, notes []logger.MsgData) {
+func (lexer *Lexer) AddRangeErrorWithNotes(r text.Range, text string, notes []logger.MsgData) {
 	// Don't report multiple errors in the same spot
 	if r.Loc == lexer.prevErrorLoc {
 		return
@@ -54,7 +55,7 @@ func (lexer *Lexer) ExpectedString(text string) {
 
 // Logs an error message to do with erroneous syntax before panicking.
 func (lexer *Lexer) SyntaxError() {
-	loc := logger.Loc{Start: int32(lexer.end)}
+	loc := text.Loc{Start: int32(lexer.end)}
 	message := "Unexpected end of file"
 	if lexer.end < len(lexer.source.Contents) {
 		c, _ := utf8.DecodeRuneInString(lexer.source.Contents[lexer.end:])
@@ -68,7 +69,7 @@ func (lexer *Lexer) SyntaxError() {
 			message = "Syntax error '\"'"
 		}
 	}
-	lexer.addRangeError(logger.Range{Loc: loc}, message)
+	lexer.addRangeError(text.Range{Loc: loc}, message)
 	panic(LexerPanic{})
 }
 
@@ -84,7 +85,7 @@ func (lexer *Lexer) Unexpected() {
 }
 
 // Logs an error at the specified range `r` and `text`.
-func (lexer *Lexer) addRangeError(r logger.Range, text string) {
+func (lexer *Lexer) addRangeError(r text.Range, text string) {
 	// Don't report multiple errors in the same spot
 	if r.Loc == lexer.prevErrorLoc {
 		return
@@ -98,7 +99,7 @@ func (lexer *Lexer) addRangeError(r logger.Range, text string) {
 
 // Logs an error at the specified range `r` and `text` with an accompanying
 // `suggestion` that user might find helpful.
-func (lexer *Lexer) addRangeErrorWithSuggestion(r logger.Range, text string, suggestion string) {
+func (lexer *Lexer) addRangeErrorWithSuggestion(r text.Range, text string, suggestion string) {
 	// Don't report multiple errors in the same spot
 	if r.Loc == lexer.prevErrorLoc {
 		return

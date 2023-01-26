@@ -1,4 +1,4 @@
-package logger
+package text
 
 // Describes a stretch of a file or piece of text.
 type Range struct {

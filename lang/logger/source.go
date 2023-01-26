@@ -3,6 +3,8 @@ package logger
 import (
 	"strings"
 	"unicode/utf8"
+
+	"github.com/skeswa/denim/lang/text"
 )
 
 // Represents a single, relevant source file.
@@ -47,7 +49,7 @@ type Source struct {
 }
 
 // ???
-func (s *Source) CommentTextWithoutIndent(r Range) string {
+func (s *Source) CommentTextWithoutIndent(r text.Range) string {
 	text := s.Contents[r.Loc.Start:r.End()]
 	if len(text) < 2 || !strings.HasPrefix(text, "/*") {
 		return text
@@ -116,7 +118,7 @@ seekBackwardToNewline:
 }
 
 // ???
-func (s *Source) LocBeforeWhitespace(loc Loc) Loc {
+func (s *Source) LocBeforeWhitespace(loc text.Loc) text.Loc {
 	for loc.Start > 0 {
 		c, width := utf8.DecodeLastRuneInString(s.Contents[:loc.Start])
 		if c != ' ' && c != '\t' && c != '\r' && c != '\n' {
@@ -128,14 +130,14 @@ func (s *Source) LocBeforeWhitespace(loc Loc) Loc {
 }
 
 // ???
-func (s *Source) RangeOfLegacyOctalEscape(loc Loc) (r Range) {
-	text := s.Contents[loc.Start:]
-	r = Range{Loc: loc, Len: 0}
+func (s *Source) RangeOfLegacyOctalEscape(loc text.Loc) (r text.Range) {
+	txt := s.Contents[loc.Start:]
+	r = text.Range{Loc: loc, Len: 0}
 
-	if len(text) >= 2 && text[0] == '\\' {
+	if len(txt) >= 2 && txt[0] == '\\' {
 		r.Len = 2
-		for r.Len < 4 && int(r.Len) < len(text) {
-			c := text[r.Len]
+		for r.Len < 4 && int(r.Len) < len(txt) {
+			c := txt[r.Len]
 			if c < '0' || c > '9' {
 				break
 			}
@@ -146,35 +148,35 @@ func (s *Source) RangeOfLegacyOctalEscape(loc Loc) (r Range) {
 }
 
 // ???
-func (s *Source) RangeOfOperatorAfter(loc Loc, op string) Range {
-	text := s.Contents[loc.Start:]
-	index := strings.Index(text, op)
+func (s *Source) RangeOfOperatorAfter(loc text.Loc, op string) text.Range {
+	txt := s.Contents[loc.Start:]
+	index := strings.Index(txt, op)
 	if index >= 0 {
-		return Range{Loc: Loc{Start: loc.Start + int32(index)}, Len: int32(len(op))}
+		return text.Range{Loc: text.Loc{Start: loc.Start + int32(index)}, Len: int32(len(op))}
 	}
-	return Range{Loc: loc}
+	return text.Range{Loc: loc}
 }
 
 // ???
-func (s *Source) RangeOfOperatorBefore(loc Loc, op string) Range {
-	text := s.Contents[:loc.Start]
-	index := strings.LastIndex(text, op)
+func (s *Source) RangeOfOperatorBefore(loc text.Loc, op string) text.Range {
+	txt := s.Contents[:loc.Start]
+	index := strings.LastIndex(txt, op)
 	if index >= 0 {
-		return Range{Loc: Loc{Start: int32(index)}, Len: int32(len(op))}
+		return text.Range{Loc: text.Loc{Start: int32(index)}, Len: int32(len(op))}
 	}
-	return Range{Loc: loc}
+	return text.Range{Loc: loc}
 }
 
 // ???
-func (s *Source) RangeOfNumber(loc Loc) (r Range) {
-	text := s.Contents[loc.Start:]
-	r = Range{Loc: loc, Len: 0}
+func (s *Source) RangeOfNumber(loc text.Loc) (r text.Range) {
+	txt := s.Contents[loc.Start:]
+	r = text.Range{Loc: loc, Len: 0}
 
-	if len(text) > 0 {
-		if c := text[0]; c >= '0' && c <= '9' {
+	if len(txt) > 0 {
+		if c := txt[0]; c >= '0' && c <= '9' {
 			r.Len = 1
-			for int(r.Len) < len(text) {
-				c := text[r.Len]
+			for int(r.Len) < len(txt) {
+				c := txt[r.Len]
 				if (c < '0' || c > '9') && (c < 'a' || c > 'z') && (c < 'A' || c > 'Z') && c != '.' && c != '_' {
 					break
 				}
@@ -186,19 +188,19 @@ func (s *Source) RangeOfNumber(loc Loc) (r Range) {
 }
 
 // ???
-func (s *Source) RangeOfString(loc Loc) Range {
-	text := s.Contents[loc.Start:]
-	if len(text) == 0 {
-		return Range{Loc: loc, Len: 0}
+func (s *Source) RangeOfString(loc text.Loc) text.Range {
+	txt := s.Contents[loc.Start:]
+	if len(txt) == 0 {
+		return text.Range{Loc: loc, Len: 0}
 	}
 
-	quote := text[0]
+	quote := txt[0]
 	if quote == '"' || quote == '\'' {
 		// Search for the matching quote character
-		for i := 1; i < len(text); i++ {
-			c := text[i]
+		for i := 1; i < len(txt); i++ {
+			c := txt[i]
 			if c == quote {
-				return Range{Loc: loc, Len: int32(i + 1)}
+				return text.Range{Loc: loc, Len: int32(i + 1)}
 			} else if c == '\\' {
 				i += 1
 			}
@@ -207,22 +209,22 @@ func (s *Source) RangeOfString(loc Loc) Range {
 
 	if quote == '`' {
 		// Search for the matching quote character
-		for i := 1; i < len(text); i++ {
-			c := text[i]
+		for i := 1; i < len(txt); i++ {
+			c := txt[i]
 			if c == quote {
-				return Range{Loc: loc, Len: int32(i + 1)}
+				return text.Range{Loc: loc, Len: int32(i + 1)}
 			} else if c == '\\' {
 				i += 1
-			} else if c == '$' && i+1 < len(text) && text[i+1] == '{' {
+			} else if c == '$' && i+1 < len(txt) && txt[i+1] == '{' {
 				break // Only return the range for no-substitution template literals
 			}
 		}
 	}
 
-	return Range{Loc: loc, Len: 0}
+	return text.Range{Loc: loc, Len: 0}
 }
 
 // ???
-func (s *Source) TextForRange(r Range) string {
+func (s *Source) TextForRange(r text.Range) string {
 	return s.Contents[r.Loc.Start : r.Loc.Start+r.Len]
 }

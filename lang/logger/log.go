@@ -1,5 +1,7 @@
 package logger
 
+import "github.com/skeswa/denim/lang/text"
+
 // Logs things.
 //
 // Logging is either done to stderr (via "NewStderrLog") or to an in-memory
@@ -32,7 +34,7 @@ type Log struct {
 }
 
 // Adds an error to the log.
-func (log Log) AddError(tracker *LineColumnTracker, r Range, text string) {
+func (log Log) AddError(tracker *LineColumnTracker, r text.Range, text string) {
 	log.AddMsg(Msg{
 		Kind: Error,
 		Data: tracker.MsgData(r, text),
@@ -40,7 +42,7 @@ func (log Log) AddError(tracker *LineColumnTracker, r Range, text string) {
 }
 
 // Adds an error with additional commentary to the log.
-func (log Log) AddErrorWithNotes(tracker *LineColumnTracker, r Range, text string, notes []MsgData) {
+func (log Log) AddErrorWithNotes(tracker *LineColumnTracker, r text.Range, text string, notes []MsgData) {
 	log.AddMsg(Msg{
 		Kind:  Error,
 		Data:  tracker.MsgData(r, text),
