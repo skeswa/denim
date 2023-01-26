@@ -678,7 +678,8 @@ if !message.is_empty() {
     - Suffixable
   - `mod`
   - `pub`
-    - `pub(pkg)` instead of `pub(crate)`
+    - `pub(pkg)` for directory-level visibility
+    - `pub(repo)` for repository-level visibility
   - `return`
   - `self`
   - `Self`
@@ -1584,38 +1585,24 @@ let icons = [
 ```
 
 Since this is quite a common pattern in Denim, there is a special syntax for it
-enabled by the `tandem` keyword. `tandem` is simply syntactic sugar for the
-concurrent invocation of multiple potentially asynchronous functions normally
-enabled by the combined usage of `.async` and `.after_all().await`.
+enabled by the `tandem` keyword. `tandem { ... }` is simply syntactic sugar for
+the concurrent invocation of multiple potentially asynchronous functions
+normally enabled by the combined usage of `.async` and `.after_all().await`. As
+such, a `tandem { ... }` expression evaluates to a tuple of the return values of
+each comma delimited sub-expression.
 
 ```rust
-let (google_icon, _, c_text) = tandem (
+let (google_icon, _, c_text) = tandem {
   fetch(url: "https://google.com/favicon.ico"),
   pause(Duration::new(milliseconds: 100)),
   readFile(path: "./a/b/c.txt"),
-);
+};
 
-let icons = tandem [
+let icons = tandem {
   fetch(url: "https://nba.com/favicon.ico"),
   fetch(url: "https://nhl.com/favicon.ico"),
   fetch(url: "https://mlb.com/favicon.ico"),
-];
-```
-
-The `tandem` keyword is also suffixable, just like `async` and `await`.
-
-```rust
-let (google_icon, _, c_text) = (
-  fetch(url: "https://google.com/favicon.ico"),
-  pause(Duration::new(milliseconds: 100)),
-  readFile(path: "./a/b/c.txt"),
-).tandem;
-
-let icons = [
-  fetch(url: "https://nba.com/favicon.ico"),
-  fetch(url: "https://nhl.com/favicon.ico"),
-  fetch(url: "https://mlb.com/favicon.ico"),
-].tandem;
+};
 ```
 
 Both tuples and arrays of `Eventual` support `.race()` to wait for the first
