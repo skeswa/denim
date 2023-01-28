@@ -707,12 +707,11 @@ if !message.is_empty() {
   - `fork`
     - Suffixable
   - `tandem`
-    - Suffixable
 
 ##### Suffixing
 
 In Denim,some keywords can be applied as suffixes with `.` notation. Namely,
-`async`, `await`, `fork`, `if`, `match`, `tandem`, `try`, and `while`.
+`async`, `await`, `fork`, `if`, `match`, `try`, and `while`.
 
 ```rust
 let some_eventual_function_value = async some_function("abc");
