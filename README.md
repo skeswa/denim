@@ -1432,10 +1432,10 @@ fn do_a_thing(data: IntOrString) {
 }
 
 fn do_another_thing(data: int | string | byte) {
-  match data.type {
-    int => print("it is an int"),
-    string => print("it is an int"),
-    _ => print("it is a byte"),
+  match data {
+    is int => print("it is an int"),
+    is! string => print("it isn't an string"),
+    _ => print("it is probably a string"),
   }
 }
 
