@@ -902,17 +902,17 @@ fn(a: A, b: B, c: C) -> D;
 
 Denim has a special syntax for functions that receive an inlined anonymous
 function as an argument. This common when passing callbacks and in embedded
-DSLs. Any function argument named `block` can have an inline block after its
+DSLs. Any function argument named `body` can have an inline block after its
 invocation that works like a lambda function.
 
 ```rust
-fn element(name: string, block: Option<fn() -> Element>) -> Element {
-  Element { name, child: block() }
+fn element(name: string, body: Option<fn() -> Element>) -> Element {
+  Element { name, child: body() }
 }
 
 // This:
-element(name: "div", block: || {
-  element(name: "button", block: || {
+element(name: "div", body: || {
+  element(name: "button", body: || {
     span("click me")
   })
 })
@@ -928,12 +928,12 @@ element("div") {
 Thanks to "getterification", we can make this syntax even sweeter:
 
 ```rust
-fn button(block: Option<fn() -> Element>) -> Element {
-  element("button", block)
+fn button(body: Option<fn() -> Element>) -> Element {
+  element("button", body)
 }
 
-fn div(block: Option<fn() -> Element>) -> Element {
-  element("div", block)
+fn div(body: Option<fn() -> Element>) -> Element {
+  element("div", body)
 }
 
 div {
