@@ -987,7 +987,7 @@ You can also re-export stuff using the `show` keyword.
 ```rust
 from "github.com/abc/xyz@v0.9.0" show { hello };
 
-from "~/bing/bang" show { boom as büm };
+from "~/bing/bang" show { boom: büm };
 ```
 
 Like in Rust, you can export stuff from Denim modules with the `pub` keyword.
