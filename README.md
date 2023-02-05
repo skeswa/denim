@@ -943,6 +943,8 @@ div {
 }
 ```
 
+TODO(skeswa): `it` for the singular argument passed to `body`.
+
 #### Modules
 
 Denim's core packaging primitive is called a "module". Modules designed to
