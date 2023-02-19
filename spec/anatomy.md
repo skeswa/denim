@@ -1,5 +1,9 @@
 # Anatomy of Denim Syntax
 
+```
+TODO(skeswa): build out a tree here based on Rust syntax.
+```
+
 Denim is _primarily_ an expression language. This means that most forms of
 value-producing or effect-causing evaluation are directed by the uniform syntax
 category of _expressions_. Each kind of expression can typically _nest_ within
