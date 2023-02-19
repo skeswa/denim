@@ -1,4 +1,0 @@
-struct B {
-  d: int;
-  e: string;
-}
