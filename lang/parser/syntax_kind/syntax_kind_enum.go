@@ -12,19 +12,22 @@ import (
 )
 
 const (
-	// Comment is a SyntaxKind of type Comment.
+	// Describes any kind of non-doc comment
 	Comment SyntaxKind = iota
-	// Whitespace is a SyntaxKind of type Whitespace.
+	// Root token for any file
+	SourceFile
+	// Describes any kind of whitespace (e.g. \n, \t, etc.)
 	Whitespace
 )
 
 var ErrInvalidSyntaxKind = fmt.Errorf("not a valid SyntaxKind, try [%s]", strings.Join(_SyntaxKindNames, ", "))
 
-const _SyntaxKindName = "commentwhitespace"
+const _SyntaxKindName = "commentsource_filewhitespace"
 
 var _SyntaxKindNames = []string{
 	_SyntaxKindName[0:7],
-	_SyntaxKindName[7:17],
+	_SyntaxKindName[7:18],
+	_SyntaxKindName[18:28],
 }
 
 // SyntaxKindNames returns a list of possible string values of SyntaxKind.
@@ -36,7 +39,8 @@ func SyntaxKindNames() []string {
 
 var _SyntaxKindMap = map[SyntaxKind]string{
 	Comment:    _SyntaxKindName[0:7],
-	Whitespace: _SyntaxKindName[7:17],
+	SourceFile: _SyntaxKindName[7:18],
+	Whitespace: _SyntaxKindName[18:28],
 }
 
 // String implements the Stringer interface.
@@ -48,8 +52,9 @@ func (x SyntaxKind) String() string {
 }
 
 var _SyntaxKindValue = map[string]SyntaxKind{
-	_SyntaxKindName[0:7]:  Comment,
-	_SyntaxKindName[7:17]: Whitespace,
+	_SyntaxKindName[0:7]:   Comment,
+	_SyntaxKindName[7:18]:  SourceFile,
+	_SyntaxKindName[18:28]: Whitespace,
 }
 
 // ParseSyntaxKind attempts to convert a string to a SyntaxKind.
