@@ -13,4 +13,10 @@ type Token struct {
 	// Number of bytes taken up by this [Token] within its surrounding snippet of
 	// source code.
 	Length int
+	// Additional metadata optionally attached to this [Token] to add more
+	// context.
+	//
+	// Most kinds of tokens will not need metadata, and so this field will be
+	// `nil`.
+	Metadata *TokenMetadata
 }

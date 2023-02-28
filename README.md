@@ -127,10 +127,10 @@ Denim's primitives are mostly stolen from Go. It has:
 
   A `byte` literal is just a non-negative number like `128`.
 
-- `double`\
+- `float`\
   A 64-bit signed floating point number.
 
-  A `double` literal is either dot-delimited decimal numbers like `-12.80001`,
+  A `float` literal is either dot-delimited decimal numbers like `-12.80001`,
   or scientific notation like `1.2e-12`.
 
 - `int`\
@@ -530,7 +530,7 @@ TODO(skeswa): flesh this out (Dart Sets).
 ```rust
 // The type of `x` is inferred to be `[string]` here.
 let x = {"one", "two", "three"};
-let y: {double} = {1, 2.2, 3};
+let y: {float} = {1, 2.2, 3};
 ```
 
 TODO(skeswa): spread notation
@@ -781,7 +781,7 @@ Syntactically, Denim functions are very similar Rust functions.
 
 ```rust
 // Functions can specify a return type using the `->` symbol.
-pub fn multiply_by_two(num: double) -> double {
+pub fn multiply_by_two(num: float) -> float {
   // Functions implicitly return the last value in their body. Since, the next
   // line is not terminated by a `;`, it evaluates to `num * 2`.
   num * 2
@@ -804,13 +804,13 @@ to this rule: **if a function has just a single argument, no label is
 necessary**.
 
 ```rust
-fn multiply_by_two(num: double) -> double {
+fn multiply_by_two(num: float) -> float {
   num * 2
 }
 
 print(multiply_by_two(3)); // prints "6"
 
-fn multiply(a: double, b: double) -> double {
+fn multiply(a: float, b: float) -> float {
   a * b
 }
 
@@ -831,7 +831,7 @@ to specify a default value for a parameter.
 // default.
 //
 // NOTE: default values must be immutable.
-fn i_cant_wait_to(action = "take a nap", times: double = 1) {
+fn i_cant_wait_to(action = "take a nap", times: float = 1) {
   print("Time to $action $times time(s)!");
 }
 
@@ -855,7 +855,7 @@ later, but it works identically to how Rust's
 [`Option<T>`](https://doc.rust-lang.org/std/option/) works.
 
 ```rust
-fn measurement(scalar: double, unit: string?) {
+fn measurement(scalar: float, unit: string?) {
   let lowercase_unit = unit?.to_lower() ?? "";
 
   "$scalar $lowercase_unit"

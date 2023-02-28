@@ -1,6 +1,7 @@
 package lexer
 
 import (
+	"fmt"
 	"unicode/utf8"
 
 	"github.com/skeswa/denim/lang/lexer/token"
@@ -37,17 +38,17 @@ func NewLexer(source string) Lexer {
 // Advances the [Lexer] forward one [token.Token] in the source string,
 // returning it.
 func (lexer *Lexer) NextToken() token.Token {
-	firstRune, firstRuneIndex := lexer.bump()
+	lexer.bump()
 
-	if firstRune == endOfSourceRune {
-		return token.Token{
-			Index:  firstRuneIndex,
-			Kind:   token.Unknown,
-			Length: 0,
-		}
+	initialIndex := lexer.currentIndex
+	tokenKind, tokenMetadata := lexer.lex()
+
+	return token.Token{
+		Index:    initialIndex,
+		Kind:     tokenKind,
+		Length:   lexer.currentIndex - initialIndex,
+		Metadata: tokenMetadata,
 	}
-
-	panic("askdjh")
 }
 
 const (
@@ -55,12 +56,11 @@ const (
 	endOfSourceRune rune = -1
 )
 
-// Advances the [Lexer] forward one `rune` in the source string, returning it
-// followed by its index.
+// Advances the [Lexer] forward one `rune` in the source string.
 //
 // Note that this method does not advance to the next token - for that, see
 // [NextToken].
-func (lexer *Lexer) bump() (rune, int) {
+func (lexer *Lexer) bump() {
 	nextRune, nextRuneWidth := utf8.DecodeRuneInString(lexer.source[lexer.nextIndex:])
 
 	// A width of `0` indicates the end of the `string`.
@@ -73,8 +73,33 @@ func (lexer *Lexer) bump() (rune, int) {
 	lexer.currentIndex = lexer.nextIndex
 	lexer.currentRune = nextRune
 	lexer.nextIndex += nextRuneWidth
+}
 
-	return nextRune, lexer.currentIndex
+// Asserts that the rune that is [offset] runes ahead of the current one is
+// [expectedRune], panicking otherwise.
+func (lexer *Lexer) expectRuneAhead(expectedRune rune, offset int) {
+	if !lexer.isDebug {
+		return
+	}
+
+	currentRune := lexer.peek(offset)
+	if currentRune == expectedRune {
+		return
+	}
+
+	panic(fmt.Sprintf("Expected '%c', but found '%c'", expectedRune, currentRune))
+}
+
+// Asserts that the current rune of this [Lexer] is [expectedRune], panicking
+// otherwise.
+func (lexer *Lexer) expectRune(expectedRune rune) {
+	lexer.expectRuneAhead(expectedRune, 0)
+}
+
+// Asserts that the next rune of this [Lexer] is [expectedRune], panicking
+// otherwise.
+func (lexer *Lexer) expectRuneNext(expectedRune rune) {
+	lexer.expectRuneAhead(expectedRune, 1)
 }
 
 // Returns true if this [Lexer] has more source to lex.

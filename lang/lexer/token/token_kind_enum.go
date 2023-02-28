@@ -16,21 +16,27 @@ const (
 	BlockComment TokenKind = iota
 	// Marks the end of any source snippet.
 	End
+	// Describes a `// line comment`.
+	LineComment
 	// Describes a token not expected by the lexer, e.g. "№".
 	Unknown
+	// Describes a `/` (typically used in division).
+	Slash
 	// Describes any kind of whitespace (e.g. \n, \t, etc.).
 	Whitespace
 )
 
 var ErrInvalidTokenKind = fmt.Errorf("not a valid TokenKind, try [%s]", strings.Join(_TokenKindNames, ", "))
 
-const _TokenKindName = "BlockCommentEndUnknownWhitespace"
+const _TokenKindName = "BlockCommentEndLineCommentUnknownSlashWhitespace"
 
 var _TokenKindNames = []string{
 	_TokenKindName[0:12],
 	_TokenKindName[12:15],
-	_TokenKindName[15:22],
-	_TokenKindName[22:32],
+	_TokenKindName[15:26],
+	_TokenKindName[26:33],
+	_TokenKindName[33:38],
+	_TokenKindName[38:48],
 }
 
 // TokenKindNames returns a list of possible string values of TokenKind.
@@ -43,8 +49,10 @@ func TokenKindNames() []string {
 var _TokenKindMap = map[TokenKind]string{
 	BlockComment: _TokenKindName[0:12],
 	End:          _TokenKindName[12:15],
-	Unknown:      _TokenKindName[15:22],
-	Whitespace:   _TokenKindName[22:32],
+	LineComment:  _TokenKindName[15:26],
+	Unknown:      _TokenKindName[26:33],
+	Slash:        _TokenKindName[33:38],
+	Whitespace:   _TokenKindName[38:48],
 }
 
 // String implements the Stringer interface.
@@ -58,8 +66,10 @@ func (x TokenKind) String() string {
 var _TokenKindValue = map[string]TokenKind{
 	_TokenKindName[0:12]:  BlockComment,
 	_TokenKindName[12:15]: End,
-	_TokenKindName[15:22]: Unknown,
-	_TokenKindName[22:32]: Whitespace,
+	_TokenKindName[15:26]: LineComment,
+	_TokenKindName[26:33]: Unknown,
+	_TokenKindName[33:38]: Slash,
+	_TokenKindName[38:48]: Whitespace,
 }
 
 // ParseTokenKind attempts to convert a string to a TokenKind.

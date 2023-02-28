@@ -7,7 +7,9 @@ package token
 ENUM(
 BlockComment 	// Describes a `/ * block comment * /`.
 End						// Marks the end of any source snippet.
+LineComment 	// Describes a `// line comment`.
 Unknown				// Describes a token not expected by the lexer, e.g. "№".
+Slash					// Describes a `/` (typically used in division).
 Whitespace		// Describes any kind of whitespace (e.g. \n, \t, etc.).
 )
 */
