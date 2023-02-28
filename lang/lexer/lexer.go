@@ -56,11 +56,12 @@ const (
 	endOfSourceRune rune = -1
 )
 
-// Advances the [Lexer] forward one `rune` in the source string.
+// Advances the [Lexer] forward one `rune` in the source string, returning that
+// `rune`.
 //
 // Note that this method does not advance to the next token - for that, see
 // [NextToken].
-func (lexer *Lexer) bump() {
+func (lexer *Lexer) bump() rune {
 	nextRune, nextRuneWidth := utf8.DecodeRuneInString(lexer.source[lexer.nextIndex:])
 
 	// A width of `0` indicates the end of the `string`.
@@ -73,6 +74,8 @@ func (lexer *Lexer) bump() {
 	lexer.currentIndex = lexer.nextIndex
 	lexer.currentRune = nextRune
 	lexer.nextIndex += nextRuneWidth
+
+	return nextRune
 }
 
 // Asserts that the rune that is [offset] runes ahead of the current one is
@@ -102,9 +105,9 @@ func (lexer *Lexer) expectRuneNext(expectedRune rune) {
 	lexer.expectRuneAhead(expectedRune, 1)
 }
 
-// Returns true if this [Lexer] has more source to lex.
-func (lexer *Lexer) hasNext() bool {
-	return lexer.currentRune != endOfSourceRune
+// Returns true if this [Lexer] has no source to lex.
+func (lexer *Lexer) isTerminated() bool {
+	return lexer.currentRune == endOfSourceRune
 }
 
 // Looks ahead of the current rune by the specified offset, returning the rune

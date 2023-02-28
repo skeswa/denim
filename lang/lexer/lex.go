@@ -40,7 +40,39 @@ func (lexer *Lexer) lexBlockComment() (token.TokenKind, *token.TokenMetadata) {
 
 	lexer.bump()
 
-	panic("todo")
+	depth := 1
+
+	for ; !lexer.isTerminated(); lexer.bump() {
+		switch lexer.currentRune {
+		case '/':
+			if lexer.peek(1) == '*' {
+				lexer.bump()
+
+				// We found another `/*`, so let's bump the depth.
+				depth += 1
+			}
+		case '*':
+			if lexer.peek(1) == '/' {
+				lexer.bump()
+
+				// We found a `*/`, so let's drop the depth.
+				depth -= 1
+
+				// If the depth is zero, that means we have captured `/* ??? */`. That
+				// means we should get outta here.
+				if depth == 0 {
+					break
+				}
+			}
+		}
+	}
+
+	var metadata *token.TokenMetadata
+	if isUnterminated := depth != 0; isUnterminated {
+		metadata = &token.TokenMetadata{BlockCommentIsUnterminated: isUnterminated}
+	}
+
+	return token.BlockComment, metadata
 }
 
 // Lexes a line comment token at the current position of the [Lexer].
@@ -57,7 +89,7 @@ func (lexer *Lexer) lexLineComment() (token.TokenKind, *token.TokenMetadata) {
 		isDocComment = true
 	}
 
-	for lexer.hasNext() && lexer.peek(1) != '\n' {
+	for !lexer.isTerminated() && lexer.peek(1) != '\n' {
 		lexer.bump()
 	}
 
@@ -74,7 +106,7 @@ func (lexer *Lexer) lexWhitespace() (token.TokenKind, *token.TokenMetadata) {
 	lexer.expectRune(' ')
 
 	// Keep going until we hit a rune that is not whitespace.
-	for lexer.hasNext() && isRuneWhitespace(lexer.peek(1)) {
+	for !lexer.isTerminated() && isRuneWhitespace(lexer.peek(1)) {
 		lexer.bump()
 	}
 
