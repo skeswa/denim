@@ -1,5 +1,10 @@
 package token
 
+import (
+	"strconv"
+	"strings"
+)
+
 // Atomic unit of Denim source code.
 //
 // A "token" is best thought of as a sequence of one or more characters that
@@ -19,4 +24,22 @@ type Token struct {
 	// Most kinds of tokens will not need metadata, and so this field will be
 	// `nil`.
 	Metadata *TokenMetadata
+}
+
+// Represets [token] as a string.
+func (token *Token) String() string {
+	var stringBuilder strings.Builder
+
+	stringBuilder.WriteString(token.Kind.String())
+	stringBuilder.WriteRune('@')
+	stringBuilder.WriteString(strconv.Itoa(token.Index))
+	stringBuilder.WriteString("..")
+	stringBuilder.WriteString(strconv.Itoa(token.Index + token.Length))
+
+	if token.Metadata != nil {
+		stringBuilder.WriteRune(' ')
+		stringBuilder.WriteString(token.Metadata.String())
+	}
+
+	return stringBuilder.String()
 }
