@@ -1,3 +1,4 @@
 {
-  "window.title": "denim"
+  "go.testFlags": ["-v"],
+  "window.title": "denim",
 }

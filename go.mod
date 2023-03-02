@@ -2,7 +2,10 @@ module github.com/skeswa/denim
 
 go 1.19
 
-require github.com/abice/go-enum v0.5.5
+require (
+	github.com/abice/go-enum v0.5.5
+	github.com/google/go-cmp v0.5.9
+)
 
 require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
