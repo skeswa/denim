@@ -42,7 +42,8 @@ func (lexer *Lexer) lexBlockComment() (token.TokenKind, *token.TokenMetadata) {
 
 	depth := 1
 
-	for ; !lexer.isTerminated(); lexer.bump() {
+loop:
+	for ; !lexer.IsTerminated(); lexer.bump() {
 		switch lexer.currentRune {
 		case '/':
 			if lexer.peek(1) == '*' {
@@ -61,7 +62,7 @@ func (lexer *Lexer) lexBlockComment() (token.TokenKind, *token.TokenMetadata) {
 				// If the depth is zero, that means we have captured `/* ??? */`. That
 				// means we should get outta here.
 				if depth == 0 {
-					break
+					break loop
 				}
 			}
 		}
@@ -89,7 +90,7 @@ func (lexer *Lexer) lexLineComment() (token.TokenKind, *token.TokenMetadata) {
 		isDocComment = true
 	}
 
-	for !lexer.isTerminated() && lexer.peek(1) != '\n' {
+	for !lexer.IsTerminated() && lexer.peek(1) != '\n' {
 		lexer.bump()
 	}
 
@@ -106,7 +107,7 @@ func (lexer *Lexer) lexWhitespace() (token.TokenKind, *token.TokenMetadata) {
 	lexer.expectRune(' ')
 
 	// Keep going until we hit a rune that is not whitespace.
-	for !lexer.isTerminated() && isRuneWhitespace(lexer.peek(1)) {
+	for !lexer.IsTerminated() && isRuneWhitespace(lexer.peek(1)) {
 		lexer.bump()
 	}
 

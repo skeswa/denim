@@ -33,8 +33,11 @@ func (token *Token) String() string {
 	stringBuilder.WriteString(token.Kind.String())
 	stringBuilder.WriteRune('@')
 	stringBuilder.WriteString(strconv.Itoa(token.Index))
-	stringBuilder.WriteString("..")
-	stringBuilder.WriteString(strconv.Itoa(token.Index + token.Length))
+
+	if token.Length > 0 {
+		stringBuilder.WriteString("..")
+		stringBuilder.WriteString(strconv.Itoa(token.Index + token.Length))
+	}
 
 	if token.Metadata != nil {
 		stringBuilder.WriteRune(' ')

@@ -35,6 +35,11 @@ func NewLexer(source string) Lexer {
 	return Lexer{source: source}
 }
 
+// Returns true if this [Lexer] has no source to lex.
+func (lexer *Lexer) IsTerminated() bool {
+	return lexer.currentRune == endOfSourceRune
+}
+
 // Advances the [Lexer] forward one [token.Token] in the source string,
 // returning it.
 func (lexer *Lexer) NextToken() token.Token {
@@ -43,10 +48,18 @@ func (lexer *Lexer) NextToken() token.Token {
 	initialIndex := lexer.currentIndex
 	tokenKind, tokenMetadata := lexer.lex()
 
+	tokenLength := lexer.currentIndex - initialIndex
+	if tokenKind != token.End {
+		// Because we only move the current index to the next token on the next call
+		// to this method, length will always be one too small. So we correct that
+		// in all cases except the one where this method should not be called again.
+		tokenLength += 1
+	}
+
 	return token.Token{
 		Index:    initialIndex,
 		Kind:     tokenKind,
-		Length:   lexer.currentIndex - initialIndex,
+		Length:   tokenLength,
 		Metadata: tokenMetadata,
 	}
 }
@@ -103,11 +116,6 @@ func (lexer *Lexer) expectRune(expectedRune rune) {
 // otherwise.
 func (lexer *Lexer) expectRuneNext(expectedRune rune) {
 	lexer.expectRuneAhead(expectedRune, 1)
-}
-
-// Returns true if this [Lexer] has no source to lex.
-func (lexer *Lexer) isTerminated() bool {
-	return lexer.currentRune == endOfSourceRune
 }
 
 // Looks ahead of the current rune by the specified offset, returning the rune
