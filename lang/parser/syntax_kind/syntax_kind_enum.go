@@ -22,12 +22,12 @@ const (
 
 var ErrInvalidSyntaxKind = fmt.Errorf("not a valid SyntaxKind, try [%s]", strings.Join(_SyntaxKindNames, ", "))
 
-const _SyntaxKindName = "commentsource_filewhitespace"
+const _SyntaxKindName = "CommentSourceFileWhitespace"
 
 var _SyntaxKindNames = []string{
 	_SyntaxKindName[0:7],
-	_SyntaxKindName[7:18],
-	_SyntaxKindName[18:28],
+	_SyntaxKindName[7:17],
+	_SyntaxKindName[17:27],
 }
 
 // SyntaxKindNames returns a list of possible string values of SyntaxKind.
@@ -39,8 +39,8 @@ func SyntaxKindNames() []string {
 
 var _SyntaxKindMap = map[SyntaxKind]string{
 	Comment:    _SyntaxKindName[0:7],
-	SourceFile: _SyntaxKindName[7:18],
-	Whitespace: _SyntaxKindName[18:28],
+	SourceFile: _SyntaxKindName[7:17],
+	Whitespace: _SyntaxKindName[17:27],
 }
 
 // String implements the Stringer interface.
@@ -53,8 +53,8 @@ func (x SyntaxKind) String() string {
 
 var _SyntaxKindValue = map[string]SyntaxKind{
 	_SyntaxKindName[0:7]:   Comment,
-	_SyntaxKindName[7:18]:  SourceFile,
-	_SyntaxKindName[18:28]: Whitespace,
+	_SyntaxKindName[7:17]:  SourceFile,
+	_SyntaxKindName[17:27]: Whitespace,
 }
 
 // ParseSyntaxKind attempts to convert a string to a SyntaxKind.
