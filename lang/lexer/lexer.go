@@ -22,9 +22,6 @@ type Lexer struct {
 	isDebug bool
 	// Position of the next `rune` within the [source] string.
 	nextIndex int
-	// Previous value of [currentRune], or `0` if there has not yet been at least
-	// two runes.
-	previousRune rune
 	// Source code text being lexed by this [Lexer].
 	source string
 }
@@ -36,7 +33,7 @@ func NewLexer(source string) Lexer {
 }
 
 // Returns true if this [Lexer] has no source to lex.
-func (lexer *Lexer) IsTerminated() bool {
+func (lexer *Lexer) IsExhausted() bool {
 	return lexer.currentRune == endOfSourceRune
 }
 
@@ -45,8 +42,24 @@ func (lexer *Lexer) IsTerminated() bool {
 func (lexer *Lexer) NextToken() token.Token {
 	lexer.bump()
 
-	initialIndex := lexer.currentIndex
-	tokenKind, tokenMetadata := lexer.lex()
+	var (
+		initialIndex  = lexer.currentIndex
+		tokenKind     token.TokenKind
+		tokenMetadata *token.TokenMetadata
+	)
+
+	// If we're at the beginning of the source, we need to check for a shebang,
+	// which can only appear on the first line. Otherwise, continue with business
+	// as usual.
+	if initialIndex <= 0 {
+		var didFindShebang bool
+
+		if tokenKind, tokenMetadata, didFindShebang = lexer.maybeLexShebang(); !didFindShebang {
+			tokenKind, tokenMetadata = lexer.lex()
+		}
+	} else {
+		tokenKind, tokenMetadata = lexer.lex()
+	}
 
 	tokenLength := lexer.currentIndex - initialIndex
 	if tokenKind != token.End {
@@ -81,8 +94,6 @@ func (lexer *Lexer) bump() rune {
 	if nextRuneWidth == 0 {
 		nextRune = endOfSourceRune
 	}
-
-	lexer.previousRune = lexer.currentRune
 
 	lexer.currentIndex = lexer.nextIndex
 	lexer.currentRune = nextRune
@@ -125,23 +136,24 @@ func (lexer *Lexer) peek(offset int) rune {
 	// lookahead runes.
 
 	var (
-		currentIndex  = lexer.nextIndex
-		nextRune      = lexer.currentRune
-		nextRuneWidth int
+		currentRune = lexer.currentRune
+		nextIndex   = lexer.nextIndex
 	)
 
 	for i := 0; i < offset; i += 1 {
-		nextRune, nextRuneWidth = utf8.DecodeRuneInString(lexer.source[currentIndex:])
+		nextRune, nextRuneWidth := utf8.DecodeRuneInString(lexer.source[nextIndex:])
 
-		if nextRuneWidth == 0 {
-			nextRune = endOfSourceRune
+		// If [nextRuneWidth] is <= 0, that means the lexer is exhausted, so let's
+		// get out of here and send the "end of source" signal.
+		if nextRuneWidth <= 0 {
+			currentRune = endOfSourceRune
 
 			break
 		}
 
-		currentIndex += nextRuneWidth
-		i += 1
+		currentRune = nextRune
+		nextIndex += nextRuneWidth
 	}
 
-	return nextRune
+	return currentRune
 }

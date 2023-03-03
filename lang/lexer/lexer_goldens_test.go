@@ -27,7 +27,7 @@ func lexerGoldenTestFunc(input string) (string, error) {
 	lexer := lexer.NewLexer(input)
 
 	var stringBuilder strings.Builder
-	for !lexer.IsTerminated() {
+	for !lexer.IsExhausted() {
 		token := lexer.NextToken()
 
 		stringBuilder.WriteString(token.String())

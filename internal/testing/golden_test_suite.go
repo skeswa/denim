@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -95,7 +96,16 @@ func NewGoldenTestSuite(args NewGoldenTestSuiteArgs) (*GoldenTestSuite, error) {
 		goldenTestCases = append(goldenTestCases, *goldenTestCase)
 	}
 
-	return &GoldenTestSuite{goldenTestCases: goldenTestCases, goldenTestFunc: args.GoldenTestFunc, name: goldensDirectoryName, t: args.T}, nil
+	sort.Sort(byGoldenTestCaseName(goldenTestCases))
+
+	goldenTestSuite := GoldenTestSuite{
+		goldenTestCases: goldenTestCases,
+		goldenTestFunc:  args.GoldenTestFunc,
+		name:            goldensDirectoryName,
+		t:               args.T,
+	}
+
+	return &goldenTestSuite, nil
 }
 
 // Runs every test in this [GoldenTestSuite].

@@ -9,6 +9,7 @@ BlockComment 	// Describes a `/ * block comment * /`.
 End						// Marks the end of any source snippet.
 LineComment 	// Describes a `// line comment`.
 Unknown				// Describes a token not expected by the lexer, e.g. "№".
+Shebang			  // Describes a UNIX interpreter directive put at the top of files e.g. `#!/usr/bin/env bash`.
 Slash					// Describes a `/` (typically used in division).
 Whitespace		// Describes any kind of whitespace (e.g. \n, \t, etc.).
 )

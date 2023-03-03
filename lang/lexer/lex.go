@@ -43,7 +43,7 @@ func (lexer *Lexer) lexBlockComment() (token.TokenKind, *token.TokenMetadata) {
 	depth := 1
 
 loop:
-	for ; !lexer.IsTerminated(); lexer.bump() {
+	for ; !lexer.IsExhausted(); lexer.bump() {
 		switch lexer.currentRune {
 		case '/':
 			if lexer.peek(1) == '*' {
@@ -85,12 +85,14 @@ func (lexer *Lexer) lexLineComment() (token.TokenKind, *token.TokenMetadata) {
 
 	isDocComment := false
 
-	// Check for a triple slash; triple slash is a "doc comment".
-	if nextRune := lexer.peek(1); nextRune == '/' {
+	// Check for a triple slash; triple slash is a "doc comment". Ignore
+	// quadrouple slash+ because it could just be ASCII art
+	// e.g. `///// CONSTANTS /////`.
+	if lexer.peek(1) == '/' && lexer.peek(2) != '/' {
 		isDocComment = true
 	}
 
-	for !lexer.IsTerminated() && lexer.peek(1) != '\n' {
+	for !lexer.IsExhausted() && lexer.peek(1) != '\n' {
 		lexer.bump()
 	}
 
@@ -107,9 +109,33 @@ func (lexer *Lexer) lexWhitespace() (token.TokenKind, *token.TokenMetadata) {
 	lexer.expectRune(' ')
 
 	// Keep going until we hit a rune that is not whitespace.
-	for !lexer.IsTerminated() && isRuneWhitespace(lexer.peek(1)) {
+	for !lexer.IsExhausted() && isRuneWhitespace(lexer.peek(1)) {
 		lexer.bump()
 	}
 
 	return token.Whitespace, nil
+}
+
+// Tries to lex a shebang token at the current position of the [Lexer], doing
+// nothing and returning `false` if it does not find anything.
+func (lexer *Lexer) maybeLexShebang() (token.TokenKind, *token.TokenMetadata, bool) {
+	if lexer.peek(0) != '#' || lexer.peek(1) != '!' {
+		return token.Shebang, nil, false
+	}
+
+	lexer.bump()
+
+	for !lexer.IsExhausted() && isRuneWhitespace(lexer.peek(1)) {
+		lexer.bump()
+	}
+
+	lexer.bump()
+
+	interpreterIndex := lexer.currentIndex
+
+	for !lexer.IsExhausted() && lexer.peek(1) != '\n' {
+		lexer.bump()
+	}
+
+	return token.Shebang, &token.TokenMetadata{ShebangInterpreterIndex: interpreterIndex}, true
 }

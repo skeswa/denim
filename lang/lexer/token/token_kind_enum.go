@@ -20,6 +20,8 @@ const (
 	LineComment
 	// Describes a token not expected by the lexer, e.g. "№".
 	Unknown
+	// Describes a UNIX interpreter directive put at the top of files e.g. `#!/usr/bin/env bash`.
+	Shebang
 	// Describes a `/` (typically used in division).
 	Slash
 	// Describes any kind of whitespace (e.g. \n, \t, etc.).
@@ -28,15 +30,16 @@ const (
 
 var ErrInvalidTokenKind = fmt.Errorf("not a valid TokenKind, try [%s]", strings.Join(_TokenKindNames, ", "))
 
-const _TokenKindName = "BlockCommentEndLineCommentUnknownSlashWhitespace"
+const _TokenKindName = "BlockCommentEndLineCommentUnknownShebangSlashWhitespace"
 
 var _TokenKindNames = []string{
 	_TokenKindName[0:12],
 	_TokenKindName[12:15],
 	_TokenKindName[15:26],
 	_TokenKindName[26:33],
-	_TokenKindName[33:38],
-	_TokenKindName[38:48],
+	_TokenKindName[33:40],
+	_TokenKindName[40:45],
+	_TokenKindName[45:55],
 }
 
 // TokenKindNames returns a list of possible string values of TokenKind.
@@ -51,8 +54,9 @@ var _TokenKindMap = map[TokenKind]string{
 	End:          _TokenKindName[12:15],
 	LineComment:  _TokenKindName[15:26],
 	Unknown:      _TokenKindName[26:33],
-	Slash:        _TokenKindName[33:38],
-	Whitespace:   _TokenKindName[38:48],
+	Shebang:      _TokenKindName[33:40],
+	Slash:        _TokenKindName[40:45],
+	Whitespace:   _TokenKindName[45:55],
 }
 
 // String implements the Stringer interface.
@@ -68,8 +72,9 @@ var _TokenKindValue = map[string]TokenKind{
 	_TokenKindName[12:15]: End,
 	_TokenKindName[15:26]: LineComment,
 	_TokenKindName[26:33]: Unknown,
-	_TokenKindName[33:38]: Slash,
-	_TokenKindName[38:48]: Whitespace,
+	_TokenKindName[33:40]: Shebang,
+	_TokenKindName[40:45]: Slash,
+	_TokenKindName[45:55]: Whitespace,
 }
 
 // ParseTokenKind attempts to convert a string to a TokenKind.
