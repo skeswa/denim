@@ -466,6 +466,42 @@ let x: Option<string>;
 let x: string?;
 ```
 
+`Option` is used in much of the same way that `null`, `nil`, or `undefined` is
+used in other languages - to communicate that a value may be absent.
+Unfortunately, dealing with `Option` and other similar ideas is sort of awkward.
+You end up writing a lot of if-this-then-that logic dealing with whether the
+value is there or not.
+
+```js
+if (!thing.x || !thing.x.y || !thing.x.y.z) {
+  return "nope";
+}
+
+return thing.x.y.z.value;
+```
+
+To reduce the cruft, lanuages like JavaScript added the
+[`?.`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining)
+and
+[`??`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing)
+operators.
+
+```js
+return thing.x?.y?.z?.value ?? "nope";
+```
+
+Better right? Well, sure. Except that now you have two operators that basically
+do the same thing depending on context - `.` and `?.`. They enable access into
+the state and behavior of values and objects.
+
+In Denim, all instances of `.` behave like `?.` does in other languages - it
+falls back to `Option::None` automatically when an optional value is absent.
+Denim retains `??` as syntactic sugar for `Option::unwrap_or(..)`:
+
+```rust
+thing.x.y.z.value ?? "nope";
+```
+
 #### Maps
 
 TODO(skeswa): flesh this out (Dart Maps).
@@ -574,19 +610,18 @@ about.
 #### Operators
 
 - `and`, `or`\
-  Denim steals these logical comparison operators from
-  [Python](https://docs.python.org/3/library/operator.html). Why? Well, truth be
-  told, it is mostly to reduce the ambiguity of `||` (see: Rust closure syntax).
-  But also, I think it sorta reads nicely since keywords are highlighted to be
-  pretty eyecatching usually.
+  Denim steals these logical comparison operators from [Python](https://docs.python.org/3/library/operator.html).
+  Why? Well, truth be told, it is mostly to reduce the ambiguity of `||` (see: Rust
+  closure syntax). But also, I think it sorta reads nicely since keywords are highlighted
+  to be pretty eyecatching usually.
 - `==`, `!=`\
-  The strict equality and inequality operators work just the way that you think
-  they do: they check if primitives are equal, or if non-primitives point to the
-  same address in memory.
+  The strict equality and inequality operators work just the way that you think they
+  do: they check if primitives are equal, or if non-primitives point to the same
+  address in memory.
 - `===`, `!==`\
-  These two operators are congruence and incongruence operators in Denim. They
-  are meant to check if two values are qualitatively equal or not. We use the
-  `Eq` trait to implement these operators.
+  These two operators are congruence and incongruence operators in Denim. They are
+  meant to check if two values are qualitatively equal or not. We use the `Eq` trait
+  to implement these operators.
 - `+`, `-`, `*`, `/`, and `%`\
   Arithmetic operators can only be applied to numbers of the same kind.
 - `**`, the exponentiation operator, is stolen from
@@ -871,7 +906,7 @@ later, but it works identically to how Rust's
 
 ```rust
 fn measurement(scalar: float, unit: string?) {
-  let lowercase_unit = unit?.to_lower() ?? "";
+  let lowercase_unit = unit.to_lower() ?? "";
 
   "$scalar $lowercase_unit"
 }
@@ -1286,7 +1321,7 @@ fn authenticate(environment: Environment, auth_user: User) -> bool {
 
 // `&` is the secret sauce here
 fn do_stuff(environment: Environment, user: User?) {
-  user?.authenticate(environment, &auth_user).if {
+  user.authenticate(environment, &auth_user).if {
     print("yes!");
   } else {
     print("no!");
