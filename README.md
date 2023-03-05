@@ -871,6 +871,16 @@ let b = 5;
 print(multiply(a: 2, b)); // prints "10"
 ```
 
+There are situations where you need multiple arguments, but naming them would be
+a little silly. The best way to do this in Denim is to have a tuple as your only
+argument.
+
+```rust
+fn add(nums: (int, int)) -> int {
+  nums.0 + nums.1
+}
+```
+
 Denim functions can also have optional arguments. One way to accomplish this is
 to specify a default value for a parameter.
 
