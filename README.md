@@ -1209,10 +1209,10 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = my_other_car.fork {
+let my_other_car = ~my_other_car.fork {
   make: "Rivian",
   model: "R1T",
-  user: fork {
+  user: ~fork {
     // `self` refers to the original value of this `User` field.
     coolness_rating: self.coolness_rating + 1,
   },
