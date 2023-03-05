@@ -130,8 +130,8 @@ Denim's primitives are mostly stolen from Go. It has:
 - `float`\
   A 64-bit signed floating point number.
 
-  A `float` literal is either dot-delimited decimal numbers like `-12.80001`,
-  or scientific notation like `1.2e-12`.
+  A `float` literal is either dot-delimited decimal numbers like `-12.80001`, or
+  scientific notation like `1.2e-12`.
 
 - `int`\
   A 64-bit signed integer number.
@@ -573,12 +573,20 @@ about.
 
 #### Operators
 
-Denim features the "usual suspects" for a C-family language:
-
-- `&&`, `||`, `==`, and `!=`\
-  Logical comparison operators work the way that you think they do. One thing to
-  note is that the equality comparison operators do not perform qualitative comparison.
-  Instead they do a dumb equality check, like Java, for instance.
+- `and`, `or`\
+  Denim steals these logical comparison operators from
+  [Python](https://docs.python.org/3/library/operator.html). Why? Well, truth be
+  told, it is mostly to reduce the ambiguity of `||` (see: Rust closure syntax).
+  But also, I think it sorta reads nicely since keywords are highlighted to be
+  pretty eyecatching usually.
+- `==`, `!=`\
+  The strict equality and inequality operators work just the way that you think
+  they do: they check if primitives are equal, or if non-primitives point to the
+  same address in memory.
+- `===`, `!==`\
+  These two operators are congruence and incongruence operators in Denim. They
+  are meant to check if two values are qualitatively equal or not. We use the
+  `Eq` trait to implement these operators.
 - `+`, `-`, `*`, `/`, and `%`\
   Arithmetic operators can only be applied to numbers of the same kind.
 - `**`, the exponentiation operator, is stolen from
