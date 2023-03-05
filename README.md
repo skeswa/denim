@@ -1272,13 +1272,13 @@ Here, we take:
   state
 
 ```rust
-fn authenticate(environment: Environment, user: User) -> bool {
+fn authenticate(environment: Environment, auth_user: User) -> bool {
   // ...
 }
 
-// `@` is the secret sauce here
+// `&` is the secret sauce here
 fn do_stuff(environment: Environment, user: User?) {
-  user?.authenticate(environment, user: @).if {
+  user?.authenticate(environment, &auth_user).if {
     print("yes!");
   } else {
     print("no!");
