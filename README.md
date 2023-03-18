@@ -223,10 +223,10 @@ let abc = 123;
 abc = 321; // Compile-time error
 ```
 
-To create a mutable variable, you need to add a `~` prefix to the `let` keyword.
+To create a mutable variable, you need to add a `mut` prefix to the `let` keyword.
 
 ```rust
-let ~xyz = 123;
+let mut xyz = 123;
 
 xyz = 456; // 👍
 ```
@@ -313,10 +313,10 @@ print(array[2]); // Prints "3"
 print(array[17]); // Compile-time error
 ```
 
-Need your Array to be mutable? Prefix the literal with a `~`.
+Need your Array to be mutable? Prefix the literal with a `mut`.
 
 ```rust
-let mutable_array = ~[1, 2, 3];
+let mutable_array = mut [1, 2, 3];
 ```
 
 Sometimes when you have a mutable Array, it starts empty. In this situation, the
@@ -325,7 +325,7 @@ You can help provide more type information on the variable or explicitly cast
 the Array literal to correct this.
 
 ```rust
-let another_array: ~[string] = ~[];
+let another_array: mut [string] = mut [];
 // In Denim, like in Rust, you can cast a value with the `as` keyword.
 let yet_another_array = [] as [bool];
 ```
@@ -333,16 +333,16 @@ let yet_another_array = [] as [bool];
 Denim can also infer the inner type of the Array later on from context.
 
 ```rust
-// `one_more_for_the_road` is starts as a `~[unknown]`.
-let one_more_for_the_road: = ~[];
-// Now Denim knows that `one_more_for_the_road` must be an `~[int]`.
+// `one_more_for_the_road` is starts as a `mut [unknown]`.
+let one_more_for_the_road: = mut [];
+// Now Denim knows that `one_more_for_the_road` must be an `mut [int]`.
 one_more_for_the_road.add(2)
 ```
 
 Denim Arrays have lots of helpful methods focused on mutation.
 
 ```rust
-let some_array: ~[int] = ~[];
+let some_array: mut [int] = mut [];
 some_array.add(2);
 some_array.add(1);
 
@@ -527,18 +527,18 @@ print(x["four"]); // Prints "None"
 print(y[7]); // Prints "None"
 ```
 
-Denim Maps, like other Denim data structures, are made mutable with a `~`
+Denim Maps, like other Denim data structures, are made mutable with a `mut`
 prefix.
 
 ```rust
-let mutable_map = ~{"one": 1, "two": 2};
+let mutable_map = mut {"one": 1, "two": 2};
 ```
 
 Mutable Denim Maps feature useful methods and operators stolen from the Maps of
 other languages.
 
 ```rust
-let mutable_map: ~{string: string} = ~{};
+let mutable_map: mut {string: string} = mut {};
 mutable_map["hello"] = "world";
 mutable_map["foo"] = "bar";
 
@@ -573,7 +573,7 @@ TODO(skeswa): flesh this out (Dart Sets).
 ```rust
 // The type of `x` is inferred to be `{string}` here.
 let x = {"one", "two", "three"};
-let y: ~{float} = ~{1, 2.2, 3};
+let y = mut {1, 2.2, 3};
 ```
 
 TODO(skeswa): spread notation
@@ -807,19 +807,19 @@ match some_number {
 fn x() -> Result {
   something_that_can_fail(123).try;
   try {
-    let ~a = 123;
+    let mut a = 123;
     a = a * 2;
 
     something_that_can_fail(123)
   }
 }
 
-let ~i = 0;
+let mut i = 0;
 while i < 3 {
   print("i is $i");
 }
 
-let ~is_done = true;
+let mut is_done = true;
 is_done.while {
   is_done = false;
 }
@@ -1193,12 +1193,12 @@ let my_car = Car {
 my_car.make = "Toyota"; // Compile-time error.
 ```
 
-The only way to create a mutable `struct` instance is to create it with a `~`
-prefixing the `struct` type. In Denim, structs and traits with a `~` are
+The only way to create a mutable `struct` instance is to create it with a `mut`
+prefixing the `struct` type. In Denim, structs and traits with a `mut` are
 internally mutable.
 
 ```rust
-let my_mut_car = ~Car {
+let my_mut_car = mut Car {
   make: "Mazda",
   model: "Miata",
   owner: some_user,
@@ -1225,11 +1225,11 @@ let my_other_car = my_car.fork {
 print(my_car.make) // Prints "Mazda"
 print(my_other_car.make) // Prints "Toyota"
 
-my_other_car.make = "Toyota"; // Compile-time error (`my_other_car` is not a `~Car`)
+my_other_car.make = "Toyota"; // Compile-time error (`my_other_car` is not a `mut Car`)
 ```
 
 But what if you need the forked `struct` instance to be internally mutable? This
-is made possible by prefixing the `fork` expression with a `~`.
+is made possible by prefixing the `fork` expression with a `mut`.
 
 ```rust
 let my_car = Car {
@@ -1238,7 +1238,7 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = ~my_car.fork;
+let my_other_car = mut my_car.fork;
 
 my_car.make = "Toyota"; // 👍
 ```
@@ -1254,10 +1254,10 @@ let my_car = Car {
   owner: some_user,
 };
 
-let my_other_car = ~my_other_car.fork {
+let my_other_car = mut my_other_car.fork {
   make: "Rivian",
   model: "R1T",
-  user: ~fork {
+  user: fork {
     // `self` refers to the original value of this `User` field.
     coolness_rating: self.coolness_rating + 1,
   },
@@ -1267,13 +1267,13 @@ let my_other_car = ~my_other_car.fork {
 In some situations, you may want nested internal mutation: you way want to be
 able to directly mutate an inner `struct` instance nested within another
 `struct` instance. Denim supports this by declaring the inner `struct` field as
-mutable with `~`. Note that this nested internal mutability is only accessible
+mutable with `mut`. Note that this nested internal mutability is only accessible
 in situations where the surrounding type is itself mutable.
 
 ```rust
 struct House {
   address: Address,
-  owner: ~User,
+  owner: mut User,
 }
 
 struct Address {
@@ -1292,9 +1292,9 @@ let a_house = House {
   },
 };
 
-a_house.owner.active = true; // Compile-time error (`a_house` is not a `~House`)
+a_house.owner.active = true; // Compile-time error (`a_house` is not a `mut House`)
 
-let another_house = ~House {
+let another_house = mut House {
   address: {
     number: "221B",
     street: "Baker St",
@@ -1306,7 +1306,7 @@ let another_house = ~House {
 };
 
 a_house.owner.active = true; // 👍
-a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not an `~Address`)
+a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not an `mut Address`)
 ```
 
 ### Control Flow
@@ -1380,7 +1380,7 @@ fn autoboxed_foo() -> string? {
 }
 
 // `Result` is also autoboxable:
-let ~x: Result<int> = Ok(1);
+let mut x: Result<int> = Ok(1);
 x = 2;
 
 // Autoboxing works in structs too!
@@ -1400,11 +1400,11 @@ pub trait Summary {
 pub trait Tweak<T> {
   tweakable: T?;
 
-  fn tweak(~self, some_other_arg: string) -> Self;
+  fn tweak(mut self, some_other_arg: string) -> Self;
 }
 
 pub trait DefaultImpl {
-  fn foo(~self) -> string {
+  fn foo(mut self) -> string {
     "bar"
   }
 }
