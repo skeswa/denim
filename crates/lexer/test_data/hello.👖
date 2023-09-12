@@ -1,0 +1,4 @@
+/// Prints "hello, world!" to std out.
+pub fn hello(world = "world") {
+  print("hello, $world!");
+}
