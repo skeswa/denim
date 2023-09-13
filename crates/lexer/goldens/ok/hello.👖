@@ -1,4 +1,6 @@
 /// Prints "hello, world!" to std out.
+///
+/// * [world] is an optionally specifiable [string] that follows "hello, "
 pub fn hello(world = "world") {
   print("hello, $world!");
 }

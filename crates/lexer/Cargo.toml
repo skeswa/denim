@@ -3,6 +3,6 @@ edition = "2021"
 name = "lexer"
 version = "0.1.0"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+unicode-properties = "0.1.0"
+unicode-xid = "0.2.0"
