@@ -1,3 +1,7 @@
+use cursor::Cursor;
+use token::Token;
+use token_kind::TokenKind;
+
 mod char_recognition_ext;
 mod constants;
 mod cursor;
@@ -9,17 +13,18 @@ mod raw_str_error;
 mod token;
 mod token_kind;
 
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
-}
+/// Creates a new [Iterator] that exhaustively produces each Denim [Token] that
+/// comprises `input` in order from top of the file to the bottom of the file.
+pub fn tokenize(input: &str) -> impl Iterator<Item = Token> + '_ {
+    let mut cursor = Cursor::new(input);
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+    std::iter::from_fn(move || {
+        let token = cursor.tokenize_next();
 
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
+        if token.kind != TokenKind::End {
+            Some(token)
+        } else {
+            None
+        }
+    })
 }

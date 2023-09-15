@@ -36,11 +36,6 @@ impl<'a> Cursor<'a> {
         }
     }
 
-    /// Views the input string that underlies this `Cursor`.
-    pub fn as_str(&self) -> &'a str {
-        self.chars.as_str()
-    }
-
     /// Moves to the next character.
     pub(crate) fn bump(&mut self) -> Option<char> {
         let c = self.chars.next()?;

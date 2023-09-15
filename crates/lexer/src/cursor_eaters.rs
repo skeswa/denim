@@ -1,7 +1,4 @@
-use crate::{
-    char_recognition_ext::CharRecognitionExt, constants::EOF_CHAR, cursor::Cursor,
-    raw_str_error::RawStrError,
-};
+use crate::{constants::EOF_CHAR, cursor::Cursor, raw_str_error::RawStrError};
 
 impl<'a> Cursor<'a> {
     /// Eats unicode codepoints until they no longer fit the definition of a
@@ -86,19 +83,6 @@ impl<'a> Cursor<'a> {
         }
 
         has_digits
-    }
-
-    /// Eats unicode codepoints until they no longer fit the definition of an
-    /// identifier.
-    ///
-    /// NOTE: succeeds on `_`, which isn't a valid identifier.
-    pub(crate) fn eat_identifier(&mut self) {
-        if !self.first().is_id_front() {
-            return;
-        }
-        self.bump();
-
-        self.eat_while(|c| c.is_id_caboose());
     }
 
     /// Eats unicode codepoints until they no longer fit the definition of a
