@@ -1,6 +1,6 @@
 use crate::numeric_base::NumericBase;
 
-/// Enum representing the literal types supported by the lexer.
+/// Enum representing the literal types supported by the tokenizer.
 ///
 /// Note that the suffix is *not* considered when deciding the `LiteralKind` in
 /// this type. This means that float literals like `1f32` are classified by this
