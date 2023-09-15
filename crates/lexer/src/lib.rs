@@ -2,7 +2,6 @@ use cursor::Cursor;
 use token::Token;
 use token_kind::TokenKind;
 
-mod char_recognition_ext;
 mod constants;
 mod cursor;
 mod cursor_eaters;
@@ -10,6 +9,7 @@ mod cursor_tokenizers;
 mod literal_kind;
 mod numeric_base;
 mod raw_str_error;
+mod special_char;
 mod token;
 mod token_kind;
 

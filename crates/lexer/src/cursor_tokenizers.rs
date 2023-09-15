@@ -1,8 +1,8 @@
 use crate::{
-    char_recognition_ext::CharRecognitionExt,
     cursor::Cursor,
     literal_kind::LiteralKind::{self, *},
     numeric_base::NumericBase::*,
+    special_char::SpecialChar,
     token::Token,
     token_kind::TokenKind,
     token_kind::TokenKind::*,
@@ -54,7 +54,7 @@ impl<'a> Cursor<'a> {
 
             // Identifier (this should be checked after other variant that can
             // start as identifier).
-            c if c.is_id_front() => self.tokenize_ident_or_unknown_prefix(),
+            c if c.is_ident_start() => self.tokenize_ident_or_unknown_prefix(),
 
             // Numeric literal.
             c @ '0'..='9' => {
@@ -162,10 +162,10 @@ impl<'a> Cursor<'a> {
     /// Attempts to recognize the next token as an identifier, only advancing
     /// the cursor and returning it if this attempt is successful.
     fn tokenize_ident_or_unknown_prefix(&mut self) -> TokenKind {
-        debug_assert!(self.prev().is_id_front());
+        debug_assert!(self.prev().is_ident_start());
 
         // Front is already eaten, eat the rest of identifier.
-        self.eat_while(|c| c.is_id_caboose());
+        self.eat_while(|c| c.is_after_ident_start());
 
         // Known prefixes must have been handled earlier. So if
         // we see a prefix here, it is definitely an unknown prefix.
@@ -304,7 +304,7 @@ impl<'a> Cursor<'a> {
             // Don't be greedy if this is actually an integer literal followed
             // by field/method access or a range pattern
             // (`0..2` and `12.foo()`).
-            '.' if self.second() != '.' && !self.second().is_id_front() => {
+            '.' if self.second() != '.' && !self.second().is_ident_start() => {
                 // We might have stuff after the `.`, and if we do, it needs to
                 // start with a number.
                 self.bump();
