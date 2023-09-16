@@ -1,4 +1,9 @@
-use crate::{constants::EOF_CHAR, cursor::Cursor, raw_str_error::RawStrError};
+use crate::{
+    constants::EOF_CHAR,
+    cursor::Cursor,
+    raw_str_error::RawStrError,
+    string_literal_ending::StringLiteralEnding::{self, *},
+};
 
 impl<'a> Cursor<'a> {
     /// Eats unicode codepoints until they no longer fit the definition of a
@@ -26,15 +31,25 @@ impl<'a> Cursor<'a> {
     }
 
     /// Eats unicode codepoints until they no longer fit the definition of a
-    /// double-quoted string, returning `true` if the double-quoted string
-    /// terminates as expected.
-    pub(crate) fn eat_double_quoted_string(&mut self) -> bool {
+    /// double-quoted string, returning a [DoubleQuotedStringEnding] that
+    /// details how the string literal ends, if at all.
+    pub(crate) fn eat_double_quoted_string(&mut self) -> StringLiteralEnding {
         debug_assert!(self.prev() == '"');
+
+        // Look for a multi-line string.
+        if self.first() == '"' && self.second() == '"' {
+            self.bump();
+            self.bump();
+
+            return self.eat_multiline_double_quoted_string();
+        }
 
         while let Some(c) = self.bump() {
             match c {
                 '"' => {
-                    return true;
+                    return TerminatedString {
+                        is_multiline: false,
+                    };
                 }
                 '\\' if self.first() == '\\' || self.first() == '"' => {
                     // Bump again to skip escaped character.
@@ -45,7 +60,7 @@ impl<'a> Cursor<'a> {
         }
 
         // End of file reached.
-        false
+        UnterminatedString
     }
 
     /// Eats unicode codepoints until they no longer fit the definition of a
@@ -83,6 +98,35 @@ impl<'a> Cursor<'a> {
         }
 
         has_digits
+    }
+
+    /// Eats unicode codepoints until they no longer fit the definition of a
+    /// multi-line string, returning a [DoubleQuotedStringEnding] that details
+    /// how the string literal ends, if at all.
+    pub(crate) fn eat_multiline_double_quoted_string(&mut self) -> StringLiteralEnding {
+        debug_assert!(self.prev() == '"');
+
+        while let Some(c) = self.bump() {
+            match c {
+                // Check to see if this is the `"""` end of a multi-line
+                // string.
+                '"' if self.first() == '"' && self.second() == '"' => {
+                    // Eat the multi-line string ending.
+                    self.bump();
+                    self.bump();
+
+                    return TerminatedString { is_multiline: true };
+                }
+                '\\' if self.first() == '\\' || self.first() == '"' => {
+                    // Bump again to skip escaped character.
+                    self.bump();
+                }
+                _ => (),
+            }
+        }
+
+        // End of file reached.
+        UnterminatedString
     }
 
     /// Eats unicode codepoints until they no longer fit the definition of a

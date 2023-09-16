@@ -1,4 +1,4 @@
-use crate::numeric_base::NumericBase;
+use crate::{numeric_base::NumericBase, string_literal_ending::StringLiteralEnding};
 
 /// Enum representing the literal types supported by the tokenizer.
 ///
@@ -38,7 +38,7 @@ pub enum LiteralKind {
     },
     /// ""abc"", ""abc"
     Str {
-        /// `true` if this literal ends correctly with a `"`.
-        is_terminated: bool,
+        /// Describes how this string literal ends.
+        ending: StringLiteralEnding,
     },
 }

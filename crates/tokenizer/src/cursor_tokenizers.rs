@@ -95,10 +95,10 @@ impl<'a> Cursor<'a> {
 
             // String literal.
             '"' => {
-                let is_terminated = self.eat_double_quoted_string();
+                let ending = self.eat_double_quoted_string();
 
                 Literal {
-                    kind: Str { is_terminated },
+                    kind: Str { ending },
                 }
             }
 

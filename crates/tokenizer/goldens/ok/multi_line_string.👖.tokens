@@ -4,7 +4,7 @@
 " "                                                                              | 1   | Whitespace
 "="                                                                              | 1   | Eq
 " "                                                                              | 1   | Whitespace
-"\"xyz\""                                                                        | 5   | Literal { kind: Str { is_terminated: true } }
+"\"xyz\""                                                                        | 5   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
 ";"                                                                              | 1   | Semi
 "\n\n"                                                                           | 2   | Whitespace
 "// This is a comment in the middle of it all."                                  | 45  | LineComment { is_doc_comment: false }
@@ -15,11 +15,5 @@
 " "                                                                              | 1   | Whitespace
 "="                                                                              | 1   | Eq
 " "                                                                              | 1   | Whitespace
-"\"\""                                                                           | 2   | Literal { kind: Str { is_terminated: true } }
-"\"this string\n  spans multiple lines \n                                  and … | 263 | Literal { kind: Str { is_terminated: true } }
-"work"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"too"                                                                            | 3   | UnknownPrefix
-"\"\n\""                                                                         | 3   | Literal { kind: Str { is_terminated: true } }
-"\"\""                                                                           | 2   | Literal { kind: Str { is_terminated: true } }
+"\"\"\"this string\n  spans multiple lines \n                                  … | 278 | Literal { kind: Str { ending: TerminatedString { is_multiline: true } } }
 ";"                                                                              | 1   | Semi
