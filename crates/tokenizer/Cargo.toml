@@ -4,5 +4,6 @@ name = "tokenizer"
 version = "0.1.0"
 
 [dependencies]
+expect-test = "1.4.1"
 unicode-properties = "0.1.0"
 unicode-xid = "0.2.0"

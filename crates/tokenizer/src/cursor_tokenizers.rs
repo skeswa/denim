@@ -41,13 +41,12 @@ impl<'a> Cursor<'a> {
             'r' => match self.first() {
                 '#' | '"' => {
                     let maybe_pound_count = self.eat_raw_double_quoted_string(1);
-                    let suffix_start = self.pos_within_token();
 
                     let kind = RawStr {
                         pound_count: maybe_pound_count.ok(),
                     };
 
-                    Literal { kind, suffix_start }
+                    Literal { kind }
                 }
                 _ => self.tokenize_ident_or_unknown_prefix(),
             },
@@ -59,12 +58,8 @@ impl<'a> Cursor<'a> {
             // Numeric literal.
             c @ '0'..='9' => {
                 let literal_kind = self.tokenize_numeric_literal(c);
-                let suffix_start = self.pos_within_token();
 
-                Literal {
-                    kind: literal_kind,
-                    suffix_start,
-                }
+                Literal { kind: literal_kind }
             }
 
             // One-symbol tokens.
@@ -101,11 +96,9 @@ impl<'a> Cursor<'a> {
             // String literal.
             '"' => {
                 let is_terminated = self.eat_double_quoted_string();
-                let suffix_start = self.pos_within_token();
 
                 Literal {
                     kind: Str { is_terminated },
-                    suffix_start,
                 }
             }
 
@@ -132,11 +125,9 @@ impl<'a> Cursor<'a> {
         debug_assert!(self.prev() == '\'');
 
         let is_terminated = self.eat_single_quoted_string();
-        let suffix_start = self.pos_within_token();
 
         return Literal {
             kind: Char { is_terminated },
-            suffix_start,
         };
     }
 

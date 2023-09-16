@@ -45,9 +45,6 @@ pub enum TokenKind {
     Literal {
         /// Specifies the general type of `Literal`.
         kind: LiteralKind,
-        /// Counts how many unicode code points appear within this `Literal`
-        /// before the suffix begins.
-        suffix_start: u32,
     },
     /// Unrecognized prefix, like `foo#`, `foo'`, `foo"`.
     ///
