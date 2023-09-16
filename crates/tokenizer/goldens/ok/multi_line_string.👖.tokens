@@ -1,0 +1,25 @@
+"let"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"abc"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"="                                                                              | 1   | Eq
+" "                                                                              | 1   | Whitespace
+"\"xyz\""                                                                        | 5   | Literal { kind: Str { is_terminated: true } }
+";"                                                                              | 1   | Semi
+"\n\n"                                                                           | 2   | Whitespace
+"// This is a comment in the middle of it all."                                  | 45  | LineComment { is_doc_comment: false }
+"\n\n"                                                                           | 2   | Whitespace
+"let"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"a_whole_string_moment"                                                          | 21  | Ident
+" "                                                                              | 1   | Whitespace
+"="                                                                              | 1   | Eq
+" "                                                                              | 1   | Whitespace
+"\"\""                                                                           | 2   | Literal { kind: Str { is_terminated: true } }
+"\"this string\n  spans multiple lines \n                                  and … | 263 | Literal { kind: Str { is_terminated: true } }
+"work"                                                                           | 4   | Ident
+" "                                                                              | 1   | Whitespace
+"too"                                                                            | 3   | UnknownPrefix
+"\"\n\""                                                                         | 3   | Literal { kind: Str { is_terminated: true } }
+"\"\""                                                                           | 2   | Literal { kind: Str { is_terminated: true } }
+";"                                                                              | 1   | Semi

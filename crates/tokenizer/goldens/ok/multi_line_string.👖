@@ -1,0 +1,12 @@
+let abc = "xyz";
+
+// This is a comment in the middle of it all.
+
+let a_whole_string_moment = """this string
+  spans multiple lines 
+                                  and even has string interpolation
+          \n\n\n \t\t\t
+                            \"lower\": ${abc.to_lower()}
+                            \"normal\": $abc
+              unescaped quotes "work too"
+""";
