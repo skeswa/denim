@@ -1,0 +1,6 @@
+pub fn print_adjacent_string_literals() {
+  print(
+    "this is a string ""and here comes one more"
+    """ - one more for the road"""
+  );
+}
