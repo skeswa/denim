@@ -6,7 +6,6 @@ mod literal_kind;
 mod numeric_base;
 mod raw_str_error;
 mod special_char;
-mod testing;
 mod token;
 mod token_kind;
 pub mod tokenize;

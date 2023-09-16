@@ -1,0 +1,9 @@
+"r## "                                                                           | 4   | Literal { kind: RawStr { pound_count: None } }
+"I"                                                                              | 1   | Ident
+" "                                                                              | 1   | Whitespace
+"lack"                                                                           | 4   | Ident
+" "                                                                              | 1   | Whitespace
+"a"                                                                              | 1   | Ident
+" "                                                                              | 1   | Whitespace
+"quote"                                                                          | 5   | Ident
+"!"                                                                              | 1   | Bang
