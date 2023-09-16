@@ -74,6 +74,7 @@ mod golden_testing {
                     .source
                     .get(start_index..end_index)
                     .unwrap_or("")
+                    .replace("\"", "\\\"")
                     .replace("\n", "\\n")
                     .replace("\t", "\\t");
 
