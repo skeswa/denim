@@ -20,11 +20,11 @@ need to wait for something to complete, you can let in complete without blocking
 using the `async` keyword.
 
 ```rust
-quick_async_operation_1();
+quick_operation_1();
 
-// We wait for `quick_async_operation_1` to complete before starting
-// `quick_async_operation_2` without having to use a keyword - just works.
-quick_async_operation_2();
+// We wait for `quick_operation_1` to complete before starting
+// `quick_operation_2` without having to use a keyword - just works.
+quick_operation_2();
 
 let eventual_value = super_slow_operation().async;
 thing_that_needs_to_happen_right_away();
