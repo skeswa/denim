@@ -1,6 +1,7 @@
-# Denim's language design takes
+# Denim's Language Design Takes
 
-Sorted from hottest to coldest (more or less).
+Programming language design opinions sorted more or less from hottest (most
+unique/surprising) to coldest (Least unique/surprising).
 
 ## Hot Takes
 
@@ -94,7 +95,6 @@ from "github.com/some/lib" use something;
 from "~/internal/lib" show something_else;
 
 ```
-
 
 ## Medium Takes
 
