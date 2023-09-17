@@ -64,6 +64,38 @@ print("$greeting, $planet!");
 
 The result is a terse yet readable way to sequence asynchronous logic.
 
+### Imports at the bottom of the file
+
+This is normal:
+
+```
+import stuff up here
+
+yada yada yada
+
+maybe some epxorts
+
+mhm yeah
+
+**finally** the stuff you came here to read
+```
+
+Denim puts imports and exports a the bottom of the file _after_ the logic and
+stuff.
+
+```rust
+pub type ImportantStuff = struct {
+  // ...
+};
+
+---
+from "github.com/some/lib" use something;
+
+from "~/internal/lib" show something_else;
+
+```
+
+
 ## Medium Takes
 
 ### Everything is an expression
