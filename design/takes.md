@@ -159,3 +159,26 @@ if thing is Some::EnumVariant {
   print("Bingo!");
 }
 ```
+
+### Dart-style string syntax
+
+Dart makes declaring, concatenating, and interpolating values within strings
+super easy. Denim steals (most) of this syntax. A notable exception Denim string
+literals use `"` instead of `'`.
+
+```dart
+let abc = "123""xyz" // concat just by putting literals next to each other.
+let multiline = """
+  take
+    all
+      the
+        space
+          you
+            need
+""";
+
+let a = 1;
+let b = 2;
+
+let c = "$a + $b = ${a = b}" // Use `$` for string interpolation!
+```
