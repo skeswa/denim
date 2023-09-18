@@ -1,0 +1,3 @@
+hello("world");
+----
+from "github.com/hello/world" use hello;

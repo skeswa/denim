@@ -62,6 +62,18 @@ impl<'a> Cursor<'a> {
                 Literal { kind: literal_kind }
             }
 
+            // Either a section separator, `---`, or a normal minus, `-`.
+            '-' => match (self.first(), self.second()) {
+                ('-', '-') => {
+                    // Advance past the remaining section separator characters.
+                    self.bump();
+                    self.bump();
+
+                    SectionSeparator
+                }
+                _ => Minus,
+            },
+
             // One-symbol tokens.
             ';' => Semi,
             ',' => Comma,
@@ -82,7 +94,6 @@ impl<'a> Cursor<'a> {
             '!' => Bang,
             '<' => Lt,
             '>' => Gt,
-            '-' => Minus,
             '&' => Amp,
             '|' => Pipe,
             '+' => Plus,
@@ -90,7 +101,7 @@ impl<'a> Cursor<'a> {
             '^' => Caret,
             '%' => Percent,
 
-            // Lifetime or character literal.
+            // Character literal.
             '\'' => self.tokenize_char_literal(),
 
             // String literal.

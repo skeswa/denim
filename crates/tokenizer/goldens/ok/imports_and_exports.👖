@@ -1,0 +1,8 @@
+fn print_random_number() {
+  let r = random_int();
+
+  print("Here is a random number: $r")
+}
+
+---
+from "github.com/fake/math" show random_int;

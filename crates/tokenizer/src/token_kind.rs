@@ -46,6 +46,11 @@ pub enum TokenKind {
         /// Specifies the general type of `Literal`.
         kind: LiteralKind,
     },
+    /// `---`.
+    ///
+    /// Syntax used to separate the imports/exports section from the "real"
+    /// source code.
+    SectionSeparator,
     /// Unrecognized prefix, like `foo#`, `foo'`, `foo"`.
     ///
     /// NOTE: only the prefix (`foo`) is included in the token, not the
