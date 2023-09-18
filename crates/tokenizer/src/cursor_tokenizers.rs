@@ -74,6 +74,17 @@ impl<'a> Cursor<'a> {
                 _ => Minus,
             },
 
+            // Either a dotro, `::`, or a normal colon, `:`.
+            ':' => match self.first() {
+                ':' => {
+                    // Advance past the remaining dotro character.
+                    self.bump();
+
+                    Dotro
+                }
+                _ => Colon,
+            },
+
             // One-symbol tokens.
             ';' => Semi,
             ',' => Comma,
@@ -88,7 +99,6 @@ impl<'a> Cursor<'a> {
             '#' => Pound,
             '~' => Tilde,
             '?' => Question,
-            ':' => Colon,
             '$' => Dollar,
             '=' => Eq,
             '!' => Bang,

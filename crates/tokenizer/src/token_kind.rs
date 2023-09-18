@@ -24,6 +24,14 @@ pub enum TokenKind {
         /// `true` if this block comment ends correctly with a `*/`.
         is_terminated: bool,
     },
+    /// `::`.
+    ///
+    /// Syntax used to separate paths and reference functions.
+    ///
+    /// "dotro" = "quatro" (4 in spanish) + "dot" (.)
+    /// In other words, dotro is a portmanteau of "quatro" and "dot" which is
+    /// meant to mean "four dots".
+    Dotro,
     /// Any identifier (e.g. a variable name or a keyword).
     ///
     /// At this step, keywords are also considered identifiers.

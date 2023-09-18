@@ -201,14 +201,12 @@
 "Imperial"                                                                       | 8   | Ident
 "("                                                                              | 1   | OpenParen
 "Measurement"                                                                    | 11  | Ident
-":"                                                                              | 1   | Colon
-":"                                                                              | 1   | Colon
+"::"                                                                             | 2   | Dotro
 "Ft"                                                                             | 2   | Ident
 ","                                                                              | 1   | Comma
 " "                                                                              | 1   | Whitespace
 "Measurement"                                                                    | 11  | Ident
-":"                                                                              | 1   | Colon
-":"                                                                              | 1   | Colon
+"::"                                                                             | 2   | Dotro
 "In"                                                                             | 2   | Ident
 ")"                                                                              | 1   | CloseParen
 ","                                                                              | 1   | Comma
@@ -216,8 +214,7 @@
 "Metric"                                                                         | 6   | Ident
 "("                                                                              | 1   | OpenParen
 "Measurement"                                                                    | 11  | Ident
-":"                                                                              | 1   | Colon
-":"                                                                              | 1   | Colon
+"::"                                                                             | 2   | Dotro
 "Cm"                                                                             | 2   | Ident
 ")"                                                                              | 1   | CloseParen
 ","                                                                              | 1   | Comma
@@ -299,8 +296,7 @@
 ","                                                                              | 1   | Comma
 " "                                                                              | 1   | Whitespace
 "float"                                                                          | 5   | Ident
-":"                                                                              | 1   | Colon
-":"                                                                              | 1   | Colon
+"::"                                                                             | 2   | Dotro
 "{"                                                                              | 1   | OpenBrace
 "Self"                                                                           | 4   | Ident
 ","                                                                              | 1   | Comma
