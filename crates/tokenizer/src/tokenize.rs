@@ -24,7 +24,7 @@ mod golden_tests {
 
     #[test]
     fn err_goldens() {
-        for golden_test_case in GoldenTestCases::in_dir("err").into_iter() {
+        for golden_test_case in GoldenTestCases::in_dir("err") {
             println!(
                 "Golden test: {}",
                 golden_test_case.source_path.to_str().unwrap_or_default()
@@ -37,7 +37,7 @@ mod golden_tests {
 
     #[test]
     fn ok_goldens() {
-        for golden_test_case in GoldenTestCases::in_dir("ok").into_iter() {
+        for golden_test_case in GoldenTestCases::in_dir("ok") {
             println!(
                 "Golden test: {}",
                 golden_test_case.source_path.to_str().unwrap_or_default()
@@ -113,12 +113,12 @@ mod golden_testing {
     }
 
     /// Collection of related [GoldenTestCase] instances.
-    pub(crate) struct GoldenTestCases(Vec<GoldenTestCase>);
+    pub(crate) struct GoldenTestCases();
 
     impl GoldenTestCases {
         /// Reads all of the golden test cases defined within
         /// `goldens/{dir_name}`.
-        pub(crate) fn in_dir(dir_name: &'static str) -> GoldenTestCases {
+        pub(crate) fn in_dir(dir_name: &'static str) -> impl Iterator<Item = GoldenTestCase> {
             let crate_root_dir_path = Path::new(env!("CARGO_MANIFEST_DIR"));
 
             let goldens_dir_path = crate_root_dir_path.join("goldens");
@@ -154,14 +154,7 @@ mod golden_testing {
 
             golden_test_cases.sort();
 
-            GoldenTestCases(golden_test_cases)
-        }
-
-        /// Creates a consuming iterator, that is, one that moves each value out
-        /// of the vector (from start to end). [GoldenTestCases] cannot be used
-        /// after calling this.
-        pub(crate) fn into_iter(self) -> impl Iterator<Item = GoldenTestCase> {
-            self.0.into_iter()
+            golden_test_cases.into_iter()
         }
     }
 }
