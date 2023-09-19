@@ -56,3 +56,8 @@ rust-project.json
 
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,rust,rust-analyzer
+
+# Added by skeswa@ to make sure the results of `cargo vendor` dodge source
+# control - this may need to change eventually
+.cargo/
+vendor/
