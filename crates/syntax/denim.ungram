@@ -1,0 +1,141 @@
+// Denim Un-Grammar.
+//
+// This grammar specifies the structure of Denim's concrete syntax tree. It does
+// not specify parsing rules (ambiguities, precedence, etc are out of scope).
+// Tokens are processed -- contextual keywords are recognised, compound
+// operators glued.
+//
+// This grammar is shamelessly forked from rust-lang/rust-analyzer's
+// `rust.ungram`. Thanks matklad@ and friends!
+//
+// Legend:
+//
+//   //          -- comment
+//   Name =      -- non-terminal definition
+//   'ident'     -- token (terminal)
+//   A B         -- sequence
+//   A | B       -- alternation
+//   A*          -- zero or more repetition
+//   A?          -- zero or one repetition
+//   (A)         -- same as A
+//   label:A     -- suggested name for field of AST node
+
+// TODO(skeswa):
+// - BlockExpr
+// - Pat
+// - ParamList
+// - RetType
+// - Type
+
+Fn =
+  Visibility?
+  'fn' Name ParamList RetType?
+  (body:BlockExpr | ';')
+
+FootnoteItem =
+  PackageRef
+
+LogicItem =
+  Fn
+
+Name =
+  'ident' | 'self'
+
+NameRef =
+  'ident' | 'int_number' | 'self' | 'Self'
+
+Param =
+  Pat (':' Type)?
+| Type
+| '...'
+
+ParamList =
+  '('(
+    SelfParam
+  | (SelfParam ',')? (Param (',' Param)* ','?)?
+  )')'
+
+Path =
+  (qualifier:Path '::')? segment:PathSegment
+
+PathSegment =
+  '::'? NameRef
+
+PackageRef =
+  'from' 'string' Use? Show? ';'
+
+RetType =
+  '->' Type
+
+SelfParam =
+  'mut'? 'self'
+
+Show =
+  'show' UsableList
+
+SourceFile =
+  SourceFileLogic? SourceFileFootnote?
+
+SourceFileFootnote =
+  '---'
+  FootnoteItem*
+
+SourceFileLogic =
+  LogicItem*
+
+Usable =
+  (Path? '::')? ('*' | UsableList)
+| Path
+
+UsableList =
+  Usable (',' Usable)* ','?
+
+Use =
+  'use' UsableList
+
+Visibility =
+  'pub'
+
+// TYPES ///////////////////////////////////////////////////////////////////////
+
+Type =
+  ArrayType
+| FnType
+| InferType
+| MapType
+| NeverType
+| ParenType
+| PathType
+| SetType
+| TupleType
+| UnknownType
+
+ArrayType =
+  '[' Type ']'
+
+FnType =
+  'fn' ParamList RetType
+
+InferType =
+  'infer'
+
+MapType =
+  '{' Type ':' Type '}'
+
+NeverType =
+  'never'
+
+ParenType =
+  '(' Type ')'
+
+PathType =
+  Path
+
+SetType =
+  '{' Type '}'
+
+TupleType =
+  '(' fields:(Type (',' Type)* ','?)? ')'
+
+UnknownType =
+  'unknown'
