@@ -65,6 +65,32 @@ print("$greeting, $planet!");
 
 The result is a terse yet readable way to sequence asynchronous logic.
 
+### 2+ function parameters must be explicitly labeled
+
+Denim requires that parameters are labeled when 2 or more parameters are
+included in a function invocation.
+
+```rust
+fn add(a: int, b = 0) -> int {
+  a + b
+}
+
+add(1) // compiles
+
+add(1, 2)       // does not compile
+add(a: 1, b: 2) // compiles
+```
+
+When all you need is positional arguments, consider a tuple or array.
+
+```rust
+fn add(nums: (int, int)) -> int {
+  nums.0 + nums.1
+}
+
+add((1, 2)) // compiles
+```
+
 ### Imports at the bottom of the file
 
 This is normal:
@@ -74,7 +100,7 @@ import stuff up here
 
 yada yada yada
 
-maybe some epxorts
+maybe some exports
 
 mhm yeah
 
@@ -95,6 +121,21 @@ from "github.com/some/lib" use something;
 from "~/internal/lib" show something_else;
 
 ```
+
+### No `>` or `>=` comparison operators
+
+Why use `>` or `>=` when `<` and `<=` do trick?
+
+### No bitwise operators whatsoever
+
+Denim does not have bitwise and, or, zor, and not. Why? Most logic doesn't use
+these operators. Logic that needs to do bitwise math should use good ol'
+fashioned functions. Good riddance.
+
+### `and` and `or` instead of `&&` and `||`
+
+Pretty much only Python does this, but I think it reads nicely and reduces
+parsing ambiguity (`||` could be the beginning of a lambda).
 
 ## Medium Takes
 
