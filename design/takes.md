@@ -93,7 +93,7 @@ Denim is designed to make "chaining" operations as ergonomic. In a sense, Denim
 takes Rust's `.await` syntactic concept to its logical conclusion: let's make
 everything that can be used as a "prefix" usable as a "suffix".
 
-```rs
+```rust
 fn baz(foo: Foo, scalar = 1.0) -> double {
   // ...
   scalar * 123
@@ -109,6 +109,35 @@ Denim accomplishes a language feature called "fluency" by:
 - Allowing control flow keywords to be suffixed like `.try` and `.if`
 - Supporting the `it` keyword which is the value of the preceding expression in
   the "chain"
+
+### "DSL"-ability
+
+Denim is designed to make library APIs easy on the eyes. It accomplishes this
+via two language quirks:
+
+1. **Functions with zero arguments may be invoked without a trailing `()`**\
+   This allows functions to behave like properties, encapsulating complexity the
+   same way getters do in other languages.
+   ```rust
+   fn forty_two() -> int { 42 }
+   
+   fn ten(to_the_power_of = 1.0) -> int { (10 ** to_the_power_of).round() }
+
+   print(forty_two * ten) // Prints "420"
+   ```
+2. **Functions can have a special parameter `block` of type `fn() -> T` that
+   adds aesthetically pleasing syntax sugar**\
+   ```rust
+   fn foo(a: string, block: fn() -> string) -> string {
+     "a $block"
+   }
+
+   foo("hello") {
+     foo("darkness") {
+        "my old friend"
+     }
+   }
+   ```
 
 ### 2+ function parameters must be explicitly labeled
 
