@@ -65,32 +65,6 @@ print("$greeting, $planet!");
 
 The result is a terse yet readable way to sequence asynchronous logic.
 
-### 2+ function parameters must be explicitly labeled
-
-Denim requires that parameters are labeled when 2 or more parameters are
-included in a function invocation.
-
-```rust
-fn add(a: int, b = 0) -> int {
-  a + b
-}
-
-add(1) // compiles
-
-add(1, 2)       // does not compile
-add(a: 1, b: 2) // compiles
-```
-
-When all you need is positional arguments, consider a tuple or array.
-
-```rust
-fn add(nums: (int, int?)) -> int {
-  nums.0 + (nums.1 ?? 0)
-}
-
-add((1, 2)) // compiles
-```
-
 ### Fluency
 
 In many lanuages, lots of the good stuff is only usable when invoking a function
@@ -135,6 +109,32 @@ Denim accomplishes a language feature called "fluency" by:
 - Allowing control flow keywords to be suffixed like `.try` and `.if`
 - Supporting the `it` keyword which is the value of the preceding expression in
   the "chain"
+
+### 2+ function parameters must be explicitly labeled
+
+Denim requires that parameters are labeled when 2 or more parameters are
+included in a function invocation.
+
+```rust
+fn add(a: int, b = 0) -> int {
+  a + b
+}
+
+add(1) // compiles
+
+add(1, 2)       // does not compile
+add(a: 1, b: 2) // compiles
+```
+
+When all you need is positional arguments, consider a tuple or array.
+
+```rust
+fn add(nums: (int, int?)) -> int {
+  nums.0 + (nums.1 ?? 0)
+}
+
+add((1, 2)) // compiles
+```
 
 ## Medium Takes
 
