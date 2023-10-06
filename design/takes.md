@@ -84,12 +84,59 @@ add(a: 1, b: 2) // compiles
 When all you need is positional arguments, consider a tuple or array.
 
 ```rust
-fn add(nums: (int, int)) -> int {
-  nums.0 + nums.1
+fn add(nums: (int, int?)) -> int {
+  nums.0 + (nums.1 ?? 0)
 }
 
 add((1, 2)) // compiles
 ```
+
+### Fluency
+
+In many lanuages, lots of the good stuff is only usable when invoking a function
+as a member of a thing. Take for instance `?.` in JavaScript.
+
+```ts
+const foo = Math.random() > 0.5 ? { bar() {} } : null;
+
+foo?.doSomethingMaybe(); // this is dope
+
+function baz(foo) {
+  // ...
+}
+
+// I need this grossness to **safely** call `foo`:
+if (foo) {
+  baz(foo);
+}
+```
+
+This seems silly. `?.` is one example of the fact that we humans love to create
+sequential, causal chains of things to do. Breaking these chains with control
+flow like `if` does not feel good.
+
+Denim is designed to make "chaining" operations as ergonomic. In a sense, Denim
+takes Rust's `.await` syntactic concept to its logical conclusion: let's make
+everything that can be used as a "prefix" usable as a "suffix".
+
+```rs
+fn baz(foo: Foo, scalar = 1.0) -> double {
+  // ...
+  scalar * 123
+}
+
+foo.baz(foo: it, scalar: 2.0).if it < 200 {
+  print("it is $it!")
+}
+```
+
+Denim accomplishes a language feature called "fluency" by:
+
+- Allowing control flow keywords to be suffixed like `.try` and `.if`
+- Supporting the `it` keyword which is the value of the preceding expression in
+  the "chain"
+
+## Medium Takes
 
 ### Imports at the bottom of the file
 
@@ -136,8 +183,6 @@ fashioned functions. Good riddance.
 
 Pretty much only Python does this, but I think it reads nicely and reduces
 parsing ambiguity (`||` could be the beginning of a lambda).
-
-## Medium Takes
 
 ### Everything is an expression
 
