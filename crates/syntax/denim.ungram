@@ -35,6 +35,9 @@ Fn =
 FootnoteItem =
   PackageRef
 
+LambdaParamList =
+  '|' (Param (',' Param)* ','?)? '|'
+
 LogicItem =
   Fn
 
@@ -95,6 +98,72 @@ Use =
 
 Visibility =
   'pub'
+
+// DECLARATIONS ////////////////////////////////////////////////////////////////
+
+// Rust calls these "items":
+// https://doc.rust-lang.org/beta/reference/items.html
+
+Decl =
+  FnDecl
+| ImplDecl
+
+FnDecl =
+  Visibility?
+  'fn' Name ParamList RetType?
+  (body:BlockExpr | ';')
+
+ImplDecl =
+  Visibility?
+  'impl' ('trait'? trait:Type 'for')? self_ty:Type
+  members:('{' FnDecl* '}')
+
+// EXPRESSIONS /////////////////////////////////////////////////////////////////
+
+Expr =
+  ArrayExpr
+| BinaryExpr
+| LambdaExpr
+
+ArrayExpr =
+  '[' (Expr (',' Expr)* ','?)? ']'
+
+BinaryExpr =
+  lhs:Expr
+  op:(
+    'or' | 'and'
+  | '==' | '!=' | '<=' | '<'
+  | '+' | '*' | '-' | '/' | '~/' | '%' | '**'
+  | '&' | '|'
+  | '='
+  )
+  rhs:Expr
+
+LambdaExpr =
+  LambdaParamList RetType? body:Expr
+
+// TODO(skeswa): I was here
+
+// PATTERNS ////////////////////////////////////////////////////////////////////
+
+
+
+// STATEMENTS //////////////////////////////////////////////////////////////////
+
+Stmt =
+  ';'
+| ExprStmt
+| Item
+| LetStmt
+
+ExprStmt =
+  Expr ';'?
+
+LetStmt =
+  'let' Pat (':' Type)?
+  '=' initializer:Expr
+  ('else' BlockExpr)?
+  ';'
 
 // TYPES ///////////////////////////////////////////////////////////////////////
 
