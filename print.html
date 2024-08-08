@@ -1,0 +1,1135 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Denim</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body class="sidebar-visible no-js">
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('light')
+            html.classList.add(theme);
+            var body = document.querySelector('body');
+            body.classList.remove('no-js')
+            body.classList.add('js');
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var body = document.querySelector('body');
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            body.classList.remove('sidebar-visible');
+            body.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="journal/index.html"><strong aria-hidden="true">1.</strong> Journal</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="journal/2023_09_16_hot_takes.html"><strong aria-hidden="true">1.1.</strong> Hot Takes (Sept 2023)</a></li><li class="chapter-item expanded "><a href="journal/2024_08_07_redesign.html"><strong aria-hidden="true">1.2.</strong> Redesign (Aug 2024)</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <!-- Track and set sidebar scroll position -->
+        <script>
+            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
+            sidebarScrollbox.addEventListener('click', function(e) {
+                if (e.target.tagName === 'A') {
+                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
+                }
+            }, { passive: true });
+            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
+            sessionStorage.removeItem('sidebar-scroll');
+            if (sidebarScrollTop) {
+                // preserve sidebar scroll position when navigating via links within sidebar
+                sidebarScrollbox.scrollTop = sidebarScrollTop;
+            } else {
+                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
+                var activeSection = document.querySelector('#sidebar .active');
+                if (activeSection) {
+                    activeSection.scrollIntoView({ block: 'center' });
+                }
+            }
+        </script>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Denim</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="journal"><a class="header" href="#journal">Journal</a></h1>
+<p>Here lies all of @skeswa's notes on Denim's implementation and design over time.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="denims-language-design-takes"><a class="header" href="#denims-language-design-takes">Denim's Language Design Takes</a></h1>
+<p>Programming language design opinions sorted more or less from hottest (most
+unique/surprising) to coldest (Least unique/surprising).</p>
+<h2 id="hot-takes"><a class="header" href="#hot-takes">Hot Takes</a></h2>
+<h3 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h3>
+<p>In a typical concurrency regime, like <code>async/await</code>, programs can "opt in" to
+asynchrony in specific spots. Additionally, special functionality like
+<code>Promise.all(...)</code> is necessary to express the idea that an operation should
+wait for multiple prior operations to complete before it can begin.</p>
+<p>Denim takes a very different approach: in Denim, concurrency is a first-class
+syntactic concern.</p>
+<p>Firstly, all operations in Denim are "awaited" automatically. When you don't
+need to wait for something to complete, you can let in complete without blocking
+using the <code>async</code> keyword.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>quick_operation_1();
+
+// We wait for `quick_operation_1` to complete before starting
+// `quick_operation_2` without having to use a keyword - just works.
+quick_operation_2();
+
+let eventual_value = super_slow_operation().async;
+thing_that_needs_to_happen_right_away();
+
+print("it's ready now: ${eventual_value.await}");
+<span class="boring">}</span></code></pre></pre>
+<p>Secondly, and perhaps most importantly, Denim allows the programmer to
+ergonomically stipulate which things should happen at the same time, and which
+should happen in sequence.</p>
+<p>Statements separated a blank line are executed in sequence.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let greeting = "hello";
+
+// Performs a network call to figure out what planet we are on.
+let planet = get_current_planet();
+
+// Waits for a 3 second time to elapse.
+wait_for_3_seconds();
+
+// Nothing is printed to the screen until 3 seconds **after** `planet` is
+// fetched.
+print("$greeting, $planet!");
+<span class="boring">}</span></code></pre></pre>
+<p>Statements <strong>not</strong> separated by a blank line are executed concurrently.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let greeting = "hello";
+let planet = get_current_planet();
+wait_for_3_seconds();
+
+// We print the moment all 3 of the statements in the previous group complete.
+print("$greeting, $planet!");
+<span class="boring">}</span></code></pre></pre>
+<p>The result is a terse yet readable way to sequence asynchronous logic.</p>
+<h3 id="fluency"><a class="header" href="#fluency">Fluency</a></h3>
+<p>In many lanuages, lots of the good stuff is only usable when invoking a function
+as a member of a thing. Take for instance <code>?.</code> in JavaScript.</p>
+<pre><code class="language-ts">const foo = Math.random() &gt; 0.5 ? { bar() {} } : null;
+
+foo?.doSomethingMaybe(); // this is dope
+
+function baz(foo) {
+  // ...
+}
+
+// I need this grossness to **safely** call `foo`:
+if (foo) {
+  baz(foo);
+}
+</code></pre>
+<p>This seems silly. <code>?.</code> is one example of the fact that we humans love to create
+sequential, causal chains of things to do. Breaking these chains with control
+flow like <code>if</code> does not feel good.</p>
+<p>Denim is designed to make "chaining" operations as ergonomic. In a sense, Denim
+takes Rust's <code>.await</code> syntactic concept to its logical conclusion: let's make
+everything that can be used as a "prefix" usable as a "suffix".</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn baz(foo: Foo, scalar = 1.0) -&gt; double {
+  // ...
+  scalar * 123
+}
+
+foo.baz(foo: it, scalar: 2.0).if it &lt; 200 {
+  print("it is $it!")
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Denim accomplishes a language feature called "fluency" by:</p>
+<ul>
+<li>Allowing control flow keywords to be suffixed like <code>.try</code> and <code>.if</code></li>
+<li>Supporting the <code>it</code> keyword which is the value of the preceding expression in
+the "chain"</li>
+</ul>
+<h3 id="dsl-ability"><a class="header" href="#dsl-ability">"DSL"-ability</a></h3>
+<p>Denim is designed to make library APIs easy on the eyes. It accomplishes this
+via two language quirks:</p>
+<ol>
+<li><strong>Functions with zero arguments may be invoked without a trailing <code>()</code></strong><br />
+This allows functions to behave like properties, encapsulating complexity the
+same way getters do in other languages.
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn forty_two() -&gt; int { 42 }
+
+fn ten(to_the_power_of = 1.0) -&gt; int { (10 ** to_the_power_of).round() }
+
+print(forty_two * ten) // Prints "420"
+<span class="boring">}</span></code></pre></pre>
+</li>
+<li><strong>Functions can have a special parameter <code>block</code> of type <code>fn() -&gt; T</code> that
+adds aesthetically pleasing syntax sugar</strong>\
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn foo(a: string, block: fn() -&gt; string) -&gt; string {
+  "a $block"
+}
+
+foo("hello") {
+  foo("darkness") {
+     "my old friend"
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+</li>
+</ol>
+<h3 id="2-function-parameters-must-be-explicitly-labeled"><a class="header" href="#2-function-parameters-must-be-explicitly-labeled">2+ function parameters must be explicitly labeled</a></h3>
+<p>Denim requires that parameters are labeled when 2 or more parameters are
+included in a function invocation.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn add(a: int, b = 0) -&gt; int {
+  a + b
+}
+
+add(1) // compiles
+
+add(1, 2)       // does not compile
+add(a: 1, b: 2) // compiles
+<span class="boring">}</span></code></pre></pre>
+<p>When all you need is positional arguments, consider a tuple or array.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn add(nums: (int, int?)) -&gt; int {
+  nums.0 + (nums.1 ?? 0)
+}
+
+add((1, 2)) // compiles
+<span class="boring">}</span></code></pre></pre>
+<h2 id="medium-takes"><a class="header" href="#medium-takes">Medium Takes</a></h2>
+<h3 id="imports-at-the-bottom-of-the-file"><a class="header" href="#imports-at-the-bottom-of-the-file">Imports at the bottom of the file</a></h3>
+<p>This is normal:</p>
+<pre><code>import stuff up here
+
+yada yada yada
+
+maybe some exports
+
+mhm yeah
+
+**finally** the stuff you came here to read
+</code></pre>
+<p>Denim puts imports and exports a the bottom of the file <em>after</em> the logic and
+stuff.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type ImportantStuff = struct {
+  // ...
+};
+
+---
+from "github.com/some/lib" use something;
+
+from "~/internal/lib" show something_else;
+
+<span class="boring">}</span></code></pre></pre>
+<h3 id="no--or--comparison-operators"><a class="header" href="#no--or--comparison-operators">No <code>&gt;</code> or <code>&gt;=</code> comparison operators</a></h3>
+<p>Why use <code>&gt;</code> or <code>&gt;=</code> when <code>&lt;</code> and <code>&lt;=</code> do trick?</p>
+<h3 id="no-bitwise-operators-whatsoever"><a class="header" href="#no-bitwise-operators-whatsoever">No bitwise operators whatsoever</a></h3>
+<p>Denim does not have bitwise and, or, zor, and not. Why? Most logic doesn't use
+these operators. Logic that needs to do bitwise math should use good ol'
+fashioned functions. Good riddance.</p>
+<h3 id="and-and-or-instead-of--and-"><a class="header" href="#and-and-or-instead-of--and-"><code>and</code> and <code>or</code> instead of <code>&amp;&amp;</code> and <code>||</code></a></h3>
+<p>Pretty much only Python does this, but I think it reads nicely and reduces
+parsing ambiguity (<code>||</code> could be the beginning of a lambda).</p>
+<h3 id="everything-is-an-expression"><a class="header" href="#everything-is-an-expression">Everything is an expression</a></h3>
+<p>Like in Rust, most things in Denim are expressions. This means they yield a
+value. <code>;</code> is used to turn an expression into statement. The value of a
+statement is ignored.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>print(if value &gt; 8 { "pretty big" } else { "not that big" });
+<span class="boring">}</span></code></pre></pre>
+<h3 id="spaces-instead-of-tabs"><a class="header" href="#spaces-instead-of-tabs">Spaces instead of tabs</a></h3>
+<p>Yeah. 2 space indent. Deal with it 😎.</p>
+<h2 id="cold-takes"><a class="header" href="#cold-takes">Cold Takes</a></h2>
+<h3 id="rust-style-enum"><a class="header" href="#rust-style-enum">Rust-style <code>enum</code></a></h3>
+<p>Denim steals Rust's enums because they are super expressive while remaining
+practical and readable.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Take {
+  Hot { is_outta_pocket: bool },
+  Medium,
+  Cold(temp: f32),
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="rust-style-pattern-matching"><a class="header" href="#rust-style-pattern-matching">Rust-style pattern matching</a></h3>
+<p>Denim steals Rust's pattern matching because it gets a lot right.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>match number {
+  // Match a single value.
+  1 =&gt; print("One!"),
+  // Match several values.
+  2 | 3 | 5 | 7 | 11 =&gt; print("This is a prime"),
+  // Match an inclusive range.
+  13..=19 =&gt; print("A teen"),
+  // Handle the rest of cases.
+  _ =&gt; print("Ain't special"),
+}
+
+// Match is an expression too
+let binary = match boolean {
+  // The arms of a match must cover all the possible values
+  false =&gt; 0,
+  true =&gt; 1,
+};
+<span class="boring">}</span></code></pre></pre>
+<p>The only thing it was missing is being able to eaily match a single arm in a if
+statement:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>if thing is Some::EnumVariant {
+  print("Bingo!");
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="dart-style-string-syntax"><a class="header" href="#dart-style-string-syntax">Dart-style string syntax</a></h3>
+<p>Dart makes declaring, concatenating, and interpolating values within strings
+super easy. Denim steals (most) of this syntax. A notable exception Denim string
+literals use <code>"</code> instead of <code>'</code>.</p>
+<pre><code class="language-dart">let abc = "123""xyz" // concat just by putting literals next to each other.
+let multiline = """
+  take
+    all
+      the
+        space
+          you
+            need
+""";
+
+let a = 1;
+let b = 2;
+
+let c = "$a + $b = ${a = b}" // Use `$` for string interpolation!
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="denim"><a class="header" href="#denim">Denim</a></h1>
+<p>I think Denim needs to be a quite a bit simpler than the original design.</p>
+<h2 id="principles"><a class="header" href="#principles">Principles</a></h2>
+<p>In order of importance:</p>
+<ol>
+<li>Low-mental overhead</li>
+<li>Aesthetic</li>
+<li>Expeditious</li>
+</ol>
+<h3 id="sub-principles"><a class="header" href="#sub-principles">Sub-principles</a></h3>
+<ul>
+<li>Low-mental overhead
+<ul>
+<li>Familiar</li>
+<li>Scannable</li>
+<li>Aggressive complexity containment</li>
+</ul>
+</li>
+<li>Aesthetic
+<ul>
+<li>Fluent (things ergonomically chain together)</li>
+<li>DSL friendly</li>
+<li>Terse</li>
+</ul>
+</li>
+<li>Expeditious
+<ul>
+<li>More meaning in less syntax</li>
+<li>Highly extensible</li>
+</ul>
+</li>
+</ul>
+<h2 id="main-ideas"><a class="header" href="#main-ideas">Main Ideas</a></h2>
+<ul>
+<li>Low-mental overhead
+<ul>
+<li>Familiar
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#common-sense-builtins">Common-sense builtins</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#dart-style-doc-comments">Dart-style doc comments</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#go-style-packaging-and-visibility">Go-style packaging and visibility</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#rust-style-enums">Rust-style enums</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#rust-style-pattern-matching">Rust-style pattern matching</a></li>
+</ul>
+</li>
+<li>Scannable
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#strict-param-labeling">Strict param labeling</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#imports-at-the-bottom">Imports at the bottom</a></li>
+</ul>
+</li>
+<li>Aggressive complexity containment
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#unknown-not-any"><code>unknown</code> not <code>any</code></a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#mutation-semantics">Mutation semantics</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Aesthetic
+<ul>
+<li>Fluent
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#keyword-suffixing">Keyword suffixing</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#optional-chaining">Optional chaining</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#selfification">Selfification</a></li>
+</ul>
+</li>
+<li>DSL friendly
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#getterification">Getterification</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#body-param"><code>body</code> param</a></li>
+</ul>
+</li>
+<li>Terse
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#operator-aliasing-for-option-and-result">Operator aliasing for Option and Result</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#destructuring">Destructuring</a></li>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#autoboxing">Autoboxing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Expeditious
+<ul>
+<li>More meaning in less syntax
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+<a href="journal/2024_08_07_redesign.html#lexical-concurrency">Lexical concurrency</a></li>
+<li><input disabled="" type="checkbox"/>
+<a href="journal/2024_08_07_redesign.html#anonymous-structs">Anonymous structs</a></li>
+<li><input disabled="" type="checkbox"/>
+<a href="journal/2024_08_07_redesign.html#minimum-viable-operators">Minimum viable operators</a></li>
+</ul>
+</li>
+<li>Highly extensible
+<ul>
+<li><input disabled="" type="checkbox"/>
+<a href="journal/2024_08_07_redesign.html#function-overloading">Function overloading</a></li>
+<li><input disabled="" type="checkbox"/>
+<a href="journal/2024_08_07_redesign.html#trait-based-inheritance">Trait-based inheritance</a></li>
+<li><input disabled="" type="checkbox"/>
+<a href="journal/2024_08_07_redesign.html#impl-anything"><code>impl</code> anything</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="code-samples"><a class="header" href="#code-samples">Code Samples</a></h2>
+<h3 id="common-sense-builtins"><a class="header" href="#common-sense-builtins">Common-sense builtins</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let u1: u8  = 1u8;
+let u2: u32 = 12u32;
+let i:  i32 = 123i32;
+let i:  i64 = 123i64;
+let f1: f32 = 1.2f32;
+let f2: f64 = 1.2345e-6f64;
+
+let b: bool = false;
+let s: str  = "hello";
+
+let list: [i32]     = [1, 2, 3];
+let set:  [:i32]    = [1, 2, 3]; // type decl determines type to be a set
+let map:  [str:i32] = ["a": 1, "b": 2, "c": 3];
+<span class="boring">}</span></code></pre></pre>
+<h3 id="dart-style-doc-comments"><a class="header" href="#dart-style-doc-comments">Dart-style doc comments</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>/// This is a doc comment.
+///
+/// These comments are intended to document your code in greater detail. To
+/// facilitate this greater detail, these kinds of comments have:
+/// 1. **full** _Markdown_ `support`
+/// 2. Dart-style `[]` code links
+///    For example, [abc] references the variable created above explicitly.
+let forty_two = 42;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="go-style-packaging-and-visibility"><a class="header" href="#go-style-packaging-and-visibility">Go-style packaging and visibility</a></h3>
+<p><code>foo/xy.👖</code></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type X = i32 | str;
+pub type Y = { a: 1, b: false };
+
+fn x() {
+  print("x");
+}
+
+fn y() {
+  print("y");
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>foo/z.👖</code></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type Z = X &amp; Y;  // all of foo/xy.👖 is visible to the whole foo/ directory
+
+pub fn z() {
+  x();
+  y();
+}
+<span class="boring">}</span></code></pre></pre>
+<p><code>bar/b.👖</code></p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub type B = Y | Z;
+
+pub fn b() {
+  z();
+}
+---
+from //foo use Y, Z, z;  // Can only see `pub` decls from `//foo`
+<span class="boring">}</span></code></pre></pre>
+<h3 id="rust-style-enums"><a class="header" href="#rust-style-enums">Rust-style enums</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Create an `enum` to classify a notification event. Note how both
+// names and type information together specify the variant:
+// `MessageReceived != MessageSent` and `UserJoined(String) != UserLeft(String)`.
+// Each is different and independent.
+enum NotificationEvent {
+  // An `enum` variant may either be `unit-like`,
+  MessageReceived,
+  MessageSent,
+  // like tuple structs,
+  UserJoined(String),
+  UserLeft(String),
+  // or c-like structures.
+  Reaction { emoji: char, message_id: u64 },
+}
+
+// A function which takes a `NotificationEvent` enum as an argument and
+// returns nothing.
+fn handle_notification(event: NotificationEvent) {
+  event.match  {
+    NotificationEvent::MessageReceived =&gt; print("message received"),
+    NotificationEvent::MessageSent =&gt; print("message sent"),
+    // Destructure `username` from inside the `enum` variant.
+    NotificationEvent::UserJoined(username) =&gt; print("user '{}' joined", username),
+    NotificationEvent::UserLeft(username) =&gt; print("user '{}' left", username),
+    // Destructure `Reaction` into `emoji` and `message_id`.
+    NotificationEvent::Reaction { emoji, message_id } =&gt; {
+      print("reaction '{}' on message {}", emoji, message_id);
+    },
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="rust-style-pattern-matching-1"><a class="header" href="#rust-style-pattern-matching-1">Rust-style pattern matching</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// A function which takes a `NotificationEvent` enum as an argument and
+// returns nothing.
+fn handle_notification(event: NotificationEvent) {
+  event.match  {
+    NotificationEvent::MessageReceived =&gt; print("message received"),
+    NotificationEvent::MessageSent =&gt; print("message sent"),
+    // Destructure `username` from inside the `enum` variant.
+    NotificationEvent::UserJoined(username) =&gt; print("user '{}' joined", username),
+    NotificationEvent::UserLeft(username) =&gt; print("user '{}' left", username),
+    // Destructure `Reaction` into `emoji` and `message_id`.
+    NotificationEvent::Reaction { emoji, message_id } =&gt; {
+      print("reaction '{}' on message {}", emoji, message_id);
+    },
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="strict-param-labeling"><a class="header" href="#strict-param-labeling">Strict param labeling</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn short_story(name: str) -&gt; str {
+  "My name is $name"
+}
+
+print(short_story("Galois"));
+
+fn story(age: i32, name: str) -&gt; str {
+  "${short_story(name)} and I am $age years old"
+}
+
+print(story(name: "Galois", age: 20));
+print(story(age: 20, name: "Galois"));
+print(story(20, "Galois"));  // Compile time error
+
+fn tuple_story((age, name): (i32, str)) -&gt; str {
+  story(age, name)
+}
+
+print(tuple_story((20, "Galois")));
+<span class="boring">}</span></code></pre></pre>
+<h3 id="imports-at-the-bottom"><a class="header" href="#imports-at-the-bottom">Imports at the bottom</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub fn my_func(ctx: str) {
+  let something: SomeType = some_func(ctx);
+
+  let some_value = something.match {
+    SomeVariant =&gt; 42,
+    _ =&gt; 0,
+  };
+
+  let cool_thing: CoolThing = some_value.a_func_from_a_trait_impl(ctx);
+
+  cooler.cool_down(cool_thing);
+}
+
+---
+from cool_lib use CoolThing;
+from cooler_lib use * as cooler;
+
+from //repo_relative/dir/a_file use SomeType::ATraitImpl;
+
+from relative/sub_dir/some_file use
+  SomeType,
+  some_func,
+  SomeEnum::SomeVariant;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="mutation-semantics"><a class="header" href="#mutation-semantics">Mutation semantics</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let immutable_thing = (1, 2, 3);
+// immutable_thing.0 = immutable_thing.0 + 1; // compile time error
+let mut mutable_thing = (1, 2, 3);
+
+mutable_thing.0 = 2;
+mutable_thing.1 = 3;
+mutable_thing.2 = 4;
+
+mutable_thing.inc();
+
+print(mutable_thing); // Prints "(3, 4, 5)"
+
+immutable_thing.inc(); // Compile time error
+
+impl (i32, i32, i32) {
+  fn inc(mut self) {
+    self.0 = self.0 + 1
+    self.1 = self.1 + 1
+    self.2 = self.2 + 1
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="unknown-not-any"><a class="header" href="#unknown-not-any"><code>unknown</code> not <code>any</code></a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let some_json = "{hello: \"world\"}";
+
+let parsed_json: {str: unknown} = parse_json(some_json);
+
+let world = some_json["hello"];
+
+world.to_lower.print(&amp;mesage); // Compile time error because world is `unknown`
+
+world.as(str).to_lower.print(&amp;mesage); // 👌🏾
+---
+from convert use parse_json;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="keyword-suffixing"><a class="header" href="#keyword-suffixing">Keyword suffixing</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>choice.match { Yes =&gt; print("yes!"), No =&gt; print("no.") };
+
+result.try;
+
+predicate.if { print("true") } else { print("false") };
+
+eventual.await;
+
+operation.async;
+
+let three = 12.as(f32) / 4;
+
+let ref_to_some_fn = some_fn.fn;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="optional-chaining"><a class="header" href="#optional-chaining">Optional chaining</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type Node&lt;T&gt; = {
+  next: Node?,
+  val: T,
+};
+
+fn fifth_node&lt;T&gt;(node: Node&lt;T&gt;) -&gt; T where T: str|i32 {
+  node.next.next.next.next.or_else("fallback") // No need for `?.`-style chaining - it is built in
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="selfification"><a class="header" href="#selfification">Selfification</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn add(a: i32, b: i32) -&gt; i32 {
+  a + b
+}
+
+print(add(40, 2));
+print(40.add(&amp;a, 2));
+<span class="boring">}</span></code></pre></pre>
+<h3 id="getterification"><a class="header" href="#getterification">Getterification</a></h3>
+<p>Caveats:</p>
+<ul>
+<li><code>.fn</code> for function references</li>
+<li>Must return something</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn rand(min = 0.0, max = 1.0) -&gt; f32 {
+  let (actual_max, actual_min) = if max &gt; min { (max, min) } else { (min, max) };
+
+  (actual_max - actual_min) * secure_rand.trunc + actual_min
+}
+
+print(rand(min: -2.0, max: 2.0));
+print(rand(max: 23.0))
+print(rand());
+print(rand);
+
+fn print_hello() {
+  print("hello")
+}
+
+print_hello; // compile time error
+---
+from crypto use secure_rand;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="body-param"><a class="header" href="#body-param"><code>body</code> param</a></h3>
+<p>Inspired by <a href="https://kotlinlang.org/docs/lambdas.html#passing-trailing-lambdas">Kotlin trailing lambdas</a>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do(when: Time = Time::now(), body: fn() -&gt; void) {
+  pause(until: when);
+
+  body();
+}
+
+do(when: Time::now(), body: || print("hello world"))
+
+do(Time::now()) {
+  print("hello world")
+}
+
+do {
+  print("hello world")
+}
+
+fn do_with_args(body: fn(args: unknown) -&gt; void) {
+  body("args")
+}
+
+do_with_args {
+  print(it);
+}
+
+fn do_with_return(body: fn() -&gt; u8) {
+  print(body);
+}
+
+do_with_return {
+  8
+}
+---
+from clock use pause, Time;
+<span class="boring">}</span></code></pre></pre>
+<h3 id="operator-aliasing-for-option-and-result"><a class="header" href="#operator-aliasing-for-option-and-result">Operator aliasing for Option and Result</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn why_write(a: Option&lt;T&gt;) {}
+fn when_you_could_write(a: T?) {}
+
+fn why_do(a: Reuslt&lt;T&gt;) {}
+fn when_you_could_do(a: T!) {}
+
+fn why_use_many_word(a: Result&lt;Option&lt;T&gt;&gt;) {}
+fn when_few_word_do_trick(a: T?!) {}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="destructuring"><a class="header" href="#destructuring">Destructuring</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let tuple = (1, 2, 3);
+
+let (a, b, c) = tuple;
+let (..a_and_b, still_c) = tuple;
+let (a, b, ..c_in_a_tuple) = tuple;
+
+let struct = { w: (1.1, 2.2), x: 3, y: "4", z: false };
+let { w: (w1, w2), x, y, z} = struct;
+let {..everything_but_z, z} = struct;
+
+let list = [1, 2, 3];
+let [first_from_list] = list;
+let [_, second_from_list] = list;
+
+let map = ["i": -1, "j": -2, "k": -3];
+let ["i": i, ..everything_but_i] = map;
+
+enum E {
+  Bools { m: bool, n: bool },
+  Nums(i32),
+  Nothing,
+}
+
+let e1 = E::Bools { m: false, n: true };
+let e2 = E::Nums(0.01);
+let E::Bools { m } = e1;
+let E::Nums(num) = e2;
+
+<span class="boring">}</span></code></pre></pre>
+<h3 id="autoboxing"><a class="header" href="#autoboxing">Autoboxing</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let optional_num: i32? = 123; // `123` gets turned into `Some(123)` automatically
+fn box_me(n: i32) -&gt; i32? {
+  n
+}
+
+let str_result: str! = "hello"; // `"hello"` gets turned into `Ok("hello")` automatically
+fn box_me_again(s: str) -&gt; str! {
+  s
+}
+
+let optional_bool_result: bool?! = true; // `true` gets turned into `Ok(Some(true))` automatically
+fn box_me_baby_one_more_time(b: bool) -&gt; bool!? {
+  b
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="lexical-concurrency"><a class="header" href="#lexical-concurrency">Lexical concurrency</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn waste_time() -&gt; i32 {
+  // t = 0s
+  sleep(1.seconds);
+  let a = 1;
+  sleep(50.seconds);
+  let b = 2;
+  sleep(2.seconds);
+
+  // t = 50s
+  let eventual = sleep(1000.seconds).async;
+
+  // t = 50s
+  eventual.await;
+
+  // t = 1050s
+  a + b
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="anonymous-structs"><a class="header" href="#anonymous-structs">Anonymous structs</a></h3>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type Foo = { foo: bool };
+type Bar = { bar: i32 };
+
+type FooBar = Foo | Bar;
+
+fn print_foobar(foobar: FooBar) {
+  let { foo, bar } = foobar;
+
+  foo.match {
+    Some(foo) =&gt; print("foo: $foo"),
+    None =&gt; print("bar: ${bar.unwrap}}"),
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="a-little-of-everything"><a class="header" href="#a-little-of-everything">A little of everything</a></h3>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Common-sense builtins</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Dart-style doc comments</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Go-style packaging and visibility</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Rust-style enums</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Rust-style pattern matching</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Strict param labeling</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Imports at the bottom</li>
+<li><input disabled="" type="checkbox"/>
+<code>unknown</code> not `any</li>
+<li><input disabled="" type="checkbox"/>
+Mutation semantics</li>
+<li><input disabled="" type="checkbox"/>
+Keyword suffixing</li>
+<li><input disabled="" type="checkbox"/>
+Optional chaining</li>
+<li><input disabled="" type="checkbox"/>
+Selfification</li>
+<li><input disabled="" type="checkbox"/>
+Getterification</li>
+<li><input disabled="" type="checkbox"/>
+<code>body</code> param</li>
+<li><input disabled="" type="checkbox"/>
+Operator aliasing for Option and Result</li>
+<li><input disabled="" type="checkbox"/>
+Destructuring</li>
+<li><input disabled="" type="checkbox"/>
+Lexical concurrency</li>
+<li><input disabled="" type="checkbox"/>
+Anonymous structs</li>
+<li><input disabled="" type="checkbox"/>
+Minimum viable operators</li>
+<li><input disabled="" type="checkbox"/>
+Function overloading</li>
+<li><input disabled="" type="checkbox"/>
+Trait-based inheritance</li>
+<li><input disabled="" type="checkbox"/>
+<code>impl</code> anything</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum Weather {
+  Cloudy,
+  Sunny { uv_index: f32 },
+  PartlyCloudy,
+  Rainy(RainForecast),
+}
+
+/// Fetches information about the wetaher for the specified [date] in the
+/// location indicated by [zip].
+pub fn fetch_weather_data(date: Date, zip: ZipCode) -&gt; [WeatherData]! {
+  let raw_weather_data =
+      fetch("https://theweather.com/$zip?date=${date.as_dd_mm_yyyy}")
+      .try
+      .as_str;
+
+  raw_weather_data
+    .lines
+    .map(|line| WeatherData::parse(line))
+    .collect(to_result_list.fn)
+    .ctx("Parsing each line of raw weather data")
+}
+
+fn seven_day(zip: ZipCode) -&gt; [WeatherData!] {
+  let today = Date::today;
+
+  let list_of_eventuals: [Eventual&lt;WeatherData!&gt;] = 0..7.iter()
+      .map(|day_offset| today.prev_day(day_offset))
+      .map(|date| date.fetch_weather_data(&amp;date, zip).async)
+      .collect(to_list.fn)
+
+  let eventual_of_list: Eventual&lt;[WeatherData!]&gt; = list_of_eventuals.flattened;
+
+  eventual_of_list.await
+}
+
+impl DoI {
+  fn need_an_umbrella_today(home_zip: ZipCode, work_zip: ZipCode) -&gt; bool {
+    // The two invocations of `fetch_weather_data` happen concurrently:
+    let home_weather_data = fetch_weather_data(date: Date::today, zip: home_zip);
+    let work_weather_data = fetch_weather_data(date: Date::today, zip: work_zip);
+
+    home_weather_data.matches(Weather::Rainy)
+      or work_weather_data.matches(Weather::Rainy)
+  }
+}
+
+impl WeatherData {
+  fn as_weather(self) -&gt; Weather {
+    self.match {
+      WeatherData { rain_data } if rain_data.pct_chance_of_rain &gt; .5 =&gt;
+          Weather::Rainy(RainForecast::from(rain_data))
+      WeatherData { sun_quotient, uv_index } if sun_quotient &gt; .7 =&gt;
+          Weather::Sunny { uv_index },
+      WeatherData { sun_quotient } if sun_quotient &lt;= .7 and sun_quotient &gt; .25 =&gt;
+          Weather::PartlyCloudy,
+      WeatherData { sun_quotient } =&gt; Weather::Cloudy,
+    }
+  }
+}
+
+---
+from location use ZipCode;
+from time use Date;
+
+from //my/weather/lib use WeatherData;
+
+from util/web use fetch;
+<span class="boring">}</span></code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
