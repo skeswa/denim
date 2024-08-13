@@ -89,7 +89,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="journal/index.html"><strong aria-hidden="true">1.</strong> Journal</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="journal/2023_09_16_hot_takes.html"><strong aria-hidden="true">1.1.</strong> Hot Takes (Sept 2023)</a></li><li class="chapter-item expanded "><a href="journal/2024_08_07_redesign.html"><strong aria-hidden="true">1.2.</strong> Redesign (Aug 2024)</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="overview.html"><strong aria-hidden="true">1.</strong> Overview</a></li><li class="chapter-item expanded "><a href="journal/index.html"><strong aria-hidden="true">2.</strong> Journal</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="journal/2023_09_16_hot_takes.html"><strong aria-hidden="true">2.1.</strong> Hot Takes (Sept 2023)</a></li><li class="chapter-item expanded "><a href="journal/2024_08_07_redesign.html"><strong aria-hidden="true">2.2.</strong> Redesign (Aug 2024)</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
@@ -174,7 +174,92 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="journal"><a class="header" href="#journal">Journal</a></h1>
+                        <h1 id="overview"><a class="header" href="#overview">Overview</a></h1>
+<p>Denim is a comfortable, familiar programming language designed for interoperability.</p>
+<h2 id="pitch"><a class="header" href="#pitch">Pitch</a></h2>
+<p>So, you know how pretty much every modern, garbage-collected language feels
+eerily like the others lately? I think we can blame this phenomenon on the fact
+that many of these languages are converging on the same features and concepts;
+how many languages have added first-class functions, co-routines, data classes,
+and language-level immutablity recently?</p>
+<p>The only <em>tangible</em> differences between one language and another are the
+ecosystems and platforms that they can unlock for you. Go gets you into the
+cloud and terminal ecosystems, while JS/TS gets you into the browser and to the
+edge. Swift and Java get you onto phones, and with C# you can ship on an Xbox.</p>
+<p>And it got me thinking: <strong>if the languages we use to write our apps are this
+similar, why on earth are we writing the same logic over and over again?</strong> Why
+can't we write most of our logic, constants, and types once, and use them
+anywhere? What if there was a language purely designed to be interoperable with
+other languages?</p>
+<p>Denim is that language.</p>
+<p>The intent behind Denim is to incorporate the smallest set of common features
+from these garbage-collected languages sufficient to:</p>
+<ul>
+<li>Create common types</li>
+<li>Implement business logic</li>
+<li>Declare common constants</li>
+</ul>
+<p>Of course, it wouldn't hurt to end up with a language that is pleasant to use
+and maintain while we're at it.</p>
+<h2 id="why-denim"><a class="header" href="#why-denim">Why "Denim"?</a></h2>
+<p>Well, because <strong>"denim goes with everything"</strong> <em>rimshot</em>.</p>
+<p>While our slogan is a little playful and intended to earn a few chuckles, I
+think it accurately embodies the vision of the language. Denim aims to be as
+comfortable and complementary as any well-worn pair of jeans. This is a language
+at its best as a part of your outfit (or codebase for that matter).</p>
+<h2 id="design"><a class="header" href="#design">Design</a></h2>
+<p>Denim is not designed to be fast, or sexy, or interesting, or well-suited for
+any specific domain. It should fit right into the source code powering any ol'
+user interface, backend API, system admin script, and smart fridge. Denim's
+guiding design principles, are to be maximally:</p>
+<ul>
+<li>Comfortable,</li>
+<li>Familiar,</li>
+<li>Practical, and</li>
+<li>Interoperable</li>
+</ul>
+<p>Denim should never feel as esoteric and ornate as Rust, but it should feel a
+smidge more expressive than Go. It should be easy to read, follow, and document
+like Java, getting out of your way and letting you solve the damn problem like
+Node.js.</p>
+<p>Described above is a language that will be difficult to design, and even harder
+to implement. Our hope in all of this, at the very least, is to move the
+<a href="https://en.wikipedia.org/wiki/Overton_window">Overton window</a> in a direction
+that we bet the programming world would enjoy.</p>
+<p>Wish me luck.</p>
+<h3 id="inspiration"><a class="header" href="#inspiration">Inspiration</a></h3>
+<p>As Denim is designed to feel familiar, it borrows heavily from some popular
+programming languages/runtimes:</p>
+<ul>
+<li>Dependency management from <a href="https://deno.land/">Deno</a></li>
+<li>Module system and batteries-included standard library championed by
+<a href="https://go.dev/">Go</a></li>
+<li>Syntax largely stolen from <a href="https://www.rust-lang.org/">Rust</a> with a few
+tricks from <a href="https://dart.dev/">Dart</a> and <a href="https://www.python.org/">Python</a>
+included</li>
+<li>Concurrency model inspired by <a href="https://dart.dev/">Dart</a></li>
+<li>Testing is an hommage to <a href="https://dart.dev/">Dart</a>,
+<a href="https://www.javascript.com/">JavaScript</a>, and <a href="https://go.dev/">Go</a></li>
+</ul>
+<p><strong>tl;dr</strong> "Dart with Rust syntax and Go's packaging model".</p>
+<h3 id="compatibility"><a class="header" href="#compatibility">Compatibility</a></h3>
+<p>For Denim to be useful, in needs to be able to interop with most of the major
+languages with an established industrial presence. Denim is being developed with
+the following transpilation targets in mind:</p>
+<ul>
+<li><a href="https://dart.dev/">Dart</a> for Flutter</li>
+<li><a href="https://go.dev/">Go</a> for Cloud and CLI</li>
+<li><a href="https://www.java.com/">Java</a> for Android and legacy codebases</li>
+<li><a href="https://www.python.org/">Python</a> for Data Science</li>
+<li><a href="https://www.swift.org/">Swift</a> for Apple's ecosystem</li>
+<li><a href="https://www.typescriptlang.org/">TypeScript</a> for Web</li>
+</ul>
+<p>Prototyping will likely focus on <strong>Go</strong> and <strong>TypeScript</strong> because they are
+sufficiently, popular, and generally useful.</p>
+<p>Thereafter, since I suspect that Denim's "killer app" will be code sharing
+between client-side and server-side codebases, it would make sense to target
+<strong>Swift</strong> and <strong>Java</strong>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="journal"><a class="header" href="#journal">Journal</a></h1>
 <p>Here lies all of @skeswa's notes on Denim's implementation and design over time.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="denims-language-design-takes"><a class="header" href="#denims-language-design-takes">Denim's Language Design Takes</a></h1>
 <p>Programming language design opinions sorted more or less from hottest (most
@@ -730,19 +815,30 @@ from relative/sub_dir/some_file use
 <h3 id="mutation-semantics"><a class="header" href="#mutation-semantics">Mutation semantics</a></h3>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
-</span>let immutable_thing = (1, 2, 3);
-// immutable_thing.0 = immutable_thing.0 + 1; // compile time error
-let mut mutable_thing = (1, 2, 3);
+</span>let immutable_var = (1, 2, 3);
 
-mutable_thing.0 = 2;
-mutable_thing.1 = 3;
-mutable_thing.2 = 4;
+// immutable_var = (2, 3, 4); // compile time error
+// immutable_var.0 = immutable_var.0 + 1; // compile time error
 
-mutable_thing.inc();
+let mut mutable_var = (1, 2, 3);
 
-print(mutable_thing); // Prints "(3, 4, 5)"
+mutable_var = (2, 3, 4);
+// mutable_var.0 = mutable_var.0 + 1; // compile time error
 
-immutable_thing.inc(); // Compile time error
+let mutable_val_in_immutable_var = (1, 2, 3).mut;
+
+// mutable_val_in_immutable_var = (2, 3, 4); // compile time error
+imutable_val_in_mmutable_var.0 = imutable_val_in_mmutable_var.0 + 1;
+
+mutable_var.0 = 2;
+mutable_var.1 = 3;
+mutable_var.2 = 4;
+
+mutable_var.inc();
+
+print(mutable_var); // Prints "(3, 4, 5)"
+
+immutable_var.inc(); // Compile time error
 
 impl (i32, i32, i32) {
   fn inc(mut self) {
@@ -751,7 +847,10 @@ impl (i32, i32, i32) {
     self.2 = self.2 + 1
   }
 }
+
+let
 <span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): sample for <code>[1,2,3].mut</code></p>
 <h3 id="unknown-not-any"><a class="header" href="#unknown-not-any"><code>unknown</code> not <code>any</code></a></h3>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
