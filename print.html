@@ -707,7 +707,7 @@ pub fn b() {
   z();
 }
 ---
-from //foo use Y, Z, z;  // Can only see `pub` decls from `//foo`
+from ~/foo use Y, Z, z;  // Can only see `pub` decls from `~/foo`
 <span class="boring">}</span></code></pre></pre>
 <h3 id="rust-style-enums"><a class="header" href="#rust-style-enums">Rust-style enums</a></h3>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
@@ -805,7 +805,7 @@ print(tuple_story((20, "Galois")));
 from cool_lib use CoolThing;
 from cooler_lib use * as cooler;
 
-from //repo_relative/dir/a_file use SomeType::ATraitImpl;
+from ~/repo_relative/dir/a_file use SomeType::ATraitImpl;
 
 from relative/sub_dir/some_file use
   SomeType,
@@ -1183,7 +1183,7 @@ impl WeatherData {
 from location use ZipCode;
 from time use Date;
 
-from //my/weather/lib use WeatherData;
+from ~/my/weather/lib use WeatherData;
 
 from util/web use fetch;
 <span class="boring">}</span></code></pre></pre>
