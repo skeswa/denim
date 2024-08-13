@@ -313,7 +313,7 @@ let b: bool = false;
 let s: str  = "hello";
 
 let list: [i32]     = [1, 2, 3];
-let set:  [:i32]    = [1, 2, 3]; // type decl determines type to be a set
+let set:  [:i32]    = [:1, :2, :3];
 let map:  [str:i32] = ["a": 1, "b": 2, "c": 3];
 <span class="boring">}</span></code></pre></pre>
 <h3 id="dart-style-doc-comments"><a class="header" href="#dart-style-doc-comments">Dart-style doc comments</a></h3>
@@ -385,7 +385,7 @@ enum NotificationEvent {
 // A function which takes a `NotificationEvent` enum as an argument and
 // returns nothing.
 fn handle_notification(event: NotificationEvent) {
-  event.match  {
+  event.match {
     NotificationEvent::MessageReceived =&gt; print("message received"),
     NotificationEvent::MessageSent =&gt; print("message sent"),
     // Destructure `username` from inside the `enum` variant.
@@ -404,7 +404,7 @@ fn handle_notification(event: NotificationEvent) {
 </span>// A function which takes a `NotificationEvent` enum as an argument and
 // returns nothing.
 fn handle_notification(event: NotificationEvent) {
-  event.match  {
+  event.match {
     NotificationEvent::MessageReceived =&gt; print("message received"),
     NotificationEvent::MessageSent =&gt; print("message sent"),
     // Destructure `username` from inside the `enum` variant.
@@ -502,10 +502,7 @@ impl (i32, i32, i32) {
     self.2 = self.2 + 1
   }
 }
-
-let
 <span class="boring">}</span></code></pre></pre>
-<p>TODO(skeswa): sample for <code>[1,2,3].mut</code></p>
 <h3 id="unknown-not-any"><a class="header" href="#unknown-not-any"><code>unknown</code> not <code>any</code></a></h3>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
@@ -534,7 +531,7 @@ eventual.await;
 
 operation.async;
 
-let three = 12.as(f32) / 4;
+let three_point_o = 12.as(f32) / 4;
 
 let ref_to_some_fn = some_fn.fn;
 <span class="boring">}</span></code></pre></pre>
@@ -631,7 +628,7 @@ from clock use pause, Time;
 </span>fn why_write(a: Option&lt;T&gt;) {}
 fn when_you_could_write(a: T?) {}
 
-fn why_do(a: Reuslt&lt;T&gt;) {}
+fn why_do(a: Result&lt;T&gt;) {}
 fn when_you_could_do(a: T!) {}
 
 fn why_use_many_word(a: Result&lt;Option&lt;T&gt;&gt;) {}
@@ -742,7 +739,7 @@ Strict param labeling</li>
 <li><input disabled="" type="checkbox" checked=""/>
 Imports at the bottom</li>
 <li><input disabled="" type="checkbox"/>
-<code>unknown</code> not `any</li>
+<code>unknown</code> not <code>any</code></li>
 <li><input disabled="" type="checkbox"/>
 Mutation semantics</li>
 <li><input disabled="" type="checkbox"/>
