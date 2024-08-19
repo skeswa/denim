@@ -1,0 +1,8 @@
+{
+  "ensure_final_newline_on_save": false,
+  "languages": {
+    "Rust": {
+      "ensure_final_newline_on_save": true
+    }
+  }
+}

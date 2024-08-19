@@ -28,7 +28,7 @@
 "\n"                                                                             | 1   | Whitespace
 "from"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace
-"\"github.com/fake/math\""                                                       | 22  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+"my_math_lib"                                                                    | 11  | Ident
 " "                                                                              | 1   | Whitespace
 "show"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace

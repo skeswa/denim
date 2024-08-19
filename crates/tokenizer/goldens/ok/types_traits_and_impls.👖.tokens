@@ -6,20 +6,14 @@
 " "                                                                              | 1   | Whitespace
 "="                                                                              | 1   | Eq
 " "                                                                              | 1   | Whitespace
-"struct"                                                                         | 6   | Ident
-" "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
 "\n  "                                                                           | 3   | Whitespace
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
 "id"                                                                             | 2   | Ident
 ":"                                                                              | 1   | Colon
 " "                                                                              | 1   | Whitespace
 "string"                                                                         | 6   | Ident
 ","                                                                              | 1   | Comma
 "\n  "                                                                           | 3   | Whitespace
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
 "players"                                                                        | 7   | Ident
 ":"                                                                              | 1   | Colon
 " "                                                                              | 1   | Whitespace
@@ -86,12 +80,8 @@
 "\n  "                                                                           | 3   | Whitespace
 "&"                                                                              | 1   | Amp
 " "                                                                              | 1   | Whitespace
-"struct"                                                                         | 6   | Ident
-" "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
 "\n      "                                                                       | 7   | Whitespace
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
 "height"                                                                         | 6   | Ident
 ":"                                                                              | 1   | Colon
 " "                                                                              | 1   | Whitespace
@@ -100,8 +90,6 @@
 "Height"                                                                         | 6   | Ident
 ","                                                                              | 1   | Comma
 "\n      "                                                                       | 7   | Whitespace
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
 "team"                                                                           | 4   | Ident
 ":"                                                                              | 1   | Colon
 " "                                                                              | 1   | Whitespace
@@ -126,18 +114,13 @@
 " "                                                                              | 1   | Whitespace
 "="                                                                              | 1   | Eq
 " "                                                                              | 1   | Whitespace
-"struct"                                                                         | 6   | Ident
-" "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"pub"                                                                            | 3   | Ident
 " "                                                                              | 1   | Whitespace
 "country"                                                                        | 7   | Ident
 ":"                                                                              | 1   | Colon
 " "                                                                              | 1   | Whitespace
 "Country"                                                                        | 7   | Ident
-","                                                                              | 1   | Comma
-"\n"                                                                             | 1   | Whitespace
+" "                                                                              | 1   | Whitespace
 "}"                                                                              | 1   | CloseBrace
 ";"                                                                              | 1   | Semi
 "\n\n"                                                                           | 2   | Whitespace
@@ -147,20 +130,14 @@
 " "                                                                              | 1   | Whitespace
 "="                                                                              | 1   | Eq
 " "                                                                              | 1   | Whitespace
-"struct"                                                                         | 6   | Ident
-" "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
 "\n  "                                                                           | 3   | Whitespace
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
 "age"                                                                            | 3   | Ident
 ":"                                                                              | 1   | Colon
 " "                                                                              | 1   | Whitespace
 "int"                                                                            | 3   | Ident
 ","                                                                              | 1   | Comma
 "\n  "                                                                           | 3   | Whitespace
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
 "names"                                                                          | 5   | Ident
 ":"                                                                              | 1   | Colon
 " "                                                                              | 1   | Whitespace
@@ -188,13 +165,9 @@
 "{"                                                                              | 1   | OpenBrace
 "}"                                                                              | 1   | CloseBrace
 "\n\n"                                                                           | 2   | Whitespace
-"type"                                                                           | 4   | Ident
+"enum"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace
 "Height"                                                                         | 6   | Ident
-" "                                                                              | 1   | Whitespace
-"="                                                                              | 1   | Eq
-" "                                                                              | 1   | Whitespace
-"enum"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
 "\n  "                                                                           | 3   | Whitespace
@@ -232,6 +205,8 @@
 " "                                                                              | 1   | Whitespace
 "enum"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace
+"ImperialMeasurement"                                                            | 19  | Ident
+" "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
 "\n      "                                                                       | 7   | Whitespace
 "Ft"                                                                             | 2   | Ident
@@ -247,10 +222,12 @@
 ","                                                                              | 1   | Comma
 "\n    "                                                                         | 5   | Whitespace
 "}"                                                                              | 1   | CloseBrace
-" \n  "                                                                          | 4   | Whitespace
+"\n  "                                                                           | 3   | Whitespace
 "|"                                                                              | 1   | Pipe
 " "                                                                              | 1   | Whitespace
 "enum"                                                                           | 4   | Ident
+" "                                                                              | 1   | Whitespace
+"MetricMeasurement"                                                              | 17  | Ident
 " "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
 "\n      "                                                                       | 7   | Whitespace
@@ -267,25 +244,7 @@
 "\n"                                                                             | 1   | Whitespace
 "from"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace
-"\"github.com/a/b/c\""                                                           | 18  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-" "                                                                              | 1   | Whitespace
-"use"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"Team"                                                                           | 4   | Ident
-";"                                                                              | 1   | Semi
-"\n"                                                                             | 1   | Whitespace
-"from"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"\"github.com/x/y/z\""                                                           | 18  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-" "                                                                              | 1   | Whitespace
-"use"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"Country"                                                                        | 7   | Ident
-";"                                                                              | 1   | Semi
-"\n"                                                                             | 1   | Whitespace
-"from"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"\"indigo\""                                                                     | 8   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+"indigo"                                                                         | 6   | Ident
 " "                                                                              | 1   | Whitespace
 "use"                                                                            | 3   | Ident
 " "                                                                              | 1   | Whitespace
@@ -303,4 +262,29 @@
 " "                                                                              | 1   | Whitespace
 "Clone"                                                                          | 5   | Ident
 "}"                                                                              | 1   | CloseBrace
+";"                                                                              | 1   | Semi
+"\n\n"                                                                           | 2   | Whitespace
+"from"                                                                           | 4   | Ident
+" "                                                                              | 1   | Whitespace
+"~"                                                                              | 1   | Tilde
+"/"                                                                              | 1   | Slash
+"entities"                                                                       | 8   | Ident
+"/"                                                                              | 1   | Slash
+"sport"                                                                          | 5   | Ident
+" "                                                                              | 1   | Whitespace
+"use"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"Team"                                                                           | 4   | Ident
+";"                                                                              | 1   | Semi
+"\n\n"                                                                           | 2   | Whitespace
+"from"                                                                           | 4   | Ident
+" "                                                                              | 1   | Whitespace
+"."                                                                              | 1   | Dot
+"."                                                                              | 1   | Dot
+"/"                                                                              | 1   | Slash
+"util"                                                                           | 4   | Ident
+" "                                                                              | 1   | Whitespace
+"use"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"Country"                                                                        | 7   | Ident
 ";"                                                                              | 1   | Semi

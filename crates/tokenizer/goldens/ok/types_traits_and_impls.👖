@@ -1,6 +1,6 @@
-pub type DoublesTeam = struct {
-  pub id: string,
-  pub players: (Player, Player),
+pub type DoublesTeam = {
+  id: string,
+  players: (Player, Player),
 };
 
 impl Team for DoublesTeam {
@@ -14,39 +14,39 @@ impl Team for DoublesTeam {
 /// I can reference the [height] field with this syntax. I can also
 /// reference [country] because [Player] is a [Citizen].
 pub type Player =
-  & struct {
-      pub height: mut Height,
-      pub team: Team?,
+  & {
+      height: mut Height,
+      team: Team?,
     }
   & Citizen
   & Person;
 
-type Citizen = struct {
-  pub country: Country,
-};
+type Citizen = { country: Country };
 
-type Person = struct {
-  pub age: int,
-  pub names: [string],
+type Person = {
+  age: int,
+  names: [string],
 };
 
 impl auto Debug, Display for Player {}
 
-type Height = enum {
+enum Height {
   Imperial(Measurement::Ft, Measurement::In),
   Metric(Measurement::Cm),
 };
 
 type Measurement =
-  | enum {
+  | enum ImperialMeasurement {
       Ft(float),
       In(float),
-    } 
-  | enum {
+    }
+  | enum MetricMeasurement {
       Cm(float),
     };
 
 ---
-from "github.com/a/b/c" use Team;
-from "github.com/x/y/z" use Country;
-from "indigo" use Debug, Display, float::{Self, Clone};
+from indigo use Debug, Display, float::{Self, Clone};
+
+from ~/entities/sport use Team;
+
+from ../util use Country;

@@ -5,4 +5,4 @@ fn print_random_number() {
 }
 
 ---
-from "github.com/fake/math" show random_int;
+from my_math_lib show random_int;
