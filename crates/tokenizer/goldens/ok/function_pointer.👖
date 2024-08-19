@@ -2,8 +2,8 @@ fn call_your_mom(mom: Fn() -> unknown) {
   print("📞${mom()}")
 }
 
-fn my_mom() -> infer {
+fn my_mom() -> str {
   "👩🏾‍🦱"
 }
 
-call_your_mom(::my_mom)
+call_your_mom(my_mom.fn)

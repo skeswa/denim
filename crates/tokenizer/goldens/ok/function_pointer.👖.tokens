@@ -33,7 +33,7 @@
 "-"                                                                              | 1   | Minus
 ">"                                                                              | 1   | Gt
 " "                                                                              | 1   | Whitespace
-"infer"                                                                          | 5   | Ident
+"str"                                                                            | 3   | Ident
 " "                                                                              | 1   | Whitespace
 "{"                                                                              | 1   | OpenBrace
 "\n  "                                                                           | 3   | Whitespace
@@ -43,6 +43,8 @@
 "\n\n"                                                                           | 2   | Whitespace
 "call_your_mom"                                                                  | 13  | Ident
 "("                                                                              | 1   | OpenParen
-"::"                                                                             | 2   | Dotro
 "my_mom"                                                                         | 6   | Ident
+"."                                                                              | 1   | Dot
+"fn"                                                                             | 2   | Ident
 ")"                                                                              | 1   | CloseParen
+"\n"                                                                             | 1   | Whitespace
