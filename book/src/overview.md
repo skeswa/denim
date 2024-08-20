@@ -44,27 +44,19 @@ at its best as a part of your outfit (or codebase for that matter).
 
 ## Design
 
-Denim is not designed to be fast, or sexy, or interesting, or well-suited for
-any specific domain. It should fit right into the source code powering any ol'
-user interface, backend API, system admin script, and smart fridge. Denim's
-guiding design principles, are to be maximally:
+Denim is not designed to be particularly fast, sexy, interesting, or well-suited
+for any specific domain. It should fit right into the source code powering any
+piece of software - from servers to smart fridges. Denim's guiding design
+principles, are to be maximally:
 
-- Comfortable,
-- Familiar,
-- Practical, and
-- Interoperable
+- Easy to reason about and read
+- Pleasing to look at and work with
+- Quick to learn and manipulate
 
 Denim should never feel as esoteric and ornate as Rust, but it should feel a
 smidge more expressive than Go. It should be easy to read, follow, and document
-like Java, getting out of your way and letting you solve the damn problem like
-Node.js.
-
-Described above is a language that will be difficult to design, and even harder
-to implement. Our hope in all of this, at the very least, is to move the
-[Overton window](https://en.wikipedia.org/wiki/Overton_window) in a direction
-that we bet the programming world would enjoy.
-
-Wish me luck.
+like Java, while getting out of your way and letting you practically solve your
+problem like Node.js.
 
 ### Inspiration
 
@@ -77,28 +69,20 @@ programming languages/runtimes:
 - Syntax largely stolen from [Rust](https://www.rust-lang.org/) with a few
   tricks from [Dart](https://dart.dev/) and [Python](https://www.python.org/)
   included
-- Concurrency model inspired by [Dart](https://dart.dev/)
-- Testing is an hommage to [Dart](https://dart.dev/),
-  [JavaScript](https://www.javascript.com/), and [Go](https://go.dev/)
+- Extensibility workflow taken from both [Dart](https://dart.dev/) and
+  [Rust](https://www.rust-lang.org/)
 
 **tl;dr** "Dart with Rust syntax and Go's packaging model".
 
 ### Compatibility
 
 For Denim to be useful, in needs to be able to interop with most of the major
-languages with an established industrial presence. Denim is being developed with
-the following transpilation targets in mind:
+languages with an established industrial presence. Initially, Denim is being
+developed with the following transpilation targets in mind:
 
-- [Dart](https://dart.dev/) for Flutter
-- [Go](https://go.dev/) for Cloud and CLI
-- [Java](https://www.java.com/) for Android and legacy codebases
-- [Python](https://www.python.org/) for Data Science
-- [Swift](https://www.swift.org/) for Apple's ecosystem
-- [TypeScript](https://www.typescriptlang.org/) for Web
+1. [TypeScript](https://www.typescriptlang.org/) for web (and also [everything else](https://www.laws-of-software.com/laws/atwood/))
+2. [Python](https://www.python.org/) for data science
+3. [Swift](https://www.swift.org/) for Apple's ecosystem
+4. [Kotlin](https://kotlinlang.org/) for Google's ecosystem
 
-Prototyping will likely focus on **Go** and **TypeScript** because they are
-sufficiently, popular, and generally useful.
-
-Thereafter, since I suspect that Denim's "killer app" will be code sharing
-between client-side and server-side codebases, it would make sense to target
-**Swift** and **Java**.
+Thereafter, compatibility could be coming to a friendly neighborhood language near you!
