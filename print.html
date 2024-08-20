@@ -208,25 +208,19 @@ think it accurately embodies the vision of the language. Denim aims to be as
 comfortable and complementary as any well-worn pair of jeans. This is a language
 at its best as a part of your outfit (or codebase for that matter).</p>
 <h2 id="design"><a class="header" href="#design">Design</a></h2>
-<p>Denim is not designed to be fast, or sexy, or interesting, or well-suited for
-any specific domain. It should fit right into the source code powering any ol'
-user interface, backend API, system admin script, and smart fridge. Denim's
-guiding design principles, are to be maximally:</p>
+<p>Denim is not designed to be particularly fast, sexy, interesting, or well-suited
+for any specific domain. It should fit right into the source code powering any
+piece of software - from servers to smart fridges. Denim's guiding design
+principles, are to be maximally:</p>
 <ul>
-<li>Comfortable,</li>
-<li>Familiar,</li>
-<li>Practical, and</li>
-<li>Interoperable</li>
+<li>Easy to reason about and read</li>
+<li>Pleasing to look at and work with</li>
+<li>Quick to learn and manipulate</li>
 </ul>
 <p>Denim should never feel as esoteric and ornate as Rust, but it should feel a
 smidge more expressive than Go. It should be easy to read, follow, and document
-like Java, getting out of your way and letting you solve the damn problem like
-Node.js.</p>
-<p>Described above is a language that will be difficult to design, and even harder
-to implement. Our hope in all of this, at the very least, is to move the
-<a href="https://en.wikipedia.org/wiki/Overton_window">Overton window</a> in a direction
-that we bet the programming world would enjoy.</p>
-<p>Wish me luck.</p>
+like Java, while getting out of your way and letting you practically solve your
+problem like Node.js.</p>
 <h3 id="inspiration"><a class="header" href="#inspiration">Inspiration</a></h3>
 <p>As Denim is designed to feel familiar, it borrows heavily from some popular
 programming languages/runtimes:</p>
@@ -237,28 +231,21 @@ programming languages/runtimes:</p>
 <li>Syntax largely stolen from <a href="https://www.rust-lang.org/">Rust</a> with a few
 tricks from <a href="https://dart.dev/">Dart</a> and <a href="https://www.python.org/">Python</a>
 included</li>
-<li>Concurrency model inspired by <a href="https://dart.dev/">Dart</a></li>
-<li>Testing is an hommage to <a href="https://dart.dev/">Dart</a>,
-<a href="https://www.javascript.com/">JavaScript</a>, and <a href="https://go.dev/">Go</a></li>
+<li>Extensibility workflow taken from both <a href="https://dart.dev/">Dart</a> and
+<a href="https://www.rust-lang.org/">Rust</a></li>
 </ul>
 <p><strong>tl;dr</strong> "Dart with Rust syntax and Go's packaging model".</p>
 <h3 id="compatibility"><a class="header" href="#compatibility">Compatibility</a></h3>
 <p>For Denim to be useful, in needs to be able to interop with most of the major
-languages with an established industrial presence. Denim is being developed with
-the following transpilation targets in mind:</p>
-<ul>
-<li><a href="https://dart.dev/">Dart</a> for Flutter</li>
-<li><a href="https://go.dev/">Go</a> for Cloud and CLI</li>
-<li><a href="https://www.java.com/">Java</a> for Android and legacy codebases</li>
-<li><a href="https://www.python.org/">Python</a> for Data Science</li>
+languages with an established industrial presence. Initially, Denim is being
+developed with the following transpilation targets in mind:</p>
+<ol>
+<li><a href="https://www.typescriptlang.org/">TypeScript</a> for web (and also <a href="https://www.laws-of-software.com/laws/atwood/">everything else</a>)</li>
+<li><a href="https://www.python.org/">Python</a> for data science</li>
 <li><a href="https://www.swift.org/">Swift</a> for Apple's ecosystem</li>
-<li><a href="https://www.typescriptlang.org/">TypeScript</a> for Web</li>
-</ul>
-<p>Prototyping will likely focus on <strong>Go</strong> and <strong>TypeScript</strong> because they are
-sufficiently, popular, and generally useful.</p>
-<p>Thereafter, since I suspect that Denim's "killer app" will be code sharing
-between client-side and server-side codebases, it would make sense to target
-<strong>Swift</strong> and <strong>Java</strong>.</p>
+<li><a href="https://kotlinlang.org/">Kotlin</a> for Google's ecosystem</li>
+</ol>
+<p>Thereafter, compatibility could be coming to a friendly neighborhood language near you!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="journal"><a class="header" href="#journal">Journal</a></h1>
 <p>Here lies all of @skeswa's notes on Denim's implementation and design over time.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="denims-language-design-takes"><a class="header" href="#denims-language-design-takes">Denim's Language Design Takes</a></h1>
