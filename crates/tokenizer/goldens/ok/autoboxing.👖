@@ -1,0 +1,17 @@
+// Why do this:
+fn foo() -> string? {
+  Some("bar")
+}
+
+// when you could simply do this:
+fn autoboxed_foo() -> string? {
+  "bar"
+}
+
+// `Result` is also autoboxable:
+let mut x: int! = Ok(1);
+x = 2;
+
+// Autoboxing works in structs too!
+struct X(Option<int>);
+let x = X(1234);

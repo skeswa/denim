@@ -1,0 +1,94 @@
+"// Why do this:"                                                                | 15  | LineComment { is_doc_comment: false }
+"\n"                                                                             | 1   | Whitespace
+"fn"                                                                             | 2   | Ident
+" "                                                                              | 1   | Whitespace
+"foo"                                                                            | 3   | Ident
+"("                                                                              | 1   | OpenParen
+")"                                                                              | 1   | CloseParen
+" "                                                                              | 1   | Whitespace
+"-"                                                                              | 1   | Minus
+">"                                                                              | 1   | Gt
+" "                                                                              | 1   | Whitespace
+"string"                                                                         | 6   | Ident
+"?"                                                                              | 1   | Question
+" "                                                                              | 1   | Whitespace
+"{"                                                                              | 1   | OpenBrace
+"\n  "                                                                           | 3   | Whitespace
+"Some"                                                                           | 4   | Ident
+"("                                                                              | 1   | OpenParen
+"\"bar\""                                                                        | 5   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                                              | 1   | CloseParen
+"\n"                                                                             | 1   | Whitespace
+"}"                                                                              | 1   | CloseBrace
+"\n\n"                                                                           | 2   | Whitespace
+"// when you could simply do this:"                                              | 33  | LineComment { is_doc_comment: false }
+"\n"                                                                             | 1   | Whitespace
+"fn"                                                                             | 2   | Ident
+" "                                                                              | 1   | Whitespace
+"autoboxed_foo"                                                                  | 13  | Ident
+"("                                                                              | 1   | OpenParen
+")"                                                                              | 1   | CloseParen
+" "                                                                              | 1   | Whitespace
+"-"                                                                              | 1   | Minus
+">"                                                                              | 1   | Gt
+" "                                                                              | 1   | Whitespace
+"string"                                                                         | 6   | Ident
+"?"                                                                              | 1   | Question
+" "                                                                              | 1   | Whitespace
+"{"                                                                              | 1   | OpenBrace
+"\n  "                                                                           | 3   | Whitespace
+"\"bar\""                                                                        | 5   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+"\n"                                                                             | 1   | Whitespace
+"}"                                                                              | 1   | CloseBrace
+"\n\n"                                                                           | 2   | Whitespace
+"// `Result` is also autoboxable:"                                               | 32  | LineComment { is_doc_comment: false }
+"\n"                                                                             | 1   | Whitespace
+"let"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"mut"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"x"                                                                              | 1   | Ident
+":"                                                                              | 1   | Colon
+" "                                                                              | 1   | Whitespace
+"int"                                                                            | 3   | Ident
+"!"                                                                              | 1   | Bang
+" "                                                                              | 1   | Whitespace
+"="                                                                              | 1   | Eq
+" "                                                                              | 1   | Whitespace
+"Ok"                                                                             | 2   | Ident
+"("                                                                              | 1   | OpenParen
+"1"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+")"                                                                              | 1   | CloseParen
+";"                                                                              | 1   | Semi
+"\n"                                                                             | 1   | Whitespace
+"x"                                                                              | 1   | Ident
+" "                                                                              | 1   | Whitespace
+"="                                                                              | 1   | Eq
+" "                                                                              | 1   | Whitespace
+"2"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+";"                                                                              | 1   | Semi
+"\n\n"                                                                           | 2   | Whitespace
+"// Autoboxing works in structs too!"                                            | 35  | LineComment { is_doc_comment: false }
+"\n"                                                                             | 1   | Whitespace
+"struct"                                                                         | 6   | Ident
+" "                                                                              | 1   | Whitespace
+"X"                                                                              | 1   | Ident
+"("                                                                              | 1   | OpenParen
+"Option"                                                                         | 6   | Ident
+"<"                                                                              | 1   | Lt
+"int"                                                                            | 3   | Ident
+">"                                                                              | 1   | Gt
+")"                                                                              | 1   | CloseParen
+";"                                                                              | 1   | Semi
+"\n"                                                                             | 1   | Whitespace
+"let"                                                                            | 3   | Ident
+" "                                                                              | 1   | Whitespace
+"x"                                                                              | 1   | Ident
+" "                                                                              | 1   | Whitespace
+"="                                                                              | 1   | Eq
+" "                                                                              | 1   | Whitespace
+"X"                                                                              | 1   | Ident
+"("                                                                              | 1   | OpenParen
+"1234"                                                                           | 4   | Literal { kind: Int { base: Decimal, is_empty: false } }
+")"                                                                              | 1   | CloseParen
+";"                                                                              | 1   | Semi
