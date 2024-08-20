@@ -279,8 +279,7 @@
 "\n\n"                                                                           | 2   | Whitespace
 "from"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace
-"."                                                                              | 1   | Dot
-"."                                                                              | 1   | Dot
+".."                                                                             | 2   | DotDot
 "/"                                                                              | 1   | Slash
 "util"                                                                           | 4   | Ident
 " "                                                                              | 1   | Whitespace

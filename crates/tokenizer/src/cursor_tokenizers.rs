@@ -85,10 +85,19 @@ impl<'a> Cursor<'a> {
                 _ => Colon,
             },
 
+            '.' => match self.first() {
+                '.' => {
+                    // Advance past the remaining dotdot character.
+                    self.bump();
+
+                    DotDot
+                }
+                _ => Dot,
+            },
+
             // One-symbol tokens.
             ';' => Semi,
             ',' => Comma,
-            '.' => Dot,
             '(' => OpenParen,
             ')' => CloseParen,
             '{' => OpenBrace,

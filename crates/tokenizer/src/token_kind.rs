@@ -24,6 +24,11 @@ pub enum TokenKind {
         /// `true` if this block comment ends correctly with a `*/`.
         is_terminated: bool,
     },
+    /// `..`
+    ///
+    /// Two consecutive dots. This operator is used in lots of different
+    /// situations - spread, rest, range, etc.
+    DotDot,
     /// `::`.
     ///
     /// Syntax used to separate paths and reference functions.
