@@ -98,6 +98,10 @@ pub enum TokenKind {
     Dot,
     /// "=".
     Eq,
+    /// "==".
+    EqEq,
+    /// "===".
+    EqEqEq,
     /// ">".
     Gt,
     /// "<".

@@ -87,6 +87,7 @@ impl<'a> Cursor<'a> {
                 _ => Colon,
             },
 
+            // Either a `..` or `.`.
             '.' => match self.first() {
                 '.' => {
                     // Advance past the remaining dotdot character.
@@ -95,6 +96,24 @@ impl<'a> Cursor<'a> {
                     DotDot
                 }
                 _ => Dot,
+            },
+
+            // Either a `===`, `==`, or `=`.
+            '=' => match (self.first(), self.second()) {
+                ('=', '=') => {
+                    // Advance past the remaining eqeqeq characters.
+                    self.bump();
+                    self.bump();
+
+                    EqEqEq
+                }
+                ('=', _) => {
+                    // Advance past the remaining eqeq characters.
+                    self.bump();
+
+                    EqEq
+                }
+                _ => Eq,
             },
 
             // One-symbol tokens.
@@ -111,7 +130,6 @@ impl<'a> Cursor<'a> {
             '~' => Tilde,
             '?' => Question,
             '$' => Dollar,
-            '=' => Eq,
             '!' => Bang,
             '<' => Lt,
             '>' => Gt,
