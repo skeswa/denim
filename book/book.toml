@@ -3,7 +3,7 @@ authors = ["Sandile Keswa"]
 language = "en"
 multilingual = false
 src = "src"
-title = "Denim"
+title = "👖 Denim"
 
 [build]
 build-dir = "out"
