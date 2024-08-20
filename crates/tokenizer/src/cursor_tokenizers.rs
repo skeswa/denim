@@ -59,6 +59,8 @@ impl<'a> Cursor<'a> {
             c @ '0'..='9' => {
                 let literal_kind = self.tokenize_numeric_literal(c);
 
+                // TODO: add support for type suffixes e.g. `123i32`.
+
                 Literal { kind: literal_kind }
             }
 
