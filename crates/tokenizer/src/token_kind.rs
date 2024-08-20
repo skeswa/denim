@@ -37,6 +37,10 @@ pub enum TokenKind {
     /// In other words, dotro is a portmanteau of "quatro" and "dot" which is
     /// meant to mean "four dots".
     Dotro,
+    /// "==".
+    EqEq,
+    /// "===".
+    EqEqEq,
     /// Any identifier (e.g. a variable name or a keyword).
     ///
     /// At this step, keywords are also considered identifiers.
@@ -59,6 +63,10 @@ pub enum TokenKind {
         /// Specifies the general type of `Literal`.
         kind: LiteralKind,
     },
+    /// "!=".
+    NEq,
+    /// "!==".
+    NEqEq,
     /// `---`.
     ///
     /// Syntax used to separate the imports/exports section from the "real"
@@ -98,10 +106,6 @@ pub enum TokenKind {
     Dot,
     /// "=".
     Eq,
-    /// "==".
-    EqEq,
-    /// "===".
-    EqEqEq,
     /// ">".
     Gt,
     /// "<".

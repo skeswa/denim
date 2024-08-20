@@ -1,0 +1,19 @@
+impl Printify for Val {
+  fn printify(self) {
+    if self === 42 {
+      print("so true")
+    } else if self == 69 {
+      print("nice")
+    } else if self < 0 {
+      print("why so negative")
+    } else if self != 1 or self !== 2 {
+      if not self.lt(10).and(self.gt(3)) {
+        print("free as a three i see")
+      } else {
+        print("🤷🏾‍♂️")
+      }
+    } else {
+      print("looks like we have a DJ on our hands")
+    }
+  }
+}

@@ -116,6 +116,24 @@ impl<'a> Cursor<'a> {
                 _ => Eq,
             },
 
+            // Either a `!==`, `!=`, or `!`.
+            '!' => match (self.first(), self.second()) {
+                ('=', '=') => {
+                    // Advance past the remaining neqeq characters.
+                    self.bump();
+                    self.bump();
+
+                    NEqEq
+                }
+                ('=', _) => {
+                    // Advance past the remaining neqeq characters.
+                    self.bump();
+
+                    NEq
+                }
+                _ => Bang,
+            },
+
             // One-symbol tokens.
             ';' => Semi,
             ',' => Comma,
@@ -130,7 +148,6 @@ impl<'a> Cursor<'a> {
             '~' => Tilde,
             '?' => Question,
             '$' => Dollar,
-            '!' => Bang,
             '<' => Lt,
             '>' => Gt,
             '&' => Amp,
