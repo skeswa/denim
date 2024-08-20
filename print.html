@@ -248,12 +248,1569 @@ developed with the following transpilation targets in mind:</p>
 <p>Thereafter, compatibility could be coming to a friendly neighborhood language near you!</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="journal"><a class="header" href="#journal">Journal</a></h1>
 <p>Here lies all of @skeswa's notes on Denim's implementation and design over time.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="redesign-aug-2024"><a class="header" href="#redesign-aug-2024">Redesign (Aug 2024)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="tour"><a class="header" href="#tour">Tour</a></h1>
+<p>There is always where you want to start with a new language - what will Denim
+look like? The answer is a lot like Rust. I just happen to think that Rust gets
+a lot of stuff right. That said, expect some deviations made in the interest of
+developer ergonomics and Denim's particular domain challenges.</p>
+<h2 id="primitives"><a class="header" href="#primitives">Primitives</a></h2>
+<p>Denim's primitives are mostly stolen from Go. It has:</p>
+<ul>
+<li>
+<p><code>bool</code><br />
+Boolean value that can be <code>true</code> or <code>false</code>.</p>
+<p>A <code>bool</code> literal is either <code>true</code> or <code>false</code>.</p>
+</li>
+<li>
+<p><code>byte</code><br />
+An 8-bit unsigned integer, often in strings. NOTE: in the context of a <code>string</code>,
+<code>byte</code> does not encapsulate the semantic concept of a "character" since in some
+encodings, like <a href="https://developer.mozilla.org/en-US/docs/Glossary/UTF-8">UTF-8</a>,
+a character may be expressed with more than one byte.</p>
+<p>A <code>byte</code> literal is just a non-negative number like <code>128</code>.</p>
+</li>
+<li>
+<p><code>float</code><br />
+A 64-bit signed floating point number.</p>
+<p>A <code>float</code> literal is either dot-delimited decimal numbers like <code>-12.80001</code>, or
+scientific notation like <code>1.2e-12</code>.</p>
+</li>
+<li>
+<p><code>int</code><br />
+A 64-bit signed integer number.</p>
+<p>An <code>int</code> literal is just a number like <code>11</code> or <code>-7</code>. Notably, Denim does not
+support binary, hex, or octal <code>int</code> literals.</p>
+</li>
+<li>
+<p><code>rune</code><br />
+A 32-bit unsigned integer number intended to represent the semantic concept of
+a "character" in strings.</p>
+<p>A <code>rune</code> literals is just a single-quoted character like <code>'k'</code> or <code>'💩'</code>.</p>
+</li>
+<li>
+<p><code>string</code><br />
+A sequence of bytes semantically associated with text.</p>
+<p>A <code>string</code> literal is usually a quoted span of text like <code>"hello world"</code>, but
+it comes in other flavors too.</p>
+<pre><code class="language-dart">"\"With escaped characters\t";
+
+"""A
+multiline
+string""";
+
+r#"
+ a raw string where \n escaped characters are not a thing
+ "#;
+</code></pre>
+<p>Denim also supports Dart-style <code>string</code> concatentation. You can concatentate
+string literals by declaring them adjacent to one another. Though many other
+languages support it however, Denim will not support <code>string</code> concatentation
+via the <code>+</code> operator.</p>
+<pre><code class="language-dart">"this a long string that I'm' worried will end up exceeding the line limit, "
+"but luckily I can just continue with another adjacent string on the "
+"next line";
+</code></pre>
+<p><code>string</code> interpolation will look very familar to fans of
+<a href="https://babeljs.io/docs/en/learn/#template-strings">ES2015+</a> or
+<a href="https://dart.dev/guides/language/language-tour#strings">Dart</a>.</p>
+<pre><code class="language-dart">"${1 + 2 + 3 + 4 + 5} is fifteen";
+
+"You can also reference $some_variable without the `{}`";
+</code></pre>
+</li>
+</ul>
+<h3 id="special-primitives"><a class="header" href="#special-primitives">Special primitives</a></h3>
+<p>It is important to note that <strong>Denim does not have a null-type like Go's
+<code>nil</code></strong>. The closest idea that Denim has in this regard is the <code>void</code>. The
+<code>void</code> type has exactly one value, <code>void</code>, and is used when there is no other
+meaningful value that could be returned. <code>void</code>, much like Rust's <code>()</code>, is most
+commonly seen implicitly: functions without a <code>-&gt;</code> implicitly have a <code>void</code>
+return type.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// The functions below are equivalent:
+
+fn long() -&gt; void {}
+fn short() {}
+<span class="boring">}</span></code></pre></pre>
+<p>Denim also steals the <code>unknown</code> type from TypeScript. <code>unknown</code> represents all
+possible values. Every type is assignable to type <code>unknown</code>. Therefore the type
+<code>unknown</code> is a universal supertype of the type system. However, the Denim
+compiler won't allow any operation on values typed <code>unknown</code> - the values must
+first be cast to a narrower type. For more on this concept, check out
+<a href="https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-0.html#new-unknown-top-type">some information on TypeScript's <code>unknown</code></a>.</p>
+<h2 id="variables"><a class="header" href="#variables">Variables</a></h2>
+<p>Denim steals variable declaration from Rust.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let abc = 123;
+<span class="boring">}</span></code></pre></pre>
+<p>Like in Rust, Denim's <code>let</code> creates immutable variables by default. This means
+that <code>abc</code> cannot by be assigned a new value.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let abc = 123;
+abc = 321; // Compile-time error
+<span class="boring">}</span></code></pre></pre>
+<p>To create a mutable variable, you need to add a <code>mut</code> prefix to the <code>let</code> keyword.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mut xyz = 123;
+
+xyz = 456; // 👍
+<span class="boring">}</span></code></pre></pre>
+<p>Importantly, Denim does not have a notion of <code>const</code>. Instead <code>let</code> is also used
+to declare constants at the top-level lexical scope,</p>
+<h2 id="printing"><a class="header" href="#printing">Printing</a></h2>
+<p>Denim ships with one main way to print out to the console - <code>print</code>.</p>
+<p><code>print</code> is a function (explained in greater depth later) that takes a <code>string</code>
+which it prints to its own line in the console. In the browser, this means it
+calls <code>console.log(...)</code> under the hood. Outside of the browser, it appends a
+line to stdout.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>print("hello world"); // Prints "hello world" on its own line.
+<span class="boring">}</span></code></pre></pre>
+<p>It is worth noting that more sophisticated logging facilities are available via
+library.</p>
+<h2 id="tuples"><a class="header" href="#tuples">Tuples</a></h2>
+<p>Tuples are a fixed-size collection of different types. They can be helpful in
+situations where you want to group a few different pieces of data without
+creating a dedicated, named data structure for them. Rust Tuples are great. Why
+mess with a good thing? Denim Tuples are functionally identical.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Tuple of an `int`, a `string`, and a `bool`. By the way, `let` is how we
+// create variables in Denim. We'll elaborate in depth a little later.
+let tuple = (123, "456", true);
+
+// You can read different parts of a Tuple with dot notation.
+print(tuple.0); // Prints "123"
+print(tuple.1); // Prints "456"
+print(tuple.2); // Prints "true"
+
+print(tuple.7); // Compile-time error
+<span class="boring">}</span></code></pre></pre>
+<p>While Denim Tuples are always immutable, they can be quite ergonomic to use and
+manipulate. Tuples can be composed together via the <code>...</code> operator, and split
+apart in a similar way through de-structuring.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = (1.2e-3, 'e', false);
+let y = ("yo", ...x, x.1);
+
+print(y); // Prints "(yo, 0.0012, e, false, e)"
+
+let (first, ...middle_stuff, last) = y;
+
+print(first); // Prints "yo"
+print(third); // Prints "e"
+
+// NOTE: `middle_stuff` is itself a Tuple.
+print(middle_stuff); // Prints "(0.0012, e, false)"
+<span class="boring">}</span></code></pre></pre>
+<h2 id="array"><a class="header" href="#array">Array</a></h2>
+<p>Perhaps the most common collection in most languages is an array - an ordered
+sequence of values that supports random access. In JavaScript, it is called
+<code>Array</code> while in Rust it is called <code>Vec</code>. Denim Arrays should look feel and
+behave like Dart's <code>List</code> or JavaScript's <code>Array</code>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let array = [1, 2, 3];
+<span class="boring">}</span></code></pre></pre>
+<p>Like in other languages, Denim Arrays support random access by index with the
+<code>[]</code> operator.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// The type of `array` is inferred to be `[int]` here.
+let array = [1, 2, 3];
+
+print(array[0]); // Prints "1"
+print(array[2]); // Prints "3"
+
+print(array[17]); // Compile-time error
+<span class="boring">}</span></code></pre></pre>
+<p>Need your Array to be mutable? Prefix the literal with a <code>mut</code>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mutable_array = mut [1, 2, 3];
+<span class="boring">}</span></code></pre></pre>
+<p>Sometimes when you have a mutable Array, it starts empty. In this situation, the
+inner type of the Array is ambiguous, so it falls back to <code>unknown</code> by default.
+You can help provide more type information on the variable or explicitly cast
+the Array literal to correct this.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let another_array: mut [string] = mut [];
+// In Denim, like in Rust, you can cast a value with the `as` keyword.
+let yet_another_array = [] as [bool];
+<span class="boring">}</span></code></pre></pre>
+<p>Denim can also infer the inner type of the Array later on from context.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// `one_more_for_the_road` is starts as a `mut [unknown]`.
+let one_more_for_the_road: = mut [];
+// Now Denim knows that `one_more_for_the_road` must be an `mut [int]`.
+one_more_for_the_road.add(2)
+<span class="boring">}</span></code></pre></pre>
+<p>Denim Arrays have lots of helpful methods focused on mutation.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let some_array: mut [int] = mut [];
+some_array.add(2);
+some_array.add(1);
+
+print(some_array); // Prints "[2, 1]"
+
+some_array.remove_at(0);
+
+print(some_array); // Prints "[1]"
+
+print(array[2]); // Prints "3"
+print(mutable_array[0]); // Prints "2"
+<span class="boring">}</span></code></pre></pre>
+<p>Denim Arrays ship with special syntax to instantiate arrays with a fixed number
+of identical values.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let eight_zeroes = [0; 8]; // `eight_zeroes` is an `[int]`
+let four_strings = [""; 4]; // `eight_zeroes` is an `[string]`
+<span class="boring">}</span></code></pre></pre>
+<p>Denim Arrays are spreadable with <code>...</code> just like JavaScript arrays.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = [1, 2, 3];
+let y = [...x, 4, 5, ...x, 6];
+
+print(y); // Prints "[1, 2, 3, 4, 5, 1, 2, 3, 6]"
+<span class="boring">}</span></code></pre></pre>
+<p>Denim allows for ergonomic slicing and dicing of arrays via de-structuring.
+Denim Array de-structuring is very similar to JavaScript <code>Array</code> de-structuring.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let y = [1, 2, 3, 4, 5, 6];
+
+let [first, second, ...middle_stuff, last] = y;
+
+print(first); // Prints "1"
+print(second); // Prints "2"
+print(last); // Prints "6"
+
+// NOTE: `middle_stuff` is itself an Array.
+print(middle_stuff); // Prints "[3, 4, 5]"
+<span class="boring">}</span></code></pre></pre>
+<h2 id="enums"><a class="header" href="#enums">Enums</a></h2>
+<p>Enums are a great way to model data that is best described in categories. For
+example, the concept of "days of the week" <em>could</em> be accurately described a
+<code>string</code>, but since there are only seven kinds of them, <code>enum</code> is a better fit.
+<code>enum</code> allows you to explicitly enumerate each variant.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum DayOfTheWeek {
+  Monday,
+  Tuesday,
+  Wednesday,
+  Thursday,
+  Friday,
+  Saturday,
+  Sunday,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Broadly speaking, explicit enumeration via <code>enum</code> makes validation and pattern
+matching over your data more ergnomic and less error prone. Sometimes, it makes
+sense to also attach data to each variant, allowing <code>enum</code> to function more like
+structs or classes in other languages.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum IpAddress {
+  // V4 IP addresses look like "192.168.1.1".
+  //
+  // Each `IpAddress::V4` has an inner field of type `[int]`.
+  V4([int]),
+  // V6 IP addresses look like "2001:db8::2:1".
+  //
+  // Each `IpAddress::V6` has a `segments` field of type `string` and a
+  // `segment_count` of type `int`.
+  V6 { segments: string, segment_count: int },
+}
+
+let some_v4_address = IpAddress::V4([192, 168, 1, 1]);
+
+print(some_v4_address.0); // Prints "[192, 168, 1, 1]"
+
+// `segments` does not need to be explicitly specified since it is the only
+// field of `IpAddress::V4`.
+let some_v4_address = IpAddress::V6 {
+  segments: "2001:db8::2:1",
+  segment_count: 5,
+};
+
+print(some_v6_address.segments); // Prints "2001:db8::2:1"
+print(some_v6_address.segment_count); // Prints "5"
+<span class="boring">}</span></code></pre></pre>
+<h3 id="special-enums"><a class="header" href="#special-enums">Special enums</a></h3>
+<p>TODO(skeswa): flesh this out by copying (<code>Option</code>, <code>Result</code>) from rust.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub enum Option&lt;T&gt; {
+  None,
+  Some(value: T),
+}
+
+pub enum Result&lt;T, E&gt; where E = Error {
+  Err(error: E),
+  Ok(value: T),
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We have special syntactic sugar for <code>Option</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This:
+let x: Option&lt;string&gt;;
+// Is the same as this:
+let x: string?;
+<span class="boring">}</span></code></pre></pre>
+<p><code>Option</code> is used in much of the same way that <code>null</code>, <code>nil</code>, or <code>undefined</code> is
+used in other languages - to communicate that a value may be absent.
+Unfortunately, dealing with <code>Option</code> and other similar ideas is sort of awkward.
+You end up writing a lot of if-this-then-that logic dealing with whether the
+value is there or not.</p>
+<pre><code class="language-js">if (!thing.x || !thing.x.y || !thing.x.y.z) {
+  return "nope";
+}
+
+return thing.x.y.z.value;
+</code></pre>
+<p>To reduce the cruft, lanuages like JavaScript added the
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining"><code>?.</code></a>
+and
+<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing"><code>??</code></a>
+operators.</p>
+<pre><code class="language-js">return thing.x?.y?.z?.value ?? "nope";
+</code></pre>
+<p>Better right? Well, sure. Except that now you have two operators that basically
+do the same thing depending on context - <code>.</code> and <code>?.</code>. They enable access into
+the state and behavior of values and objects.</p>
+<p>In Denim, all instances of <code>.</code> behave like <code>?.</code> does in other languages - it
+falls back to <code>Option::None</code> automatically when an optional value is absent.
+Denim retains <code>??</code> as syntactic sugar for <code>Option::unwrap_or(..)</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>thing.x.y.z.value ?? "nope";
+<span class="boring">}</span></code></pre></pre>
+<h2 id="maps"><a class="header" href="#maps">Maps</a></h2>
+<p>TODO(skeswa): flesh this out (Dart Maps).</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Below, `x` is inferred to be of type `{string: int}`.
+let x = {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+};
+
+let y: {string: unknown} = {
+  1: "one",
+  2: [1, 2],
+  3: {"hello": "world"},
+};
+
+print(x["one"]); // Prints "Some(1)"
+print(y[2]); // Prints "Some([1, 2])"
+
+print(x["four"]); // Prints "None"
+print(y[7]); // Prints "None"
+<span class="boring">}</span></code></pre></pre>
+<p>Denim Maps, like other Denim data structures, are made mutable with a <code>mut</code>
+prefix.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mutable_map = mut {"one": 1, "two": 2};
+<span class="boring">}</span></code></pre></pre>
+<p>Mutable Denim Maps feature useful methods and operators stolen from the Maps of
+other languages.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let mutable_map: mut {string: string} = mut {};
+mutable_map["hello"] = "world";
+mutable_map["foo"] = "bar";
+
+print(mutable_map); // Prints "{hello: world, foo: bar}"
+
+mutable_map.remove_key("hello");
+
+print(mutable_map); // Prints "{foo: bar}"
+<span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): spread notation</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+};
+let y = {...x, "four": 4};
+<span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): destructuring</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let {"one": one, "two": two, ...everything_else} = y;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="sets"><a class="header" href="#sets">Sets</a></h2>
+<p>TODO(skeswa): flesh this out (Dart Sets).</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// The type of `x` is inferred to be `{string}` here.
+let x = {"one", "two", "three"};
+let y = mut {1, 2.2, 3};
+<span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): spread notation</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let x = {
+  "one": 1,
+  "two": 2,
+  "three": 3,
+};
+let y = {...x, "four": 4};
+<span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): no destructuring</p>
+<h2 id="type-aliases"><a class="header" href="#type-aliases">Type Aliases</a></h2>
+<p>Denim allows you to come up with another name for an existing type using
+something called a type alias. Like Rust type aliases, Denim type aliases are
+declared with the keyword <code>type</code>. For example, the following defines the type
+<code>Point</code> as a synonym for the type <code>(int, int)</code>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type Point = (int, int);
+
+let p: Point = (41, 68);
+<span class="boring">}</span></code></pre></pre>
+<p>Type aliases can be useful to abbreviate long, verbose types. Type aliases also
+come in handy when attaching more semantic meaning or description to a common
+type, like a tuple in the case above, would make your code easier to reason
+about.</p>
+<h2 id="operators"><a class="header" href="#operators">Operators</a></h2>
+<ul>
+<li><code>and</code>, <code>or</code><br />
+Denim steals these logical comparison operators from <a href="https://docs.python.org/3/library/operator.html">Python</a>.
+Why? Well, truth be told, it is mostly to reduce the ambiguity of <code>||</code> (see: Rust
+closure syntax). But also, I think it sorta reads nicely since keywords are highlighted
+to be pretty eyecatching usually.</li>
+<li><code>==</code>, <code>!=</code><br />
+The strict equality and inequality operators work just the way that you think they
+do: they check if primitives are equal, or if non-primitives point to the same
+address in memory.</li>
+<li><code>===</code>, <code>!==</code><br />
+These two operators are congruence and incongruence operators in Denim. They are
+meant to check if two values are qualitatively equal or not. We use the <code>Eq</code> trait
+to implement these operators.</li>
+<li><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, and <code>%</code><br />
+Arithmetic operators can only be applied to numbers of the same kind.</li>
+<li><code>**</code>, the exponentiation operator, is stolen from
+<a href="https://docs.python.org/3/reference/expressions.html#the-power-operator">Python</a></li>
+<li><code>~/</code>, the truncating division operator, is stolen from
+<a href="https://api.flutter.dev/flutter/dart-core/num/operator_truncate_divide.html">Dart</a></li>
+</ul>
+<p>You might be wondering where the bitwise operators are - there are none! Looking
+for operator overloads? You won't find them here.</p>
+<p>Good riddance.</p>
+<h2 id="comments"><a class="header" href="#comments">Comments</a></h2>
+<p>Comments are almost purely stolen from Rust.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This is a simple line comment.
+
+let abc /* this is an inline comment */ = /* stick these anywhere */ 123;
+
+/// This is a doc comment.
+///
+/// These comments are intended to document your code in greater detail. To
+/// facilitate this greater detail, these kinds of comments have:
+/// 1. **full** _Markdown_ `support`
+/// 2. Dart-style `[]` code links
+///    For example, [abc] references the variable created above explicitly.
+let forty_two = 42;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="expressions-and-statements"><a class="header" href="#expressions-and-statements">Expressions and statements</a></h2>
+<p>Following Rust's lead, Denim is (mostly) an expression language.
+<a href="https://doc.rust-lang.org/reference/statements-and-expressions.html">Rust's documentation</a>
+does a good job describing what this means, and some of its implications:</p>
+<blockquote>
+<p>Most forms of value-producing or effect-causing evaluation are directed by the
+uniform syntax category of <em>expressions</em>. Each kind of expression can
+typically nest within each other kind of expression, and rules for evaluation
+of expressions involve specifying both the value produced by the expression
+and the order in which its sub-expressions are themselves evaluated.</p>
+<p>In contrast, statements in Rust serve mostly to contain and explicitly
+sequence expression evaluation.</p>
+</blockquote>
+<p>The quoted description can be a bit difficult to fully understand, but it
+basically boils down to a simple mantra: in Denim, almost everything, including
+control flow like <code>if...else</code>, is an "expression" can be used like a value.
+Expressions can be terminated, and their values contained, by capping them with
+a <code>;</code> character. Loosely, a terminated expression <em>is</em> a "statement".</p>
+<p>Perhaps the best way to visualize this is to demonstrate an example involving
+<code>if...else</code>, Denim's simplest branching control flow expression.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Pretend that `some_random_int` is defined elsewhere and is a randomly
+// generated `int`.
+let x = some_random_int;
+
+// Below, `message`'s value results from an `if...else if...else` expression
+// on `x`. When `x` is `4`, `message` is `"x is four"`. Also, if `x` is not `3`
+// or `4`, `message` is the empty string.
+let message = if x == 4 {
+  "x is four"
+} else if x == 3 {
+  "x is three"
+} else {
+  ""
+};
+
+// As you can see, expressions can also be used in a sort of stand-alone
+// fashion.
+if !message.is_empty() {
+  print(message);
+} else {
+  print("Looks like there is nothing to say!");
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="keywords"><a class="header" href="#keywords">Keywords</a></h2>
+<ul>
+<li>Stolen from Rust
+<ul>
+<li><code>as</code></li>
+<li><code>async</code>
+<ul>
+<li>Suffixable</li>
+</ul>
+</li>
+<li><code>await</code>
+<ul>
+<li>Suffixable</li>
+</ul>
+</li>
+<li><code>break</code></li>
+<li><code>continue</code></li>
+<li><code>else</code></li>
+<li><code>enum</code></li>
+<li><code>extern</code></li>
+<li><code>false</code></li>
+<li><code>fn</code></li>
+<li><code>for</code></li>
+<li><code>if</code>
+<ul>
+<li>Suffixable</li>
+</ul>
+</li>
+<li><code>impl</code></li>
+<li><code>in</code></li>
+<li><code>let</code></li>
+<li><code>loop</code></li>
+<li><code>match</code>
+<ul>
+<li>Suffixable</li>
+</ul>
+</li>
+<li><code>mod</code></li>
+<li><code>pub</code>
+<ul>
+<li><code>pub(pkg)</code> for directory-level visibility</li>
+<li><code>pub(repo)</code> for repository-level visibility</li>
+</ul>
+</li>
+<li><code>return</code></li>
+<li><code>self</code></li>
+<li><code>Self</code>
+<ul>
+<li>Special type</li>
+</ul>
+</li>
+<li><code>struct</code></li>
+<li><code>trait</code></li>
+<li><code>true</code></li>
+<li><code>type</code></li>
+<li><code>use</code></li>
+<li><code>where</code></li>
+<li><code>while</code>
+<ul>
+<li>Suffixable</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Stolen from Dart
+<ul>
+<li><code>is</code>
+<ul>
+<li>Used for Dart-style type checking</li>
+</ul>
+</li>
+<li><code>show</code></li>
+<li><code>try</code>
+<ul>
+<li>Suffixable</li>
+</ul>
+</li>
+<li><code>void</code></li>
+</ul>
+</li>
+<li>Stolen from Python
+<ul>
+<li><code>from</code></li>
+</ul>
+</li>
+<li>Stolen from TypeScript
+<ul>
+<li><code>unknown</code></li>
+</ul>
+</li>
+<li>Originals
+<ul>
+<li><code>fork</code>
+<ul>
+<li>Suffixable</li>
+</ul>
+</li>
+<li><code>tandem</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="suffixing"><a class="header" href="#suffixing">Suffixing</a></h3>
+<p>In Denim,some keywords can be applied as suffixes with <code>.</code> notation. Namely,
+<code>async</code>, <code>await</code>, <code>fork</code>, <code>if</code>, <code>match</code>, <code>try</code>, and <code>while</code>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let some_eventual_function_value = async some_function("abc");
+
+let some_other_eventual_function_value = some_other_function("abc").async;
+
+print(await some_eventual_function_value);
+
+print(some_other_eventual_function_value.await);
+
+fork some_struct {
+  some_field: "123",
+};
+
+some_struct.fork {
+  some_field: "123",
+};
+
+if some_bool_expression {
+  print("its bigger")
+} else {
+  print("its _not_ bigger")
+}
+
+some_bool_expression.if {
+  print("its bigger")
+} else {
+  print("its _not_ bigger")
+}
+
+some_number.match {
+  1..=122 =&gt; print("nope"),
+  123 =&gt; print("yep"),
+  _ =&gt; print("nope"),
+}
+
+match some_number {
+  1..=122 =&gt; print("nope"),
+  123 =&gt; print("yep"),
+  _ =&gt; print("nope"),
+}
+
+fn x() -&gt; Result {
+  something_that_can_fail(123).try;
+  try {
+    let mut a = 123;
+    a = a * 2;
+
+    something_that_can_fail(123)
+  }
+}
+
+let mut i = 0;
+while i &lt; 3 {
+  print("i is $i");
+}
+
+let mut is_done = true;
+is_done.while {
+  is_done = false;
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="functions"><a class="header" href="#functions">Functions</a></h2>
+<p>Syntactically, Denim functions are very similar Rust functions.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Functions can specify a return type using the `-&gt;` symbol.
+pub fn multiply_by_two(num: float) -&gt; float {
+  // Functions implicitly return the last value in their body. Since, the next
+  // line is not terminated by a `;`, it evaluates to `num * 2`.
+  num * 2
+}
+
+// No need to specify if a function is `void`, just say nothing at all:
+fn print_hello_world() {
+  // By the way, printing works the same way it does in Dart. `print` is a
+  // globally visible function that takes a `string` and outputs it to
+  // console/stdout.
+  print("hello world");
+}
+<span class="boring">}</span></code></pre></pre>
+<p>There is just one wrinkle with Denim functions - there are no positional
+arguments, only named arguments that can appear in any order. When a function is
+invoked, its arguments must be explicitly labeled at the call-site unless a
+variable is passed along sharing the name of an argument. There is one exception
+to this rule: <strong>if a function has just a single argument, no label is
+necessary</strong>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn multiply_by_two(num: float) -&gt; float {
+  num * 2
+}
+
+print(multiply_by_two(3)); // prints "6"
+
+fn multiply(a: float, b: float) -&gt; float {
+  a * b
+}
+
+print(multiply(a: 2, b: 5)); // prints "10"
+
+let b = 5;
+
+print(multiply(a: 2, b)); // prints "10"
+<span class="boring">}</span></code></pre></pre>
+<p>There are situations where you need multiple arguments, but naming them would be
+a little silly. The best way to do this in Denim is to have a tuple as your only
+argument.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn add(nums: (int, int)) -&gt; int {
+  nums.0 + nums.1
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Denim functions can also have optional arguments. One way to accomplish this is
+to specify a default value for a parameter.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Below Denim infers that `action` is a `string` from its default value.
+//
+// We explicitly specify a type for `times` because `= 1` would it an `int` by
+// default.
+//
+// NOTE: default values must be immutable.
+fn i_cant_wait_to(action = "take a nap", times: float = 1) {
+  print("Time to $action $times time(s)!");
+}
+
+print(
+  i_cant_wait_to(
+    action: "eat donuts",
+  ), // prints "Time to eat donuts 1 time(s)!"
+);
+print(
+  i_cant_wait_to(
+    action: "eat donuts",
+    times: 1.5,
+  ), // prints "Time to eat donuts 1.5 times(s)!"
+);
+print(i_cant_wait_to()); // prints "Time to take a nap 1 times!"
+<span class="boring">}</span></code></pre></pre>
+<p>Another way to declare an optional argument is to make its type <code>T?</code>. <code>T?</code>
+represents an optional value of type <code>T</code>. We'll describe <code>T?</code> in greater depth
+later, but it works identically to how Rust's
+<a href="https://doc.rust-lang.org/std/option/"><code>Option&lt;T&gt;</code></a> works.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn measurement(scalar: float, unit: string?) {
+  let lowercase_unit = unit.to_lower() ?? "";
+
+  "$scalar $lowercase_unit"
+}
+
+print(measurement(scalar: 12.5, unit: Some("px"))); // prints "12.5px"
+print(measurement(scalar: 12.5, unit: None)); // prints "12.5"
+<span class="boring">}</span></code></pre></pre>
+<p>Denim also includes some syntactic sugar to make using this a little less
+verbose by allowing <code>Some</code> or <code>None</code> to be implied by the respective inclusion
+or exclusion of an argument.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>print(measurement(scalar: 12.5)); // prints "12.5"
+print(measurement(scalar: 12.5, unit: "px")); // prints "12.5px"
+<span class="boring">}</span></code></pre></pre>
+<p>Denim also has a convenient alternate syntax for anonymous functions, called
+lamba functions, that it borrows from Rust closures. Unlike Rust closures
+however, Denim lambda functions are just plain ol' functions with no extra or
+special behaviors.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn sum_three(a: int, b: int, c: int) -&gt; int {
+  a + b + c;
+}
+
+let sum_three_as_a_lambda = |a: int, b: int, c: int| a + b + c;
+<span class="boring">}</span></code></pre></pre>
+<p>The argument types of a lambda can be inferred if enough information is provided
+at the call site.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let inferred: fn(a: int) -&gt; int = |a| a + 1;
+<span class="boring">}</span></code></pre></pre>
+<p>By the way, function types look like this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn(a: A, b: B, c: C) -&gt; D;
+<span class="boring">}</span></code></pre></pre>
+<p>Denim has a special syntax for functions that receive an inlined anonymous
+function as an argument. This common when passing callbacks and in embedded
+DSLs. Any function argument named <code>body</code> can have an inline block after its
+invocation that works like a lambda function.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn element(name: string, body: Option&lt;fn() -&gt; Element&gt;) -&gt; Element {
+  Element { name, child: body() }
+}
+
+// This:
+element(name: "div", body: || {
+  element(name: "button", body: || {
+    span("click me")
+  })
+})
+
+// Is the same as this:
+element("div") {
+  element("button") {
+    span("click me")
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Thanks to "getterification", we can make this syntax even sweeter:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn button(body: Option&lt;fn() -&gt; Element&gt;) -&gt; Element {
+  element("button", body)
+}
+
+fn div(body: Option&lt;fn() -&gt; Element&gt;) -&gt; Element {
+  element("div", body)
+}
+
+div {
+  button {
+    span("click me")
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): <code>it</code> for the singular argument passed to <code>body</code>.</p>
+<h2 id="modules"><a class="header" href="#modules">Modules</a></h2>
+<p>Denim's core packaging primitive is called a "module". Modules designed to
+define behavior, state, and types for a particular context or domain.
+Furthermore, Denim modules are intended to depend on each other through the
+import and export of behavior, state, and types.</p>
+<p>Denim modules are expressed a file system as a directory with Denim source
+files. Each source file in an Denim module has full visibility of everything
+declared in the other source files of the module. Additionally, each source file
+can do its own importing and exporting. Denim source files can only import stuff
+exported by another Denim module. It might help to think of this style of
+packaging is a blend of
+<a href="https://www.golang-book.com/books/intro/11">Go packages</a> and
+<a href="https://hacks.mozilla.org/2018/03/es-modules-a-cartoon-deep-dive/">ES modules</a>.</p>
+<p>Like Deno and Go, remote modules are fetched from source control with an
+accompanying version. Version is typically inferred from a tag or reference on
+the imported module repository.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>from "github.com/abc/xyz@v0.9.0" use { hello, world };
+<span class="boring">}</span></code></pre></pre>
+<p>Denim allows imports from other modules in the same repository, too. These are
+called respository-relative imports. <code>~</code> always refers to the root of the
+repository containing the current module. Respository-relative imports do not
+specify a version because the version will always be the same as the current
+module.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>from "~/bing/bang" use { boom: büm }; // Aliases `boom` to `büm`.
+from "~/some/sub/module" use { something };
+
+// You can use ... syntax to import "everything else".
+from "github.com/foo/bar@v4.2" use { Foo, bar, ...foo_bar };
+from "github.com/bing/bong@latest" use { ...bing_bong };
+<span class="boring">}</span></code></pre></pre>
+<p>You can also re-export stuff using the <code>show</code> keyword.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>from "github.com/abc/xyz@v0.9.0" show { hello };
+
+from "~/bing/bang" show { boom: büm };
+<span class="boring">}</span></code></pre></pre>
+<p>Like in Rust, you can export stuff from Denim modules with the <code>pub</code> keyword.
+Anything not declared with a <code>pub</code> will only be visible to things in its own
+module.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub let stuff_outside_of_this_module_can_see_me = true;
+<span class="boring">}</span></code></pre></pre>
+<h2 id="structs"><a class="header" href="#structs">Structs</a></h2>
+<p>You may now be wondering how more complex data structures are created and
+managed in Denim. I'm sure you are <em>so</em> shocked to find out that we (mostly)
+stole Rust syntax here too.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// We can make some or even all of the `struct` or its fields visible to
+// external modules using the `pub` keyword.
+pub struct User {
+  active = false,
+  /// You can put doc comments directly on `struct` fields.
+  coolness_rating: int,
+  pub name: string,
+  pub nickname: string?,
+}
+<span class="boring">}</span></code></pre></pre>
+<p>We can instantiate and use <code>struct</code> like this:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let some_user = User {
+  active: true,
+  coolness_rating: 42,
+  name: "Some User",
+  nickname: None,
+};
+<span class="boring">}</span></code></pre></pre>
+<p>In the <code>User</code> <code>struct</code> above, two fields are optional - <code>active</code> and <code>nickname</code>.
+<code>active</code> is made optional by the specification of a default value for it,
+<code>false</code>. <code>nickname</code> is optional because it is of type <code>Option&lt;string&gt;</code>. Optional
+fields may be excluded when a struct is instantiated.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let sam = User {
+  coolness_rating: 11,
+  name: "Sam",
+  // Since `nickname` is an `Option&lt;string&gt;` we can simply specify a `string`.
+  nickname: "S-money",
+};
+
+let tria = User {
+  active: true,
+  coolness_rating: 12,
+  name: "Tria",
+};
+
+print(tria.nickname); // Prints "None".
+
+let jen = User {
+  active: true,
+  coolness_rating: 13,
+  name: "Jen",
+  // Below, `"Jenners"` is automatically wrapped in a `Some(..)`.
+  nickname: "Jenners",
+};
+<span class="boring">}</span></code></pre></pre>
+<p>Denim sugarifies Rust's default <code>impl</code> by simply allowing you to declare methods
+within the <code>struct</code> itself. This should feel familiar to anyone coming from a
+language that makes heavy use of classes.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Car {
+  make: string,
+  model: string,
+  owner: User,
+
+  // `self` is a special argument. Like in Rust, it means that this method is
+  // attached to any instance of `Car`.
+  fn drive(self) {
+    print(
+      "A ${self.model} ${self.model} owned "
+      "by ${self.owner.name} is driving",
+    );
+  }
+
+  // Functions defined within a `struct` don't have to be attached to a
+  // particular instance of that struct. They can instead function like static
+  // methods in other languages. For instance, you would invoke this function
+  // with `Car::create_lemon_for(some_user)`.
+  fn create_lemon_for(owner: User) {
+    Car { make: "AMC", model: "Pacer", owner }
+  }
+}
+
+let some_user = User {
+  active: true,
+  coolness_rating: 42,
+  name: "Some User",
+};
+
+let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+my_car.drive(); // Prints "A Mazda Miata owned by Some User is driving"
+<span class="boring">}</span></code></pre></pre>
+<p>As structs a big part of the language, Denim has some syntactic sugar to make
+instantiating nested structs ergonomic.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let my_other_car = Car {
+  make: "Nissan",
+  model: "Altima",
+  owner: {
+    active: false,
+    coolness_rating: -1,
+    name: "Another User",
+  },
+};
+
+my_car.drive(); // Prints "A Nissan Altima owned by Another User is driving"
+<span class="boring">}</span></code></pre></pre>
+<p>One important thing to note here is that Denim structs, like most Denim data
+structures, are immutable by default. So, direct imperative mutation of Denim
+structs won't work in all the cases that you may be used to.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+my_car.make = "Toyota"; // Compile-time error.
+<span class="boring">}</span></code></pre></pre>
+<p>The only way to create a mutable <code>struct</code> instance is to create it with a <code>mut</code>
+prefixing the <code>struct</code> type. In Denim, structs and traits with a <code>mut</code> are
+internally mutable.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let my_mut_car = mut Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+my_mut_car.make = "Toyota"; // 👍
+<span class="boring">}</span></code></pre></pre>
+<p>All Denim structs can be shallow cloned with <code>fork</code>. This useful when a field
+inside an immutable <code>struct</code> value should change.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+let my_other_car = my_car.fork {
+  // `make` is changed, but all of the other fields stay the same.
+  make: "Toyota",
+};
+
+print(my_car.make) // Prints "Mazda"
+print(my_other_car.make) // Prints "Toyota"
+
+my_other_car.make = "Toyota"; // Compile-time error (`my_other_car` is not a `mut Car`)
+<span class="boring">}</span></code></pre></pre>
+<p>But what if you need the forked <code>struct</code> instance to be internally mutable? This
+is made possible by prefixing the <code>fork</code> expression with a <code>mut</code>.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+let my_other_car = mut my_car.fork;
+
+my_car.make = "Toyota"; // 👍
+<span class="boring">}</span></code></pre></pre>
+<p>Sometimes you need to <code>fork</code> a <code>struct</code> instance nested within another <code>struct</code>
+instance. Given how frequently this is necessary, it felt like a good idea for
+Denim to ship with a dedicated syntax.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let my_car = Car {
+  make: "Mazda",
+  model: "Miata",
+  owner: some_user,
+};
+
+let my_other_car = mut my_other_car.fork {
+  make: "Rivian",
+  model: "R1T",
+  user: fork {
+    // `self` refers to the original value of this `User` field.
+    coolness_rating: self.coolness_rating + 1,
+  },
+};
+<span class="boring">}</span></code></pre></pre>
+<p>In some situations, you may want nested internal mutation: you way want to be
+able to directly mutate an inner <code>struct</code> instance nested within another
+<code>struct</code> instance. Denim supports this by declaring the inner <code>struct</code> field as
+mutable with <code>mut</code>. Note that this nested internal mutability is only accessible
+in situations where the surrounding type is itself mutable.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct House {
+  address: Address,
+  owner: mut User,
+}
+
+struct Address {
+  number: string,
+  street: string,
+}
+
+let a_house = House {
+  address: {
+    number: "42",
+    street: "Wallaby Way",
+  },
+  owner: {
+    coolness_rating: -1,
+    name: "P. Sherman",
+  },
+};
+
+a_house.owner.active = true; // Compile-time error (`a_house` is not a `mut House`)
+
+let another_house = mut House {
+  address: {
+    number: "221B",
+    street: "Baker St",
+  },
+  owner: {
+    coolness_rating: 99,
+    name: "S. Holmes",
+  },
+};
+
+a_house.owner.active = true; // 👍
+a_house.address.street = "Baker Street"; // Compile-time error (`House::address` is not an `mut Address`)
+<span class="boring">}</span></code></pre></pre>
+<h1 id="control-flow"><a class="header" href="#control-flow">Control Flow</a></h1>
+<p>TODO(skeswa): document branching TODO(skeswa): document loops TODO(skeswa):
+document loop labels
+(https://doc.rust-lang.org/rust-by-example/flow_control/loop/nested.html)</p>
+<h2 id="selfification-aka-functions-as-methods"><a class="header" href="#selfification-aka-functions-as-methods">"Selfification" (a.k.a Functions as Methods)</a></h2>
+<p>Here, we take:</p>
+<ul>
+<li>"function" to mean a subroutine <strong>without</strong> a <code>self</code> reference to some piece
+of state</li>
+<li>"method" to mean a subroutine <strong>with</strong> a <code>self</code> reference to some piece of
+state</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn authenticate(environment: Environment, auth_user: User) -&gt; bool {
+  // ...
+}
+
+// `&amp;` is the secret sauce here
+fn do_stuff(environment: Environment, user: User?) {
+  user.authenticate(environment, &amp;auth_user).if {
+    print("yes!");
+  } else {
+    print("no!");
+  };
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="getterification-aka-functions-as-fields"><a class="header" href="#getterification-aka-functions-as-fields">"Getterification" (a.k.a Functions as Fields)</a></h2>
+<p>In Denim, functions can be treated as fields if they are not passed any
+arguments.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Foo {
+  bar: int,
+
+  pub fn baz(self, extra = 0) -&gt; int {
+    self.bar + extra + 1
+  }
+}
+
+let foo = Foo { bar: 27 };
+
+print(foo.baz(2)); // prints "30"
+print(foo.baz()); // prints "28"
+print(foo.baz); // prints "28"
+
+<span class="boring">}</span></code></pre></pre>
+<h2 id="autoboxing"><a class="header" href="#autoboxing">Autoboxing</a></h2>
+<p>Given the prevalance and importance of special enums <code>Option&lt;T&gt;</code> and <code>Result&lt;T&gt;</code>
+in Denim, you might find yourself wrapping things in <code>Some(..)</code> and <code>Ok(..)</code>
+alot. To sweeten this syntax a little bit, Denim will automatically infer a <code>T</code>
+as <code>Some(T)</code> or a <code>Ok(T)</code> depending on context; this is called "autoboxing".</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Why do this:
+fn foo() -&gt; string? {
+  Some("bar")
+}
+
+// when you could simply do this:
+fn autoboxed_foo() -&gt; string? {
+  "bar"
+}
+
+// `Result` is also autoboxable:
+let mut x: Result&lt;int&gt; = Ok(1);
+x = 2;
+
+// Autoboxing works in structs too!
+struct X(Option&lt;int&gt;);
+let x = X(1234);
+<span class="boring">}</span></code></pre></pre>
+<h2 id="traits"><a class="header" href="#traits">Traits</a></h2>
+<p>TODO(skeswa): flesh this out.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub trait Summary {
+  fn summarize(self) -&gt; string;
+}
+
+pub trait Tweak&lt;T&gt; {
+  tweakable: T?;
+
+  fn tweak(mut self, some_other_arg: string) -&gt; Self;
+}
+
+pub trait DefaultImpl {
+  fn foo(mut self) -&gt; string {
+    "bar"
+  }
+}
+
+pub trait MethodGeneric {
+  fn some_method&lt;T&gt;(self) -&gt; T;
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="impls"><a class="header" href="#impls">Impls</a></h3>
+<p>Declaration:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// non-public
+impl B for A {
+  fn b(self) {
+    print("b");
+  }
+}
+
+// non-public
+impl A for X {
+  fn a(self) {
+    print("a");
+  }
+}
+impl Y for X {
+  fn y(self) {
+    print("y");
+  }
+}
+impl Z for X {
+  fn z(self) {
+    print("z");
+  }
+}
+
+// non-public
+impl X {
+  fn new_functionality_for_x(self) {
+    print("that newnew");
+  }
+}
+
+// non-public
+pub impl X {
+  fn eat(self) {
+    print("omnomnom");
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<p>Importing:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>from "~/foo/bar" use {
+  B for A,
+  Y + Z for X,
+  X,
+  A,
+  X::new_functionality_for_x,
+};
+<span class="boring">}</span></code></pre></pre>
+<h2 id="generics"><a class="header" href="#generics">Generics</a></h2>
+<p>TODO(skeswa): flesh this out.</p>
+<p>TODO(skeswa): <code>where</code>.</p>
+<h2 id="type-unions-and-intersections"><a class="header" href="#type-unions-and-intersections">Type Unions and Intersections</a></h2>
+<p>TODO(skeswa): flesh this out (Rust Type Unions (trait + trait) and TS
+Intersections (type | type).</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>type IntOrString = int | string;
+
+fn do_a_thing(data: IntOrString) {
+  if data is int {
+    print("it is an int")
+    return;
+  }
+
+  print("it is a string")
+}
+
+fn do_another_thing(data: int | string | byte) {
+  match data {
+    is int =&gt; print("it is an int"),
+    is! string =&gt; print("it isn't an string"),
+    _ =&gt; print("it is probably a string"),
+  }
+}
+
+trait Foo {
+  fn bar(self) -&gt; int,
+  fn baz(self) -&gt; bool,
+}
+
+trait Ping {
+  fn bar(self) -&gt; int,
+  fn pong(self),
+}
+
+fn do_one_more_thing(data: Foo | Ping) {
+  print(data.bar())
+}
+
+type FooAndPing = Foo &amp; Ping;
+
+fn do_one_last_thing(data: FooAndPing) {
+  data.pong();
+
+  print(data.bar())
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error handling</a></h2>
+<p>You can hoist the error out of returned <code>Result</code> within a function that returns
+<code>Result</code> with the <code>try</code> keyword.</p>
+<p>TODO(skeswa): flesh this out.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn do_a_thing() -&gt; Result&lt;void&gt; {
+  let csv_file_path = "a/b/c.csv";
+
+  let csv_data = read_file(csv_file_path).try.to_utf8();
+
+  basic_dance_move().context("tried to bust a move").try;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): flesh this out.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>pub struct Error&lt;ErrorKind&gt; {
+  pub cause: Error?;
+  pub kind: ErrorKind;
+}
+<span class="boring">}</span></code></pre></pre>
+<p>TODO(skeswa): flesh this out.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>panic("Oh no! We cannot recover from this!");
+<span class="boring">}</span></code></pre></pre>
+<h2 id="pattern-matching"><a class="header" href="#pattern-matching">Pattern matching</a></h2>
+<p>TODO(skeswa): flesh this out.</p>
+<h2 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h2>
+<p>In Denim, function invocations work differently than in other languages - they
+do not "block" by default. Instead, Denim functions work like
+<a href="https://en.wikipedia.org/wiki/Coroutine">co-routines</a>, suspending themselves
+while invoking other functions, and resuming when they return.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This call to `fetch` blocks, meaning that "done" will not be printed until
+// the fetch is finished.
+let weather = fetch(url: "https://get.theweather.com");
+print("done");
+
+// The code below:
+// 1. Prints "a"
+// 2. Waits for the first thing to be fetched
+// 3. Prints "b"
+// 4. Waits for the second thing to be fetched
+// 5. Prints "c"
+
+print("a");
+let first_thing = fetch(url: "https://first.thing.com");
+print("b");
+let second_thing = fetch(url: "https://second.thing.com");
+print("c");
+<span class="boring">}</span></code></pre></pre>
+<p>To call a function concurrently, use the <code>async</code> keyword. Using <code>async</code> on a
+function invocation wraps its return value in a special type called <code>Eventual</code>,
+like <code>Future</code> or <code>Promise</code> in other languages, is a concurrency monad that
+allows you to subscribe to the completion of an asynchronous operation.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This logic prints "a" then "b" then "c", printing the time in joburg and in
+// nyc (in no particular order) when the fetches complete later on.
+
+print("a");
+let time_in_joburg = fetch(url: "https://worldtime.com/in/joburg").async;
+print("b");
+let time_in_nyc = fetch(url: "https://worldtime.com/in/nyc").async;
+print("c");
+
+time_in_joburg.then(|time| print("time in joburg: $time"));
+time_in_nyc.then(|time| print("time in nyc: $time_in_nyc"));
+<span class="boring">}</span></code></pre></pre>
+<p>Denim provides a way to "wait" for the <code>Eventual</code> values returned by <code>async</code>
+functions - the <code>await</code> keyword. With <code>await</code>, working with asynchronous
+operations can be quite ergonomic.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// This logic:
+// 1. Starts fetching the time in atlanta
+// 2. Prints "a"
+// 3. Waits for the time in atlanta to be available before printing it
+// 4. Prints "b"
+
+let time_in_atlanta = fetch(url: "https://worldtime.com/in/atlanta").async;
+
+print("a");
+print(time_in_atlanta.await);
+print("b");
+<span class="boring">}</span></code></pre></pre>
+<p>There are a garden variety of helpful ways to wait on multiple asynchronous
+operations at once in Denim. In particular, tuples are a great way to wait on
+<code>Eventual</code> values with different types.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Any tuple of `Eventual` values has a method called `.after_all()` that waits
+// for every `Eventual` to complete.
+let (google_icon, _, c_text) = (
+  fetch(url: "https://google.com/favicon.ico").async,
+  pause(Duration::new(milliseconds: 100)).async,
+  readFile(path: "./a/b/c.txt").async,
+).after_all().await;
+
+// Arrays of `Eventual` also support `.after_all()`.
+let icons = [
+  fetch(url: "https://nba.com/favicon.ico").async,
+  fetch(url: "https://nhl.com/favicon.ico").async,
+  fetch(url: "https://mlb.com/favicon.ico").async,
+].after_all().await;
+<span class="boring">}</span></code></pre></pre>
+<p>Since this is quite a common pattern in Denim, there is a special syntax for it
+enabled by the <code>tandem</code> keyword. <code>tandem { ... }</code> is simply syntactic sugar for
+the concurrent invocation of multiple potentially asynchronous functions
+normally enabled by the combined usage of <code>.async</code> and <code>.after_all().await</code>. As
+such, a <code>tandem { ... }</code> expression evaluates to a tuple of the return values of
+each comma delimited sub-expression.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let (google_icon, _, c_text) = tandem {
+  fetch(url: "https://google.com/favicon.ico"),
+  pause(Duration::new(milliseconds: 100)),
+  readFile(path: "./a/b/c.txt"),
+};
+
+let icons = tandem {
+  fetch(url: "https://nba.com/favicon.ico"),
+  fetch(url: "https://nhl.com/favicon.ico"),
+  fetch(url: "https://mlb.com/favicon.ico"),
+};
+<span class="boring">}</span></code></pre></pre>
+<p>Both tuples and arrays of <code>Eventual</code> support <code>.race()</code> to wait for the first
+<code>Eventual</code> to complete, wrapping values in <code>Option::None</code> to mark <code>Eventual</code>
+values that lost the race.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>let results = [
+  fetch(url: "https://later.com").async,
+  fetch(url: "https://now.com").async,
+  fetch(url: "https://way.later.com").async,
+].race().await;
+
+print("$results"); // Prints "[None, Some(data), None]"
+<span class="boring">}</span></code></pre></pre>
+<h2 id="interop"><a class="header" href="#interop">Interop</a></h2>
+<p>TODO(skeswa): flesh this out.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>trait Pluralizer {
+  fn pluralize(self, text: string) -&gt; string;
+}
+
+extern(go) {
+  // Automatically compiles a Denim-friendly interface.
+  from(go) "github.com/gertd/go-pluralize@0.2" use { ...pluralize };
+
+  struct GoPluralizer {
+    client: pluralize.Client,
+  }
+
+  impl Pluralizer for GoPluralizer {
+    fn pluralize(self, text: string) -&gt; string {
+      self.client.plural(text)
+    }
+  }
+
+  pub fn new_pluralizer() -&gt; impl Pluralizer {
+    GoPluralizer { client: pluralize.NewClient() }
+  }
+}
+
+extern(ts) {
+  #[deno_types("npm:@types/pluralize@0.0.29")]
+  from(ts) "npm:pluralize@8.0.0" use { pluralize };
+
+  struct TsPluralizer {}
+
+  impl Pluralizer for TsPluralizer {
+    fn pluralize(self, text: string) -&gt; string {
+      pluralize(text)
+    }
+  }
+
+  pub fn new_pluralizer() -&gt; impl Pluralizer {
+    TsPluralizer {}
+  }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="testing"><a class="header" href="#testing">Testing</a></h2>
+<p>TODO(skeswa): flesh this out.</p>
+<p>In any "*.(spec|test).denim" file (spec = unit test, test = integeration test):</p>
+<p><code>describe</code>, <code>before</code>, <code>test</code> are all functions that only apply to tests.</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>describe("Something") {
+  before {
+
+  }
+
+  test("Something") {
+
+  }
+
+  #[timeout(seconds: 500)]
+  test("Something") {
+
+  }
+
+  if !is_dev {
+    test("Something") {
+
+    }
+  }
+}
+<span class="boring">}</span></code></pre></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="denims-language-design-takes"><a class="header" href="#denims-language-design-takes">Denim's Language Design Takes</a></h1>
 <p>Programming language design opinions sorted more or less from hottest (most
 unique/surprising) to coldest (Least unique/surprising).</p>
 <h2 id="hot-takes"><a class="header" href="#hot-takes">Hot Takes</a></h2>
-<h3 id="concurrency"><a class="header" href="#concurrency">Concurrency</a></h3>
+<h3 id="concurrency-1"><a class="header" href="#concurrency-1">Concurrency</a></h3>
 <p>In a typical concurrency regime, like <code>async/await</code>, programs can "opt in" to
 asynchrony in specific spots. Additionally, special functionality like
 <code>Promise.all(...)</code> is necessary to express the idea that an operation should
@@ -510,7 +2067,7 @@ let c = "$a + $b = ${a = b}" // Use `$` for string interpolation!
 <p>Programming language design opinions sorted more or less from hottest (most
 unique/surprising) to coldest (Least unique/surprising).</p>
 <h2 id="hot-takes-1"><a class="header" href="#hot-takes-1">Hot Takes</a></h2>
-<h3 id="concurrency-1"><a class="header" href="#concurrency-1">Concurrency</a></h3>
+<h3 id="concurrency-2"><a class="header" href="#concurrency-2">Concurrency</a></h3>
 <p>In a typical concurrency regime, like <code>async/await</code>, programs can "opt in" to
 asynchrony in specific spots. Additionally, special functionality like
 <code>Promise.all(...)</code> is necessary to express the idea that an operation should
