@@ -1,6 +1,7 @@
-# Summary
+# The Denim Programming Language
 
-- [Overview](./overview.md)
+[Overview](./overview.md)
+
 - [Journal](./journal/README.md)
   - [Redesign (Aug 2024)](./journal/2024_08_07_redesign.md)
   - [Hot Takes (Sept 2023)](./journal/2023_09_16_hot_takes.md)
