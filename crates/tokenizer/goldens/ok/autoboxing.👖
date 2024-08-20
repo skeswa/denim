@@ -12,6 +12,21 @@ fn autoboxed_foo() -> string? {
 let mut x: int! = Ok(1);
 x = 2;
 
-// Autoboxing works in structs too!
-struct X(Option<int>);
-let x = X(1234);
+// Autoboxing works in tuples too!
+type X = (Option<int>);
+let x: X = (1234);
+
+let optional_num: i32? = 123; // `123` gets turned into `Some(123)` automatically
+fn box_me(n: i32) -> i32? {
+  n
+}
+
+let str_result: str! = "hello"; // `"hello"` gets turned into `Ok("hello")` automatically
+fn box_me_again(s: str) -> str! {
+  s
+}
+
+let optional_bool_result: bool?! = true; // `true` gets turned into `Ok(Some(true))` automatically
+fn box_me_baby_one_more_time(b: bool) -> bool!? {
+  b
+}
