@@ -6,6 +6,7 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.86"
 clap = { version = "4.5.15", features = ["derive"] }
+itertools = "0.13.0"
 proc-macro2 = "1.0.86"
 quote = "1.0.36"
 serde = { version = "1.0.208", features = ["derive"] }

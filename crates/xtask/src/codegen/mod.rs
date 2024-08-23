@@ -1,3 +1,4 @@
+mod ast_nodes_src;
 mod ast_src;
 mod ast_tokens_src;
 mod codegen_grammar_files;

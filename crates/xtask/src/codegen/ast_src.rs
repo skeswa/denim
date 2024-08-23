@@ -132,7 +132,7 @@ pub enum Field {
 }
 
 impl Field {
-    fn is_many(&self) -> bool {
+    pub fn is_many(&self) -> bool {
         matches!(
             self,
             Field::Node {
@@ -141,7 +141,7 @@ impl Field {
             }
         )
     }
-    fn token_kind(&self) -> Option<proc_macro2::TokenStream> {
+    pub fn token_kind(&self) -> Option<proc_macro2::TokenStream> {
         match self {
             Field::Token(token) => {
                 let token: proc_macro2::TokenStream = token.parse().unwrap();
@@ -150,7 +150,7 @@ impl Field {
             _ => None,
         }
     }
-    fn method_name(&self) -> String {
+    pub fn method_name(&self) -> String {
         match self {
             Field::Token(name) => {
                 let name = match name.as_str() {
@@ -196,7 +196,7 @@ impl Field {
             }
         }
     }
-    fn ty(&self) -> proc_macro2::Ident {
+    pub fn ty(&self) -> proc_macro2::Ident {
         match self {
             Field::Token(_) => format_ident!("SyntaxToken"),
             Field::Node { ty, .. } => format_ident!("{}", ty),

@@ -175,8 +175,7 @@ impl SyntaxKindsSrc {
             .collect::<Vec<_>>();
 
         let ast = quote! {
-            #![allow(bad_style, missing_docs, unreachable_pub)]
-            use crate::Edition;
+            #![allow(bad_style, dead_code, missing_docs, unreachable_pub)]
 
             /// The kind of syntax node, e.g. `IDENT`, `USE_KW`, or `STRUCT`.
             #[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Debug)]
@@ -203,12 +202,12 @@ impl SyntaxKindsSrc {
             impl SyntaxKind {
                 /// Checks whether this syntax kind is a strict keyword for the given edition.
                 /// Strict keywords are identifiers that are always considered keywords.
-                pub fn is_strict_keyword(self, edition: Edition) -> bool {
+                pub fn is_strict_keyword(self) -> bool {
                     matches!(self, #(#strict_keywords_variants)|*)
                 }
 
                 /// Checks whether this syntax kind is a strict or weak keyword for the given edition.
-                pub fn is_keyword(self, edition: Edition) -> bool {
+                pub fn is_keyword(self) -> bool {
                     matches!(self, #(#strict_keywords_variants)|*)
                 }
 
@@ -220,7 +219,7 @@ impl SyntaxKindsSrc {
                     matches!(self, #(#literals)|*)
                 }
 
-                pub fn from_keyword(ident: &str, edition: Edition) -> Option<SyntaxKind> {
+                pub fn from_keyword(ident: &str) -> Option<SyntaxKind> {
                     let kw = match ident {
                         #(#strict_keywords => #strict_keywords_variants,)*
                         _ => return None,
