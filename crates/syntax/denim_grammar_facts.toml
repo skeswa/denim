@@ -1,0 +1,142 @@
+# Names of AST tokens used while parsing:
+ast_token_names = [
+    "Whitespace",
+    "Comment",
+    "String",
+    "ByteString",
+    "CString",
+    "IntNumber",
+    "FloatNumber",
+    "Char",
+    "Byte",
+    "Ident",
+]
+# Keywords that are only keywords in very specific parsing contexts:
+contextual_keywords = [
+    "builtin",
+    "offset_of",
+    "format_args",
+    "asm",
+    "macro_rules",
+    "union",
+    "default",
+    "raw",
+    "dyn",
+    "auto",
+    "yeet",
+]
+# Rules in the .ungram that are implemented in the parser itself instead of the
+# grammar specification:
+manually_implemented_rule = [
+    "lhs",
+    "rhs",
+    "then_branch",
+    "else_branch",
+    "start",
+    "end",
+    "op",
+    "index",
+    "base",
+    "value",
+    "trait",
+    "self_ty",
+    "iterable",
+    "condition",
+    "args",
+    "body",
+]
+# Nodes in the .ungram that can have doc comments on them:
+nodes_with_doc_comments = [
+    "SourceFile",
+    "Fn",
+    "Struct",
+    "Union",
+    "RecordField",
+    "TupleField",
+    "Enum",
+    "Variant",
+    "Trait",
+    "TraitAlias",
+    "Module",
+    "Static",
+    "Const",
+    "TypeAlias",
+    "Impl",
+    "ExternBlock",
+    "ExternCrate",
+    "MacroCall",
+    "MacroRules",
+    "MacroDef",
+    "Use",
+]
+# Words that should be treated as keywords even though they aren't formally
+# defined as keywords yet.
+reserved_words = [
+    "abstract",
+    "become",
+    "box",
+    "do",
+    "final",
+    "macro",
+    "override",
+    "priv",
+    "typeof",
+    "unsized",
+    "virtual",
+    "yield",
+]
+
+# Maps pieces of punctuation to words that can be used in source code.
+[punctuation-names]
+"$" = "DOLLAR"
+";" = "SEMICOLON"
+"," = "COMMA"
+"(" = "L_PAREN"
+")" = "R_PAREN"
+"{" = "L_CURLY"
+"}" = "R_CURLY"
+"[" = "L_BRACK"
+"]" = "R_BRACK"
+"<" = "L_ANGLE"
+">" = "R_ANGLE"
+"@" = "AT"
+"#" = "POUND"
+"~" = "TILDE"
+"?" = "QUESTION"
+"&" = "AMP"
+"|" = "PIPE"
+"+" = "PLUS"
+"*" = "STAR"
+"/" = "SLASH"
+"^" = "CARET"
+"%" = "PERCENT"
+"_" = "UNDERSCORE"
+"." = "DOT"
+".." = "DOT2"
+"..." = "DOT3"
+"..=" = "DOT2EQ"
+":" = "COLON"
+"::" = "COLON2"
+"=" = "EQ"
+"==" = "EQ2"
+"=>" = "FAT_ARROW"
+"!" = "BANG"
+"!=" = "NEQ"
+"-" = "MINUS"
+"->" = "THIN_ARROW"
+"<=" = "LTEQ"
+">=" = "GTEQ"
+"+=" = "PLUSEQ"
+"-=" = "MINUSEQ"
+"|=" = "PIPEEQ"
+"&=" = "AMPEQ"
+"^=" = "CARETEQ"
+"/=" = "SLASHEQ"
+"*=" = "STAREQ"
+"%=" = "PERCENTEQ"
+"&&" = "AMP2"
+"||" = "PIPE2"
+"<<" = "SHL"
+">>" = "SHR"
+"<<=" = "SHLEQ"
+">>=" = "SHREQ"
