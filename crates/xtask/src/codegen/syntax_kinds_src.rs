@@ -12,6 +12,7 @@ use quote::{format_ident, quote};
 #[derive(Copy, Clone, Debug)]
 pub struct SyntaxKindsSrc {
     pub punct: &'static [(String, String)],
+    pub contextual_keywords: &'static [String],
     pub keywords: &'static [String],
     pub literals: &'static [&'static str],
     pub tokens: &'static [&'static str],
@@ -106,6 +107,7 @@ impl SyntaxKindsSrc {
             .collect();
         let nodes = Vec::leak(nodes);
         nodes.sort();
+        let contextual_keywords = Vec::leak(grammar_facts.contextual_keywords.clone());
         let keywords = Vec::leak(keywords);
         let literals = Vec::leak(literals);
         literals.sort();
@@ -115,6 +117,7 @@ impl SyntaxKindsSrc {
         SyntaxKindsSrc {
             punct: Vec::leak(puncts),
             nodes,
+            contextual_keywords,
             keywords,
             literals,
             tokens,
@@ -148,6 +151,7 @@ impl SyntaxKindsSrc {
             "Self" => format_ident!("SELF_TYPE_KW"),
             name => format_ident!("{}_KW", to_upper_snake_case(name)),
         };
+
         let strict_keywords = self.keywords;
         let strict_keywords_variants = strict_keywords
             .iter()
@@ -155,6 +159,14 @@ impl SyntaxKindsSrc {
             .map(fmt_kw_as_variant)
             .collect::<Vec<_>>();
         let strict_keywords_tokens = strict_keywords.iter().map(|it| format_ident!("{it}"));
+
+        let contextual_keywords = self.contextual_keywords;
+        let contextual_keywords_variants = contextual_keywords
+            .iter()
+            .map(|s| s.as_str())
+            .map(fmt_kw_as_variant)
+            .collect::<Vec<_>>();
+        let contextual_keywords_tokens = contextual_keywords.iter().map(|it| format_ident!("{it}"));
 
         let literals = self
             .literals
@@ -189,6 +201,7 @@ impl SyntaxKindsSrc {
                 EOF,
                 #(#punctuation,)*
                 #(#strict_keywords_variants,)*
+                #(#contextual_keywords_variants,)*
                 #(#literals,)*
                 #(#tokens,)*
                 #(#nodes,)*
@@ -240,6 +253,7 @@ impl SyntaxKindsSrc {
             macro_rules! T {
                 #([#punctuation_values] => { $crate::SyntaxKind::#punctuation };)*
                 #([#strict_keywords_tokens] => { $crate::SyntaxKind::#strict_keywords_variants };)*
+                #([#contextual_keywords_tokens] => { $crate::SyntaxKind::#contextual_keywords_variants };)*
                 [lifetime_ident] => { $crate::SyntaxKind::LIFETIME_IDENT };
                 [int_number] => { $crate::SyntaxKind::INT_NUMBER };
                 [ident] => { $crate::SyntaxKind::IDENT };
