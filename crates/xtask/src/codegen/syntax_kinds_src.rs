@@ -29,10 +29,15 @@ impl SyntaxKindsSrc {
         let mut keywords: Vec<String> = Vec::new();
         let mut tokens: Vec<&_> = TOKENS.to_vec();
         let mut literals: Vec<&_> = Vec::new();
-        let puncts: Vec<_> = grammar_facts
-            .punctuation_names
-            .iter()
-            .map(|(k, v)| (k.to_owned(), v.to_owned()))
+
+        let mut sorted_punct_entries: Vec<_> = grammar_facts.punctuation_names.iter().collect();
+
+        // Ensure that `puncts` has a stable order.
+        sorted_punct_entries.sort_by(|a, b| a.1.cmp(&b.1));
+
+        let puncts: Vec<(String, String)> = sorted_punct_entries
+            .into_iter()
+            .map(|(k, v)| (k.to_string(), v.to_string()))
             .collect();
 
         let mut used_puncts = vec![false; puncts.len()];
