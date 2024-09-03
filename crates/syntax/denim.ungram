@@ -87,8 +87,7 @@ Attr =
   '#' '!'? '[' Meta ']'
 
 Meta =
-  'unsafe' '(' Path ('=' Expr | TokenTree)? ')'
-| Path ('=' Expr | TokenTree)?
+  Path ('=' Expr | TokenTree)?
 
 TokenTree =
   '(' ')'
