@@ -20,135 +20,167 @@
 //   (A)         -- same as A
 //   label:A     -- suggested name for field of AST node
 
-// TODO(skeswa):
-// - BlockExpr
-// - Pat
-// - ParamList
-// - RetType
-// - Type
-
-Fn =
-  Visibility?
-  'fn' Name ParamList RetType?
-  (body:BlockExpr | ';')
-
-FootnoteItem =
-  PackageRef
-
-LambdaParamList =
-  '|' (Param (',' Param)* ','?)? '|'
-
-LogicItem =
-  Fn
+//*************************//
+//         Paths           //
+//*************************//
 
 Name =
-  'ident' | 'self'
+  '#ident' | 'self'
 
 NameRef =
-  'ident' | 'int_number' | 'self' | 'Self'
-
-Param =
-  Pat (':' Type)?
-| Type
-| '...'
-
-ParamList =
-  '('(
-    SelfParam
-  | (SelfParam ',')? (Param (',' Param)* ','?)?
-  )')'
+  '#ident' | '@int_number' | 'self' | 'super' | 'crate' | 'Self'
 
 Path =
   (qualifier:Path '::')? segment:PathSegment
 
 PathSegment =
   '::'? NameRef
+| NameRef GenericArgList?
+| NameRef ParamList RetType?
+| '<' Type ('as' PathType)? '>'
 
-PackageRef =
-  'from' 'string' Use? Show? ';'
+
+//*************************//
+//        Generics         //
+//*************************//
+
+GenericArgList =
+  '::'? '<' (GenericArg (',' GenericArg)* ','?)? '>'
+
+GenericArg =
+  TypeArg
+| AssocTypeArg
+| ConstArg
+
+TypeArg =
+  Type
+
+AssocTypeArg =
+  NameRef
+  (GenericArgList | ParamList RetType?)?
+  (':' TypeBoundList | ('=' Type | ConstArg))
+
+ConstArg =
+  Expr
+
+GenericParamList =
+  '<' (GenericParam (',' GenericParam)* ','?)? '>'
+
+GenericParam =
+  TypeParam
+
+TypeParam =
+  Attr* Name (':' TypeBoundList?)?
+  ('=' default_type:Type)?
+
+WhereClause =
+  'where' predicates:(WherePred (',' WherePred)* ','?)
+
+WherePred =
+  ('for' GenericParamList)?  Type ':' TypeBoundList?
+
+//*************************//
+//          Items          //
+//*************************//
+
+SourceFile =
+  Attr*
+  Item*
+
+Item =
+  Enum
+| Fn
+| Impl
+| Trait
+| TypeAlias
+
+ItemList =
+  '{' Attr* Item* '}'
+
+Rename =
+  'as' (Name | '_')
+
+Fn =
+ Attr* Visibility?
+ 'fn' Name GenericParamList? ParamList RetType? WhereClause?
+ (body:BlockExpr | ';')
+
+ParamList =
+  '('(
+    SelfParam
+  | (SelfParam ',')? (Param (',' Param)* ','?)?
+  )')'
+| '|' (Param (',' Param)* ','?)? '|'
+
+SelfParam =
+  Attr* 'mut'? Name
+
+Param =
+  Attr* (
+    Pat (':' Type)?
+  | Type
+  | '...'
+  )
 
 RetType =
   '->' Type
 
-SelfParam =
-  'mut'? 'self'
+TypeAlias =
+  Attr* Visibility?
+  'type' Name GenericParamList? (':' TypeBoundList?)? WhereClause?
+  ('=' Type)? ';'
 
-Show =
-  'show' UsableList
+RecordFieldList =
+ '{' fields:(RecordField (',' RecordField)* ','?)? '}'
 
-SourceFile =
-  SourceFileLogic? SourceFileFootnote?
+RecordField =
+  Attr* Name ':' Type
 
-SourceFileFootnote =
-  '---'
-  FootnoteItem*
+TupleFieldList =
+  '(' fields:(TupleField (',' TupleField)* ','?)? ')'
 
-SourceFileLogic =
-  LogicItem*
+TupleField =
+  Attr* Visibility?
+  Type
 
-Usable =
-  (Path? '::')? ('*' | UsableList)
-| Path
+FieldList =
+  RecordFieldList
+| TupleFieldList
 
-UsableList =
-  Usable (',' Usable)* ','?
+Enum =
+  Attr* Visibility?
+  'enum' Name GenericParamList? WhereClause?
+  VariantList
 
-Use =
-  'use' UsableList
+VariantList =
+ '{' (Variant (',' Variant)* ','?)? '}'
+
+Variant =
+  Attr* Visibility?
+  Name FieldList? ('=' Expr)?
+
+Trait =
+  Attr* Visibility?
+  'trait' Name GenericParamList?
+  (':' TypeBoundList?)? WhereClause? AssocItemList
+
+AssocItemList =
+  '{' Attr* AssocItem* '}'
+
+AssocItem =
+  Fn
+
+Impl =
+  Attr* Visibility?
+  'impl' GenericParamList? (trait:Type 'for')? self_ty:Type WhereClause?
+  AssocItemList
 
 Visibility =
   'pub'
 
-// DECLARATIONS ////////////////////////////////////////////////////////////////
-
-// Rust calls these "items":
-// https://doc.rust-lang.org/beta/reference/items.html
-
-Decl =
-  FnDecl
-| ImplDecl
-
-FnDecl =
-  Visibility?
-  'fn' Name ParamList RetType?
-  (body:BlockExpr | ';')
-
-ImplDecl =
-  Visibility?
-  'impl' ('trait'? trait:Type 'for')? self_ty:Type
-  members:('{' FnDecl* '}')
-
-// EXPRESSIONS /////////////////////////////////////////////////////////////////
-
-Expr =
-  ArrayExpr
-| BinaryExpr
-| LambdaExpr
-
-ArrayExpr =
-  '[' (Expr (',' Expr)* ','?)? ']'
-
-BinaryExpr =
-  lhs:Expr
-  op:(
-    'or' | 'and'
-  | '==' | '!=' | '<=' | '<'
-  | '+' | '*' | '-' | '/' | '~/' | '%' | '**'
-  | '&' | '|'
-  | '='
-  )
-  rhs:Expr
-
-LambdaExpr =
-  LambdaParamList RetType? body:Expr
-
-// TODO(skeswa): I was here
-
-// PATTERNS ////////////////////////////////////////////////////////////////////
-
-
-
-// STATEMENTS //////////////////////////////////////////////////////////////////
+//****************************//
+// Statements and Expressions //
+//****************************//
 
 Stmt =
   ';'
@@ -156,55 +188,349 @@ Stmt =
 | Item
 | LetStmt
 
+LetStmt =
+  Attr* 'let' Pat (':' Type)?
+  '=' initializer:Expr
+  ';'
+
 ExprStmt =
   Expr ';'?
 
-LetStmt =
-  'let' Pat (':' Type)?
-  '=' initializer:Expr
-  ('else' BlockExpr)?
-  ';'
+Expr =
+  AsyncExpr
+| AwaitExpr
+| BinExpr
+| BlockExpr
+| BreakExpr
+| CallExpr
+| CastExpr
+| ClosureExpr
+| ContinueExpr
+| FieldExpr
+| ForExpr
+| FnRefExpr
+| IfExpr
+| IndexExpr
+| ListExpr
+| Literal
+| LoopExpr
+| MapExpr
+| MatchExpr
+| MethodCallExpr
+| MutExpr
+| NegExpr
+| NotExpr
+| ParenExpr
+| PathExpr
+| RangeExpr
+| ReturnExpr
+| SetExpr
+| TryExpr
+| TupleExpr
+| WhileExpr
+| LetExpr
+| UnderscoreExpr
 
-// TYPES ///////////////////////////////////////////////////////////////////////
+Literal =
+  Attr* value:(
+    '@int_number' | '@float_number'
+  | '@string' | '@raw_string'
+  | '@char' | '@byte'
+  | 'true' | 'false'
+  )
+
+PathExpr =
+  Attr* Path
+
+StmtList =
+  '{'
+    Attr*
+    statements:Stmt*
+    tail_expr:Expr?
+  '}'
+
+TryExpr =
+  Attr* Expr '.' 'try'
+
+MutExpr =
+  Attr* Expr '.' 'mut'
+
+FnRefExpr =
+  Attr* Expr '.' 'fn'
+
+BlockExpr =
+  Attr* Label? StmtList
+
+NegExpr =
+  Attr* '-' Expr
+
+NotExpr =
+  Attr* 'not' Expr
+| Attr* Expr '.' 'not'
+
+BinExpr =
+  Attr*
+  lhs:Expr
+  op:(
+    'or' | 'and'
+  | '==' | '!=' | '===' | '!==' | '<=' | '<'
+  | '+' | '*' | '-' | '/' | '%'
+  | '='
+  )
+  rhs:Expr
+
+CastExpr =
+  Attr* Expr '.' 'as' '(' Type ')'
+
+ParenExpr =
+  Attr* '(' Attr* Expr ')'
+
+ListExpr =
+  Attr* '[' (ListEntry (',' ListEntry)* ','?) ']'
+
+ListEntry =
+  Attr* Expr
+| '..' spread:Expr
+
+MapExpr =
+  Attr* '[' (MapEntry (',' MapEntry)* ','?) ']'
+
+MapEntry =
+  Attr* Expr ':' Expr
+| '..' spread:Expr
+
+SetExpr =
+  Attr* '[' (SetEntry (',' SetEntry)* ','?) ']'
+
+SetEntry =
+  Attr* ':' Expr
+| '..' spread:Expr
+
+IndexExpr =
+  Attr* base:Expr '[' index:Expr ']'
+
+TupleExpr =
+  Attr* '(' Attr* fields:(Expr (',' Expr)* ','?)? ')'
+
+RecordExpr =
+  RecordExprFieldList
+
+RecordExprFieldList =
+  '{'
+    Attr*
+    fields:(RecordExprField (',' RecordExprField)* ','?)?
+    ('..' spread:Expr?)?
+  '}'
+
+RecordExprField =
+  Attr* (NameRef ':')? Expr
+
+CallExpr =
+  Attr* Expr ArgList
+
+ArgList =
+  '(' args:(Expr (',' Expr)* ','?)? ')'
+
+MethodCallExpr =
+  Attr* receiver:Expr '.' NameRef GenericArgList? ArgList
+
+FieldExpr =
+  Attr* Expr '.' NameRef
+
+ClosureExpr =
+  Attr* ParamList RetType?
+  body:Expr
+
+IfExpr =
+  Attr* (('if' condition:Expr) | (condition.Expr '.' 'if'))
+  then_branch:BlockExpr
+  ('else' else_branch:(IfExpr | BlockExpr))?
+
+LoopExpr =
+  Attr* Label? 'loop'
+  loop_body:BlockExpr
+
+ForExpr =
+  Attr* Label? 'for' Pat 'in' iterable:Expr
+  loop_body:BlockExpr
+
+WhileExpr =
+  Attr* Label? 'while' condition:Expr
+  loop_body:BlockExpr
+
+BreakExpr =
+  Attr* 'break'
+
+ContinueExpr =
+  Attr* 'continue'
+
+RangeExpr =
+  Attr* start:Expr? op:('..' | '..=') end:Expr?
+
+MatchExpr =
+  Attr* 'match' Expr MatchArmList
+| Attr* Expr '.' 'match' MatchArmList
+
+MatchArmList =
+  '{'
+    Attr*
+    arms:MatchArm*
+  '}'
+
+MatchArm =
+  Attr* Pat guard:MatchGuard? '=>' Expr ','?
+
+MatchGuard =
+  'if' condition:Expr
+
+ReturnExpr =
+  Attr* 'return' Expr?
+
+LetExpr =
+  Attr* 'let' Pat '=' Expr
+
+UnderscoreExpr =
+  Attr* '_'
+
+AsyncExpr =
+  Attr* Expr '.' 'async'
+
+AwaitExpr =
+  Attr* Expr '.' 'await'
+
+//*************************//
+//          Types          //
+//*************************//
 
 Type =
-  ArrayType
-| FnType
+  FnPtrType
 | InferType
+| ListType
 | MapType
+| MutType
 | NeverType
 | ParenType
 | PathType
+| RecordType 
+| RefType
 | SetType
 | TupleType
+| UnionType
 | UnknownType
 
-ArrayType =
-  '[' Type ']'
+RecordType =
+ '{' fields:(RecordTypeField (',' RecordTypeField)* ','?)? '}'
 
-FnType =
-  'fn' ParamList RetType
-
-InferType =
-  'infer'
-
-MapType =
-  '{' Type ':' Type '}'
-
-NeverType =
-  'never'
+RecordTypeField =
+  Attr* Name ':' Type
 
 ParenType =
   '(' Type ')'
 
+NeverType =
+  'never'
+
+UnknownType =
+  'unknown'
+| '*'
+
 PathType =
   Path
-
-SetType =
-  '{' Type '}'
 
 TupleType =
   '(' fields:(Type (',' Type)* ','?)? ')'
 
-UnknownType =
-  'unknown'
+MutType =
+  'mut' Type
+
+ListType =
+  '[' Type ']'
+
+MapType =
+  '[' Type ':' Type ']'
+
+SetType =
+  '[' ':' Type ']'
+
+SliceType =
+  '[' Type ']'
+
+InferType =
+  '_'
+
+FnPtrType =
+  'fn' ParamList RetType?
+
+UnionType =
+  ('|'? Type ('|' Type)*)
+
+TypeBoundList =
+  bounds:(TypeBound ('+' TypeBound)* '+'?)
+
+TypeBound =
+  Type
+
+//************************//
+//        Patterns        //
+//************************//
+
+Pat =
+  IdentPat
+| AliasedTuplePat
+| RestPat
+| LiteralPat
+| OrPat
+| ParenPat
+| PathPat
+| WildcardPat
+| RangePat
+| RecordPat
+| SlicePat
+| TuplePat
+
+LiteralPat =
+  '-'? Literal
+
+IdentPat =
+  Attr* Name ('@' Pat)?
+
+WildcardPat =
+  '_'
+
+RangePat =
+  // 1..
+  start:Pat op:('..' | '..=')
+  // 1..2
+  | start:Pat op:('..' | '..=') end:Pat
+  // ..2
+  | op:('..' | '..=') end:Pat
+
+RecordPat =
+  '{'
+    fields:(RecordPatField (',' RecordPatField)* ','?)?
+    RestPat?
+  '}'
+
+RecordPatField =
+  Attr* (NameRef ':')? Pat
+
+AliasedTuplePat =
+   Path '(' fields:(Pat (',' Pat)* ','?)? ')'
+
+TuplePat =
+   '(' fields:(Pat (',' Pat)* ','?)? ')'
+
+ParenPat =
+  '(' Pat ')'
+
+SlicePat =
+  '[' (Pat (',' Pat)* ','?)? ']'
+
+PathPat =
+  Path
+
+OrPat =
+  (Pat ('|' Pat)* '|'?)
+
+RestPat =
+  Attr* '..'
