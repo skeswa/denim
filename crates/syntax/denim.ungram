@@ -496,8 +496,7 @@ NeverType =
   'never'
 
 UnknownType =
-  'unknown'
-| '*'
+  '*'
 
 OptionType =
   Type '?'

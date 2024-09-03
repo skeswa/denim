@@ -1560,8 +1560,6 @@ pub struct UnknownType {
 impl UnknownType {
     #[inline]
     pub fn star_token(&self) -> Option<SyntaxToken> { support::token(&self.syntax, T![*]) }
-    #[inline]
-    pub fn unknown_token(&self) -> Option<SyntaxToken> { support::token(&self.syntax, T![unknown]) }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
