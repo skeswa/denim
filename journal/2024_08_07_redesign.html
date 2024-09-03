@@ -234,7 +234,7 @@
 <li>Aggressive complexity containment
 <ul>
 <li><input disabled="" type="checkbox" checked=""/>
-<a href="#unknown-not-any"><code>unknown</code> not <code>any</code></a></li>
+<a href="#unknown-not-any"><code>*</code> not <code>any</code></a></li>
 <li><input disabled="" type="checkbox" checked=""/>
 <a href="#mutation-semantics">Mutation semantics</a></li>
 </ul>
@@ -503,18 +503,19 @@ impl (i32, i32, i32) {
   }
 }
 <span class="boring">}</span></code></pre></pre>
-<h3 id="unknown-not-any"><a class="header" href="#unknown-not-any"><code>unknown</code> not <code>any</code></a></h3>
+<h3 id="-not-any"><a class="header" href="#-not-any"><code>*</code> not <code>any</code></a></h3>
+<p>Denim uses the equivalent of TypeScript's <code>unknown</code>, but calls it <code>*</code> instead.</p>
 <pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
 </span><span class="boring">fn main() {
 </span>let some_json = "{hello: \"world\"}";
 
-let parsed_json: {str: unknown} = parse_json(some_json);
+let parsed_json: {str: *} = parse_json(some_json);
 
 let world = some_json["hello"];
 
-world.to_lower.print(&amp;mesage); // Compile time error because world is `unknown`
+world.lower.print(&amp;mesage); // Compile time error because `world` is `*`.
 
-world.as(str).to_lower.print(&amp;mesage); // 👌🏾
+world.as(str).lower.print(&amp;mesage); // 👌🏾
 ---
 from convert use parse_json;
 <span class="boring">}</span></code></pre></pre>
@@ -606,7 +607,7 @@ do {
   print("hello world")
 }
 
-fn do_with_args(body: fn(args: unknown) -&gt; void) {
+fn do_with_args(body: fn(args: *) -&gt; void) {
   body("args")
 }
 
@@ -741,7 +742,7 @@ Strict param labeling</li>
 <li><input disabled="" type="checkbox" checked=""/>
 Imports at the bottom</li>
 <li><input disabled="" type="checkbox"/>
-<code>unknown</code> not <code>any</code></li>
+<code>*</code> not <code>any</code></li>
 <li><input disabled="" type="checkbox"/>
 Mutation semantics</li>
 <li><input disabled="" type="checkbox"/>
