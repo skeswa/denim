@@ -5,10 +5,7 @@ use quote::{format_ident, quote};
 use crate::{codegen::english_util::to_upper_snake_case, CodegenCommands};
 
 use super::{
-    ast_src::AstSrc,
-    codegen_util::{add_preamble, reformat, write_doc_comment},
-    english_util::to_pascal_case,
-    syntax_kinds_src::SyntaxKindsSrc,
+    ast_src::AstSrc, codegen_util::{add_preamble, reformat, write_doc_comment}, english_util::to_pascal_case, grammar_facts::GrammarFacts, syntax_kinds_src::SyntaxKindsSrc
 };
 use itertools::Itertools;
 
@@ -22,7 +19,7 @@ impl<'a, 'b> AstNodesSrc<'a, 'b> {
         AstNodesSrc(ast_src, syntax_kinds_src)
     }
 
-    pub fn print(self, command: &CodegenCommands) -> String {
+    pub fn print(self, command: &CodegenCommands, grammar_facts: &GrammarFacts) -> String {
         let (node_defs, node_boilerplate_impls): (Vec<_>, Vec<_>) = self.0
                 .nodes
                 .iter()
@@ -43,9 +40,9 @@ impl<'a, 'b> AstNodesSrc<'a, 'b> {
                         });
 
                     let methods = node.fields.iter().map(|field| {
-                        let method_name = format_ident!("{}", field.method_name());
+                        let method_name = format_ident!("{}", field.method_name(grammar_facts));
                         let ty = field.ty();
-
+                        
                         if field.is_many() {
                             quote! {
                                 #[inline]

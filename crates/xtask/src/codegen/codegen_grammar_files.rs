@@ -13,7 +13,7 @@ use crate::{
 use super::{ast_nodes_src::AstNodesSrc, grammar_facts::GrammarFacts};
 
 pub fn codegen_grammar_files(command: &CodegenCommands, project_root: PathBuf, check: bool) {
-    let grammar = read_to_string(project_root.join("crates/syntax/references/rust.ungram"))
+    let grammar = read_to_string(project_root.join("crates/syntax/denim.ungram"))
         .unwrap()
         .parse::<Grammar>()
         .unwrap();
@@ -50,7 +50,7 @@ pub fn codegen_grammar_files(command: &CodegenCommands, project_root: PathBuf, c
 
     let ast_nodes_src = AstNodesSrc::generate(&ast_src, &syntax_kinds_src);
 
-    let ast_nodes_file_content = ast_nodes_src.print(command);
+    let ast_nodes_file_content = ast_nodes_src.print(command, &grammar_facts);
     let ast_nodes_file_path = project_root.join("crates/syntax/src/ast/generated/nodes.rs");
 
     ensure_file_contents(

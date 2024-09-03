@@ -129,6 +129,13 @@ fn lower_rule(
                 acc.push(field);
                 return;
             }
+
+            println!(
+                "{:?} {:?}",
+                grammar[grammar.tokens().nth(10).unwrap()],
+                grammar[grammar.iter().nth(41).unwrap()],
+            );
+
             panic!("unhandled rule: {rule:?}")
         }
         Rule::Labeled { label: l, rule } => {

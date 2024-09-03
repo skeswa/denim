@@ -80,22 +80,83 @@ WherePred =
   ('for' GenericParamList)?  Type ':' TypeBoundList?
 
 //*************************//
+//          Macro          //
+//*************************//
+
+Attr =
+  '#' '!'? '[' Meta ']'
+
+Meta =
+  'unsafe' '(' Path ('=' Expr | TokenTree)? ')'
+| Path ('=' Expr | TokenTree)?
+
+TokenTree =
+  '(' ')'
+| '{' '}'
+| '[' ']'
+
+//*************************//
 //          Items          //
 //*************************//
 
 SourceFile =
-  Attr*
-  Item*
+  code:CodeSection?
+  ('---' meta:MetaSection)?
 
-Item =
+CodeSection =
+  Attr*
+  CodeItem*
+
+MetaSection =
+  Attr*
+  MetaItem*
+
+CodeItem =
   Enum
 | Fn
 | Impl
 | Trait
 | TypeAlias
 
-ItemList =
-  '{' Attr* Item* '}'
+MetaItem =
+  DepItem*
+
+DepPathSegment =
+  '/'? NameRef
+
+ExternalDepPath =
+  (qualifier:ExternalDepPath '/')? segment:DepPathSegment
+
+ParentDirDepPathSegment =
+  '..' '/'
+
+LocalDepPath =
+  '.' '/' ExternalDepPath
+| ParentDirDepPathSegment ParentDirDepPathSegment* ExternalDepPath
+
+RepoDepPath =
+  '~' '/' ExternalDepPath
+
+DepPath =
+  ExternalDepPath
+| RepoDepPath
+| LocalDepPath
+
+Use =
+  ('use' | 'show') UseTreeList ';'
+
+UseTree =
+  (Path? '::')? ('*' | UseTreeExpansion)
+| Path Rename?
+
+UseTreeList =
+  UseTree (',' UseTree)* ','?
+
+UseTreeExpansion =
+  '{' UseTreeList? '}'
+
+DepItem =
+  Attr* 'from' DepPath use_or_show:Use
 
 Rename =
   'as' (Name | '_')
@@ -165,10 +226,7 @@ Trait =
   (':' TypeBoundList?)? WhereClause? AssocItemList
 
 AssocItemList =
-  '{' Attr* AssocItem* '}'
-
-AssocItem =
-  Fn
+  '{' Attr* Fn* '}'
 
 Impl =
   Attr* Visibility?
@@ -185,7 +243,7 @@ Visibility =
 Stmt =
   ';'
 | ExprStmt
-| Item
+| CodeItem
 | LetStmt
 
 LetStmt =
@@ -259,7 +317,7 @@ FnRefExpr =
   Attr* Expr '.' 'fn'
 
 BlockExpr =
-  Attr* Label? StmtList
+  Attr* StmtList
 
 NegExpr =
   Attr* '-' Expr
@@ -328,11 +386,21 @@ RecordExprField =
 CallExpr =
   Attr* Expr ArgList
 
+Arg =
+  (label:Name ':')? value:Expr
+
 ArgList =
-  '(' args:(Expr (',' Expr)* ','?)? ')'
+  '(' args:(Arg (',' Arg)* ','?)? ')'
+
+MaybeSelfifiedArg =
+  '&' self_label:Name
+| Arg 
+
+MethodCallArgList =
+  '(' args:(MaybeSelfifiedArg (',' Arg)* ','?)? ')'
 
 MethodCallExpr =
-  Attr* receiver:Expr '.' NameRef GenericArgList? ArgList
+  Attr* receiver:Expr '.' NameRef GenericArgList? MethodCallArgList
 
 FieldExpr =
   Attr* Expr '.' NameRef
@@ -342,20 +410,19 @@ ClosureExpr =
   body:Expr
 
 IfExpr =
-  Attr* (('if' condition:Expr) | (condition.Expr '.' 'if'))
-  then_branch:BlockExpr
+  Attr* 'if' condition:Expr then_branch:BlockExpr
   ('else' else_branch:(IfExpr | BlockExpr))?
 
 LoopExpr =
-  Attr* Label? 'loop'
+  Attr* 'loop'
   loop_body:BlockExpr
 
 ForExpr =
-  Attr* Label? 'for' Pat 'in' iterable:Expr
+  Attr* 'for' Pat 'in' iterable:Expr
   loop_body:BlockExpr
 
 WhileExpr =
-  Attr* Label? 'while' condition:Expr
+  Attr* 'while' condition:Expr
   loop_body:BlockExpr
 
 BreakExpr =
@@ -409,10 +476,11 @@ Type =
 | MapType
 | MutType
 | NeverType
+| OptionType
 | ParenType
 | PathType
 | RecordType 
-| RefType
+| ResultType
 | SetType
 | TupleType
 | UnionType
@@ -433,6 +501,12 @@ NeverType =
 UnknownType =
   'unknown'
 | '*'
+
+OptionType =
+  Type '?'
+
+ResultType =
+  Type '!'
 
 PathType =
   Path
@@ -462,7 +536,7 @@ FnPtrType =
   'fn' ParamList RetType?
 
 UnionType =
-  ('|'? Type ('|' Type)*)
+  (Type ('|' Type)*)
 
 TypeBoundList =
   bounds:(TypeBound ('+' TypeBound)* '+'?)

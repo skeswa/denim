@@ -79,7 +79,7 @@ impl AstSrc {
     pub fn extract_struct_traits(&mut self, grammar_facts: &GrammarFacts) {
         for node in &mut self.nodes {
             for (name, methods) in TRAITS {
-                node.extract_struct_trait(name, methods);
+                node.extract_struct_trait(name, methods, grammar_facts);
             }
         }
 
@@ -100,10 +100,15 @@ pub struct AstNodeSrc {
 }
 
 impl AstNodeSrc {
-    fn extract_struct_trait(&mut self, trait_name: &str, methods: &[&str]) {
+    fn extract_struct_trait(
+        &mut self,
+        trait_name: &str,
+        methods: &[&str],
+        grammar_facts: &GrammarFacts,
+    ) {
         let mut to_remove = Vec::new();
         for (i, field) in self.fields.iter().enumerate() {
-            let method_name = field.method_name();
+            let method_name = field.method_name(grammar_facts);
             if methods.iter().any(|&it| it == method_name) {
                 to_remove.push(i);
             }
@@ -150,41 +155,24 @@ impl Field {
             _ => None,
         }
     }
-    pub fn method_name(&self) -> String {
+    pub fn method_name(&self, grammar_facts: &GrammarFacts) -> String {
         match self {
             Field::Token(name) => {
-                let name = match name.as_str() {
-                    ";" => "semicolon",
-                    "->" => "thin_arrow",
-                    "'{'" => "l_curly",
-                    "'}'" => "r_curly",
-                    "'('" => "l_paren",
-                    "')'" => "r_paren",
-                    "'['" => "l_brack",
-                    "']'" => "r_brack",
-                    "<" => "l_angle",
-                    ">" => "r_angle",
-                    "=" => "eq",
-                    "!" => "excl",
-                    "*" => "star",
-                    "&" => "amp",
-                    "-" => "minus",
-                    "_" => "underscore",
-                    "." => "dot",
-                    ".." => "dotdot",
-                    "..." => "dotdotdot",
-                    "..=" => "dotdoteq",
-                    "=>" => "fat_arrow",
-                    "@" => "at",
-                    ":" => "colon",
-                    "::" => "coloncolon",
-                    "#" => "pound",
-                    "?" => "question_mark",
-                    "," => "comma",
-                    "|" => "pipe",
-                    "~" => "tilde",
+                let sanitized_name = match name.as_str() {
+                    "'{'" => "{",
+                    "'}'" => "}",
+                    "'('" => "(",
+                    "')'" => ")",
+                    "'['" => "[",
+                    "']'" => "]",
                     _ => name,
                 };
+
+                let name = match grammar_facts.punctuation_names.get(sanitized_name) {
+                    Some(punct_name) => &punct_name.to_lowercase(),
+                    _ => sanitized_name,
+                };
+
                 format!("{name}_token",)
             }
             Field::Node { name, .. } => {
