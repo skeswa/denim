@@ -3,9 +3,7 @@
 use std::{borrow::Cow, num::ParseIntError};
 
 pub use always_assert::always;
-use tokenizer::{
-    unescape_byte, unescape_char, unescape_mixed, unescape_unicode, EscapeError, MixedUnit, Mode,
-};
+use tokenizer::{unescape_byte, unescape_char, unescape_unicode, EscapeError, Mode};
 
 use crate::{
     ast::{self, AstToken},
@@ -307,117 +305,6 @@ impl ast::String {
         match (has_error, buf.capacity() == 0) {
             (Some(e), _) => Err(e),
             (None, true) => Ok(Cow::Borrowed(text)),
-            (None, false) => Ok(Cow::Owned(buf)),
-        }
-    }
-}
-
-impl IsString for ast::ByteString {
-    const RAW_PREFIX: &'static str = "br";
-    const MODE: Mode = Mode::ByteStr;
-}
-
-impl ast::ByteString {
-    pub fn value(&self) -> Result<Cow<'_, [u8]>, EscapeError> {
-        let text = self.text();
-        let text_range = self
-            .text_range_between_quotes()
-            .ok_or(EscapeError::LoneSlash)?;
-        let text = &text[text_range - self.syntax().text_range().start()];
-        if self.is_raw() {
-            return Ok(Cow::Borrowed(text.as_bytes()));
-        }
-
-        let mut buf: Vec<u8> = Vec::new();
-        let mut prev_end = 0;
-        let mut has_error = None;
-        unescape_unicode(text, Self::MODE, &mut |char_range, unescaped_char| match (
-            unescaped_char,
-            buf.capacity() == 0,
-        ) {
-            (Ok(c), false) => buf.push(c as u8),
-            (Ok(_), true) if char_range.len() == 1 && char_range.start == prev_end => {
-                prev_end = char_range.end
-            }
-            (Ok(c), true) => {
-                buf.reserve_exact(text.len());
-                buf.extend_from_slice(text[..prev_end].as_bytes());
-                buf.push(c as u8);
-            }
-            (Err(e), _) => has_error = Some(e),
-        });
-
-        match (has_error, buf.capacity() == 0) {
-            (Some(e), _) => Err(e),
-            (None, true) => Ok(Cow::Borrowed(text.as_bytes())),
-            (None, false) => Ok(Cow::Owned(buf)),
-        }
-    }
-}
-
-impl IsString for ast::CString {
-    const RAW_PREFIX: &'static str = "cr";
-    const MODE: Mode = Mode::CStr;
-
-    fn escaped_char_ranges(&self, cb: &mut dyn FnMut(TextRange, Result<char, EscapeError>)) {
-        let text_range_no_quotes = match self.text_range_between_quotes() {
-            Some(it) => it,
-            None => return,
-        };
-
-        let start = self.syntax().text_range().start();
-        let text = &self.text()[text_range_no_quotes - start];
-        let offset = text_range_no_quotes.start() - start;
-
-        unescape_mixed(text, Self::MODE, &mut |range, unescaped_char| {
-            let text_range = TextRange::new(
-                range.start.try_into().unwrap(),
-                range.end.try_into().unwrap(),
-            );
-            // XXX: This method should only be used for highlighting ranges. The unescaped
-            // char/byte is not used. For simplicity, we return an arbitrary placeholder char.
-            cb(text_range + offset, unescaped_char.map(|_| ' '));
-        });
-    }
-}
-
-impl ast::CString {
-    pub fn value(&self) -> Result<Cow<'_, [u8]>, EscapeError> {
-        let text = self.text();
-        let text_range = self
-            .text_range_between_quotes()
-            .ok_or(EscapeError::LoneSlash)?;
-        let text = &text[text_range - self.syntax().text_range().start()];
-        if self.is_raw() {
-            return Ok(Cow::Borrowed(text.as_bytes()));
-        }
-
-        let mut buf = Vec::new();
-        let mut prev_end = 0;
-        let mut has_error = None;
-        let extend_unit = |buf: &mut Vec<u8>, unit: MixedUnit| match unit {
-            MixedUnit::Char(c) => buf.extend(c.encode_utf8(&mut [0; 4]).as_bytes()),
-            MixedUnit::HighByte(b) => buf.push(b),
-        };
-        unescape_mixed(text, Self::MODE, &mut |char_range, unescaped| match (
-            unescaped,
-            buf.capacity() == 0,
-        ) {
-            (Ok(u), false) => extend_unit(&mut buf, u),
-            (Ok(_), true) if char_range.len() == 1 && char_range.start == prev_end => {
-                prev_end = char_range.end
-            }
-            (Ok(u), true) => {
-                buf.reserve_exact(text.len());
-                buf.extend(text[..prev_end].as_bytes());
-                extend_unit(&mut buf, u);
-            }
-            (Err(e), _) => has_error = Some(e),
-        });
-
-        match (has_error, buf.capacity() == 0) {
-            (Some(e), _) => Err(e),
-            (None, true) => Ok(Cow::Borrowed(text.as_bytes())),
             (None, false) => Ok(Cow::Owned(buf)),
         }
     }

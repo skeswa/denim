@@ -28,7 +28,7 @@ impl ast::Attr {
     }
 
     pub fn kind(&self) -> AttrKind {
-        match self.excl_token() {
+        match self.bang_token() {
             Some(_) => AttrKind::Inner,
             None => AttrKind::Outer,
         }

@@ -3,8 +3,6 @@ ast_token_names = [
     "Whitespace",
     "Comment",
     "String",
-    "ByteString",
-    "CString",
     "IntNumber",
     "FloatNumber",
     "Char",
@@ -13,17 +11,8 @@ ast_token_names = [
 ]
 # Keywords that are only keywords in very specific parsing contexts:
 contextual_keywords = [
-    "builtin",
-    "offset_of",
-    "format_args",
-    "asm",
-    "macro_rules",
-    "union",
-    "default",
-    "raw",
-    "dyn",
-    "auto",
-    "yeet",
+  # (This is a thing in Rust, but not in Denim so far - this is hold over from
+  # Rust Analyzer's source code).
 ]
 # Rules in the .ungram that are implemented in the parser itself instead of the
 # grammar specification:
@@ -47,43 +36,24 @@ manually_implemented_rule = [
 ]
 # Nodes in the .ungram that can have doc comments on them:
 nodes_with_doc_comments = [
-    "SourceFile",
+    "CodeSection",
+    "MetaSection",
     "Fn",
-    "Struct",
-    "Union",
+    "RecordTypeField",
     "RecordField",
     "TupleField",
     "Enum",
     "Variant",
     "Trait",
-    "TraitAlias",
-    "Module",
-    "Static",
-    "Const",
     "TypeAlias",
     "Impl",
-    "ExternBlock",
-    "ExternCrate",
-    "MacroCall",
-    "MacroRules",
-    "MacroDef",
-    "Use",
+    "DepItem",
 ]
 # Words that should be treated as keywords even though they aren't formally
 # defined as keywords yet.
 reserved_words = [
-    "abstract",
-    "become",
-    "box",
-    "do",
-    "final",
-    "macro",
-    "override",
-    "priv",
-    "typeof",
-    "unsized",
-    "virtual",
-    "yield",
+  # (This is a thing in Rust, but not in Denim so far - this is hold over from
+  # Rust Analyzer's source code).
 ]
 
 # Maps pieces of punctuation to words that can be used in source code.

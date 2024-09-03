@@ -109,7 +109,7 @@ CodeSection =
 
 MetaSection =
   Attr*
-  MetaItem*
+  Dep*
 
 CodeItem =
   Enum
@@ -117,9 +117,6 @@ CodeItem =
 | Impl
 | Trait
 | TypeAlias
-
-MetaItem =
-  DepItem*
 
 DepPathSegment =
   '/'? NameRef
@@ -155,7 +152,7 @@ UseTreeList =
 UseTreeExpansion =
   '{' UseTreeList? '}'
 
-DepItem =
+Dep =
   Attr* 'from' DepPath use_or_show:Use
 
 Rename =

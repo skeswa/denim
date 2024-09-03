@@ -17,7 +17,7 @@ impl AstNode for Stmt {
     fn can_cast(kind: SyntaxKind) -> bool {
         match kind {
             LET_STMT | EXPR_STMT => true,
-            _ => Item::can_cast(kind),
+            _ => CodeItem::can_cast(kind),
         }
     }
     fn cast(syntax: SyntaxNode) -> Option<Self> {
@@ -25,8 +25,8 @@ impl AstNode for Stmt {
             LET_STMT => Stmt::LetStmt(LetStmt { syntax }),
             EXPR_STMT => Stmt::ExprStmt(ExprStmt { syntax }),
             _ => {
-                let item = Item::cast(syntax)?;
-                Stmt::Item(item)
+                let item = CodeItem::cast(syntax)?;
+                Stmt::CodeItem(item)
             }
         };
         Some(res)
@@ -35,7 +35,7 @@ impl AstNode for Stmt {
         match self {
             Stmt::LetStmt(it) => &it.syntax,
             Stmt::ExprStmt(it) => &it.syntax,
-            Stmt::Item(it) => it.syntax(),
+            Stmt::CodeItem(it) => it.syntax(),
         }
     }
 }

@@ -199,6 +199,7 @@ pub struct CodeSection {
     pub(crate) syntax: SyntaxNode,
 }
 impl ast::HasAttrs for CodeSection {}
+impl ast::HasDocComments for CodeSection {}
 impl CodeSection {
     #[inline]
     pub fn code_items(&self) -> AstChildren<CodeItem> { support::children(&self.syntax) }
@@ -226,11 +227,11 @@ impl ContinueExpr {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct DepItem {
+pub struct Dep {
     pub(crate) syntax: SyntaxNode,
 }
-impl ast::HasAttrs for DepItem {}
-impl DepItem {
+impl ast::HasAttrs for Dep {}
+impl Dep {
     #[inline]
     pub fn dep_path(&self) -> Option<DepPath> { support::child(&self.syntax) }
     #[inline]
@@ -734,22 +735,14 @@ impl Meta {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-pub struct MetaItem {
-    pub(crate) syntax: SyntaxNode,
-}
-impl MetaItem {
-    #[inline]
-    pub fn dep_items(&self) -> AstChildren<DepItem> { support::children(&self.syntax) }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct MetaSection {
     pub(crate) syntax: SyntaxNode,
 }
 impl ast::HasAttrs for MetaSection {}
+impl ast::HasDocComments for MetaSection {}
 impl MetaSection {
     #[inline]
-    pub fn meta_items(&self) -> AstChildren<MetaItem> { support::children(&self.syntax) }
+    pub fn deps(&self) -> AstChildren<Dep> { support::children(&self.syntax) }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -1175,6 +1168,7 @@ pub struct RecordTypeField {
     pub(crate) syntax: SyntaxNode,
 }
 impl ast::HasAttrs for RecordTypeField {}
+impl ast::HasDocComments for RecordTypeField {}
 impl ast::HasName for RecordTypeField {}
 impl RecordTypeField {
     #[inline]
@@ -1338,7 +1332,6 @@ impl SliceType {
 pub struct SourceFile {
     pub(crate) syntax: SyntaxNode,
 }
-impl ast::HasDocComments for SourceFile {}
 impl SourceFile {
     #[inline]
     pub fn code(&self) -> Option<CodeSection> { support::child(&self.syntax) }
@@ -1575,7 +1568,6 @@ impl UnknownType {
 pub struct Use {
     pub(crate) syntax: SyntaxNode,
 }
-impl ast::HasDocComments for Use {}
 impl Use {
     #[inline]
     pub fn use_tree_list(&self) -> Option<UseTreeList> { support::child(&self.syntax) }
@@ -2109,9 +2101,9 @@ impl AstNode for ContinueExpr {
     #[inline]
     fn syntax(&self) -> &SyntaxNode { &self.syntax }
 }
-impl AstNode for DepItem {
+impl AstNode for Dep {
     #[inline]
-    fn can_cast(kind: SyntaxKind) -> bool { kind == DEP_ITEM }
+    fn can_cast(kind: SyntaxKind) -> bool { kind == DEP }
     #[inline]
     fn cast(syntax: SyntaxNode) -> Option<Self> {
         if Self::can_cast(syntax.kind()) {
@@ -2602,20 +2594,6 @@ impl AstNode for MaybeSelfifiedArg {
 impl AstNode for Meta {
     #[inline]
     fn can_cast(kind: SyntaxKind) -> bool { kind == META }
-    #[inline]
-    fn cast(syntax: SyntaxNode) -> Option<Self> {
-        if Self::can_cast(syntax.kind()) {
-            Some(Self { syntax })
-        } else {
-            None
-        }
-    }
-    #[inline]
-    fn syntax(&self) -> &SyntaxNode { &self.syntax }
-}
-impl AstNode for MetaItem {
-    #[inline]
-    fn can_cast(kind: SyntaxKind) -> bool { kind == META_ITEM }
     #[inline]
     fn cast(syntax: SyntaxNode) -> Option<Self> {
         if Self::can_cast(syntax.kind()) {
@@ -4363,7 +4341,7 @@ impl AstNode for AnyHasAttrs {
                 | CLOSURE_EXPR
                 | CODE_SECTION
                 | CONTINUE_EXPR
-                | DEP_ITEM
+                | DEP
                 | ENUM
                 | FIELD_EXPR
                 | FN
@@ -4510,9 +4488,9 @@ impl From<ContinueExpr> for AnyHasAttrs {
         }
     }
 }
-impl From<DepItem> for AnyHasAttrs {
+impl From<Dep> for AnyHasAttrs {
     #[inline]
-    fn from(node: DepItem) -> AnyHasAttrs {
+    fn from(node: Dep) -> AnyHasAttrs {
         AnyHasAttrs {
             syntax: node.syntax,
         }
@@ -4923,14 +4901,16 @@ impl AstNode for AnyHasDocComments {
     fn can_cast(kind: SyntaxKind) -> bool {
         matches!(
             kind,
-            ENUM | FN
+            CODE_SECTION
+                | ENUM
+                | FN
                 | IMPL
+                | META_SECTION
                 | RECORD_FIELD
-                | SOURCE_FILE
+                | RECORD_TYPE_FIELD
                 | TRAIT
                 | TUPLE_FIELD
                 | TYPE_ALIAS
-                | USE
                 | VARIANT
         )
     }
@@ -4940,6 +4920,14 @@ impl AstNode for AnyHasDocComments {
     }
     #[inline]
     fn syntax(&self) -> &SyntaxNode { &self.syntax }
+}
+impl From<CodeSection> for AnyHasDocComments {
+    #[inline]
+    fn from(node: CodeSection) -> AnyHasDocComments {
+        AnyHasDocComments {
+            syntax: node.syntax,
+        }
+    }
 }
 impl From<Enum> for AnyHasDocComments {
     #[inline]
@@ -4965,6 +4953,14 @@ impl From<Impl> for AnyHasDocComments {
         }
     }
 }
+impl From<MetaSection> for AnyHasDocComments {
+    #[inline]
+    fn from(node: MetaSection) -> AnyHasDocComments {
+        AnyHasDocComments {
+            syntax: node.syntax,
+        }
+    }
+}
 impl From<RecordField> for AnyHasDocComments {
     #[inline]
     fn from(node: RecordField) -> AnyHasDocComments {
@@ -4973,9 +4969,9 @@ impl From<RecordField> for AnyHasDocComments {
         }
     }
 }
-impl From<SourceFile> for AnyHasDocComments {
+impl From<RecordTypeField> for AnyHasDocComments {
     #[inline]
-    fn from(node: SourceFile) -> AnyHasDocComments {
+    fn from(node: RecordTypeField) -> AnyHasDocComments {
         AnyHasDocComments {
             syntax: node.syntax,
         }
@@ -5000,14 +4996,6 @@ impl From<TupleField> for AnyHasDocComments {
 impl From<TypeAlias> for AnyHasDocComments {
     #[inline]
     fn from(node: TypeAlias) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
-}
-impl From<Use> for AnyHasDocComments {
-    #[inline]
-    fn from(node: Use) -> AnyHasDocComments {
         AnyHasDocComments {
             syntax: node.syntax,
         }
@@ -5510,7 +5498,7 @@ impl std::fmt::Display for ContinueExpr {
         std::fmt::Display::fmt(self.syntax(), f)
     }
 }
-impl std::fmt::Display for DepItem {
+impl std::fmt::Display for Dep {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         std::fmt::Display::fmt(self.syntax(), f)
     }
@@ -5686,11 +5674,6 @@ impl std::fmt::Display for MaybeSelfifiedArg {
     }
 }
 impl std::fmt::Display for Meta {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        std::fmt::Display::fmt(self.syntax(), f)
-    }
-}
-impl std::fmt::Display for MetaItem {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         std::fmt::Display::fmt(self.syntax(), f)
     }

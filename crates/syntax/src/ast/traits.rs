@@ -25,10 +25,6 @@ pub trait HasLoopBody: AstNode {
     fn loop_body(&self) -> Option<ast::BlockExpr> {
         support::child(self.syntax())
     }
-
-    fn label(&self) -> Option<ast::Label> {
-        support::child(self.syntax())
-    }
 }
 
 pub trait HasArgList: AstNode {
@@ -38,7 +34,7 @@ pub trait HasArgList: AstNode {
 }
 
 pub trait HasModuleItem: AstNode {
-    fn items(&self) -> AstChildren<ast::Item> {
+    fn items(&self) -> AstChildren<ast::CodeItem> {
         support::children(self.syntax())
     }
 }
