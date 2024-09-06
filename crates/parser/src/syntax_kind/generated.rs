@@ -365,10 +365,7 @@ impl SyntaxKind {
         )
     }
     pub fn is_literal(self) -> bool {
-        matches!(
-            self,
-            BYTE | CHAR | FLOAT_NUMBER | INT_NUMBER | RAW_STRING | STRING
-        )
+        matches!(self, BYTE | CHAR | FLOAT_NUMBER | INT_NUMBER | RAW_STRING | STRING)
     }
     pub fn from_keyword(ident: &str) -> Option<SyntaxKind> {
         let kw = match ident {

@@ -5,7 +5,11 @@ use quote::{format_ident, quote};
 use crate::{codegen::english_util::to_upper_snake_case, CodegenCommands};
 
 use super::{
-    ast_src::AstSrc, codegen_util::{add_preamble, reformat, write_doc_comment}, english_util::to_pascal_case, grammar_facts::GrammarFacts, syntax_kinds_src::SyntaxKindsSrc
+    ast_src::AstSrc,
+    codegen_util::{add_preamble, reformat, write_doc_comment},
+    english_util::to_pascal_case,
+    grammar_facts::GrammarFacts,
+    syntax_kinds_src::SyntaxKindsSrc,
 };
 use itertools::Itertools;
 
@@ -103,12 +107,8 @@ impl<'a, 'b> AstNodesSrc<'a, 'b> {
             .enums
             .iter()
             .map(|en| {
-                let variants: Vec<_> = en
-                    .variants
-                    .iter()
-                    .map(|var| format_ident!("{}", var))
-                    .sorted()
-                    .collect();
+                let variants: Vec<_> =
+                    en.variants.iter().map(|var| format_ident!("{}", var)).sorted().collect();
                 let name = format_ident!("{}", en.name);
                 let kinds: Vec<_> = variants
                     .iter()
@@ -239,10 +239,8 @@ impl<'a, 'b> AstNodesSrc<'a, 'b> {
         let enum_names = self.0.enums.iter().map(|it| &it.name);
         let node_names = self.0.nodes.iter().map(|it| &it.name);
 
-        let display_impls = enum_names
-            .chain(node_names.clone())
-            .map(|it| format_ident!("{}", it))
-            .map(|name| {
+        let display_impls =
+            enum_names.chain(node_names.clone()).map(|it| format_ident!("{}", it)).map(|name| {
                 quote! {
                     impl std::fmt::Display for #name {
                         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -287,12 +285,8 @@ impl<'a, 'b> AstNodesSrc<'a, 'b> {
 
         let mut res = String::with_capacity(ast.len() * 2);
 
-        let mut docs = self
-            .0
-            .nodes
-            .iter()
-            .map(|it| &it.doc)
-            .chain(self.0.enums.iter().map(|it| &it.doc));
+        let mut docs =
+            self.0.nodes.iter().map(|it| &it.doc).chain(self.0.enums.iter().map(|it| &it.doc));
 
         for chunk in ast.split("# [pretty_doc_comment_placeholder_workaround] ") {
             res.push_str(chunk);

@@ -66,11 +66,7 @@ impl AstSrc {
                     node.remove_field(to_remove);
                     let ty = enm.name.clone();
                     let name = to_lower_snake_case(&ty);
-                    node.fields.push(Field::Node {
-                        name,
-                        ty,
-                        cardinality: Cardinality::Optional,
-                    });
+                    node.fields.push(Field::Node { name, ty, cardinality: Cardinality::Optional });
                 }
             }
         }
@@ -129,22 +125,12 @@ impl AstNodeSrc {
 #[derive(Debug, Eq, PartialEq)]
 pub enum Field {
     Token(String),
-    Node {
-        name: String,
-        ty: String,
-        cardinality: Cardinality,
-    },
+    Node { name: String, ty: String, cardinality: Cardinality },
 }
 
 impl Field {
     pub fn is_many(&self) -> bool {
-        matches!(
-            self,
-            Field::Node {
-                cardinality: Cardinality::Many,
-                ..
-            }
-        )
+        matches!(self, Field::Node { cardinality: Cardinality::Many, .. })
     }
     pub fn token_kind(&self) -> Option<proc_macro2::TokenStream> {
         match self {

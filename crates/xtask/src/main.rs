@@ -57,10 +57,7 @@ fn main() {
                     .expect("Failed to execute `mdbook serve --open`");
 
                 if !status.success() {
-                    eprintln!(
-                        "`mdbook serve --open` failed with status {:?}",
-                        status.code()
-                    );
+                    eprintln!("`mdbook serve --open` failed with status {:?}", status.code());
                 }
             }
         },
@@ -78,12 +75,7 @@ fn project_root() -> PathBuf {
     let dir =
         env::var("CARGO_MANIFEST_DIR").unwrap_or_else(|_| env!("CARGO_MANIFEST_DIR").to_owned());
 
-    PathBuf::from(dir)
-        .parent()
-        .unwrap()
-        .parent()
-        .unwrap()
-        .to_owned()
+    PathBuf::from(dir).parent().unwrap().parent().unwrap().to_owned()
 }
 
 impl Display for CodegenCommands {

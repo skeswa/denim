@@ -4286,9 +4286,7 @@ impl AstNode for Type {
 impl AnyHasArgList {
     #[inline]
     pub fn new<T: ast::HasArgList>(node: T) -> AnyHasArgList {
-        AnyHasArgList {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasArgList { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasArgList {
@@ -4303,18 +4301,12 @@ impl AstNode for AnyHasArgList {
 }
 impl From<CallExpr> for AnyHasArgList {
     #[inline]
-    fn from(node: CallExpr) -> AnyHasArgList {
-        AnyHasArgList {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: CallExpr) -> AnyHasArgList { AnyHasArgList { syntax: node.syntax } }
 }
 impl AnyHasAttrs {
     #[inline]
     pub fn new<T: ast::HasAttrs>(node: T) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasAttrs { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasAttrs {
@@ -4394,498 +4386,252 @@ impl AstNode for AnyHasAttrs {
 }
 impl From<AssocItemList> for AnyHasAttrs {
     #[inline]
-    fn from(node: AssocItemList) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: AssocItemList) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<AsyncExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: AsyncExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: AsyncExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<AwaitExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: AwaitExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: AwaitExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<BinExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: BinExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: BinExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<BlockExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: BlockExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: BlockExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<BreakExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: BreakExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: BreakExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<CallExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: CallExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: CallExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<CastExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: CastExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: CastExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<ClosureExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: ClosureExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: ClosureExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<CodeSection> for AnyHasAttrs {
     #[inline]
-    fn from(node: CodeSection) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: CodeSection) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<ContinueExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: ContinueExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: ContinueExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Dep> for AnyHasAttrs {
     #[inline]
-    fn from(node: Dep) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Dep) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Enum> for AnyHasAttrs {
     #[inline]
-    fn from(node: Enum) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Enum) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<FieldExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: FieldExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: FieldExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Fn> for AnyHasAttrs {
     #[inline]
-    fn from(node: Fn) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Fn) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<FnRefExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: FnRefExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: FnRefExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<ForExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: ForExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: ForExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<IdentPat> for AnyHasAttrs {
     #[inline]
-    fn from(node: IdentPat) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: IdentPat) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<IfExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: IfExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: IfExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Impl> for AnyHasAttrs {
     #[inline]
-    fn from(node: Impl) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Impl) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<IndexExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: IndexExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: IndexExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<LetExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: LetExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: LetExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<LetStmt> for AnyHasAttrs {
     #[inline]
-    fn from(node: LetStmt) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: LetStmt) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<ListEntry> for AnyHasAttrs {
     #[inline]
-    fn from(node: ListEntry) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: ListEntry) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<ListExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: ListExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: ListExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Literal> for AnyHasAttrs {
     #[inline]
-    fn from(node: Literal) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Literal) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<LoopExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: LoopExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: LoopExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MapEntry> for AnyHasAttrs {
     #[inline]
-    fn from(node: MapEntry) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MapEntry) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MapExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: MapExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MapExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MatchArm> for AnyHasAttrs {
     #[inline]
-    fn from(node: MatchArm) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MatchArm) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MatchArmList> for AnyHasAttrs {
     #[inline]
-    fn from(node: MatchArmList) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MatchArmList) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MatchExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: MatchExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MatchExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MetaSection> for AnyHasAttrs {
     #[inline]
-    fn from(node: MetaSection) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MetaSection) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MethodCallExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: MethodCallExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MethodCallExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<MutExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: MutExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MutExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<NegExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: NegExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: NegExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<NotExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: NotExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: NotExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Param> for AnyHasAttrs {
     #[inline]
-    fn from(node: Param) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Param) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<ParenExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: ParenExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: ParenExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<PathExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: PathExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: PathExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<RangeExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: RangeExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RangeExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<RecordExprField> for AnyHasAttrs {
     #[inline]
-    fn from(node: RecordExprField) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordExprField) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<RecordExprFieldList> for AnyHasAttrs {
     #[inline]
-    fn from(node: RecordExprFieldList) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordExprFieldList) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<RecordField> for AnyHasAttrs {
     #[inline]
-    fn from(node: RecordField) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordField) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<RecordPatField> for AnyHasAttrs {
     #[inline]
-    fn from(node: RecordPatField) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordPatField) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<RecordTypeField> for AnyHasAttrs {
     #[inline]
-    fn from(node: RecordTypeField) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordTypeField) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<RestPat> for AnyHasAttrs {
     #[inline]
-    fn from(node: RestPat) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RestPat) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<ReturnExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: ReturnExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: ReturnExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<SelfParam> for AnyHasAttrs {
     #[inline]
-    fn from(node: SelfParam) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: SelfParam) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<SetEntry> for AnyHasAttrs {
     #[inline]
-    fn from(node: SetEntry) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: SetEntry) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<SetExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: SetExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: SetExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<StmtList> for AnyHasAttrs {
     #[inline]
-    fn from(node: StmtList) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: StmtList) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Trait> for AnyHasAttrs {
     #[inline]
-    fn from(node: Trait) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Trait) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<TryExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: TryExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TryExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<TupleExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: TupleExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TupleExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<TupleField> for AnyHasAttrs {
     #[inline]
-    fn from(node: TupleField) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TupleField) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<TypeAlias> for AnyHasAttrs {
     #[inline]
-    fn from(node: TypeAlias) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeAlias) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<TypeParam> for AnyHasAttrs {
     #[inline]
-    fn from(node: TypeParam) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeParam) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<UnderscoreExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: UnderscoreExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: UnderscoreExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<Variant> for AnyHasAttrs {
     #[inline]
-    fn from(node: Variant) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Variant) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl From<WhileExpr> for AnyHasAttrs {
     #[inline]
-    fn from(node: WhileExpr) -> AnyHasAttrs {
-        AnyHasAttrs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: WhileExpr) -> AnyHasAttrs { AnyHasAttrs { syntax: node.syntax } }
 }
 impl AnyHasDocComments {
     #[inline]
     pub fn new<T: ast::HasDocComments>(node: T) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasDocComments { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasDocComments {
@@ -4915,98 +4661,54 @@ impl AstNode for AnyHasDocComments {
 }
 impl From<CodeSection> for AnyHasDocComments {
     #[inline]
-    fn from(node: CodeSection) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: CodeSection) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<Enum> for AnyHasDocComments {
     #[inline]
-    fn from(node: Enum) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Enum) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<Fn> for AnyHasDocComments {
     #[inline]
-    fn from(node: Fn) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Fn) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<Impl> for AnyHasDocComments {
     #[inline]
-    fn from(node: Impl) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Impl) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<MetaSection> for AnyHasDocComments {
     #[inline]
-    fn from(node: MetaSection) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MetaSection) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<RecordField> for AnyHasDocComments {
     #[inline]
-    fn from(node: RecordField) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordField) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<RecordTypeField> for AnyHasDocComments {
     #[inline]
     fn from(node: RecordTypeField) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
+        AnyHasDocComments { syntax: node.syntax }
     }
 }
 impl From<Trait> for AnyHasDocComments {
     #[inline]
-    fn from(node: Trait) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Trait) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<TupleField> for AnyHasDocComments {
     #[inline]
-    fn from(node: TupleField) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TupleField) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<TypeAlias> for AnyHasDocComments {
     #[inline]
-    fn from(node: TypeAlias) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeAlias) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl From<Variant> for AnyHasDocComments {
     #[inline]
-    fn from(node: Variant) -> AnyHasDocComments {
-        AnyHasDocComments {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Variant) -> AnyHasDocComments { AnyHasDocComments { syntax: node.syntax } }
 }
 impl AnyHasGenericArgs {
     #[inline]
     pub fn new<T: ast::HasGenericArgs>(node: T) -> AnyHasGenericArgs {
-        AnyHasGenericArgs {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasGenericArgs { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasGenericArgs {
@@ -5023,34 +4725,20 @@ impl AstNode for AnyHasGenericArgs {
 }
 impl From<AssocTypeArg> for AnyHasGenericArgs {
     #[inline]
-    fn from(node: AssocTypeArg) -> AnyHasGenericArgs {
-        AnyHasGenericArgs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: AssocTypeArg) -> AnyHasGenericArgs { AnyHasGenericArgs { syntax: node.syntax } }
 }
 impl From<MethodCallExpr> for AnyHasGenericArgs {
     #[inline]
-    fn from(node: MethodCallExpr) -> AnyHasGenericArgs {
-        AnyHasGenericArgs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: MethodCallExpr) -> AnyHasGenericArgs { AnyHasGenericArgs { syntax: node.syntax } }
 }
 impl From<PathSegment> for AnyHasGenericArgs {
     #[inline]
-    fn from(node: PathSegment) -> AnyHasGenericArgs {
-        AnyHasGenericArgs {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: PathSegment) -> AnyHasGenericArgs { AnyHasGenericArgs { syntax: node.syntax } }
 }
 impl AnyHasGenericParams {
     #[inline]
     pub fn new<T: ast::HasGenericParams>(node: T) -> AnyHasGenericParams {
-        AnyHasGenericParams {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasGenericParams { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasGenericParams {
@@ -5065,50 +4753,28 @@ impl AstNode for AnyHasGenericParams {
 }
 impl From<Enum> for AnyHasGenericParams {
     #[inline]
-    fn from(node: Enum) -> AnyHasGenericParams {
-        AnyHasGenericParams {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Enum) -> AnyHasGenericParams { AnyHasGenericParams { syntax: node.syntax } }
 }
 impl From<Fn> for AnyHasGenericParams {
     #[inline]
-    fn from(node: Fn) -> AnyHasGenericParams {
-        AnyHasGenericParams {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Fn) -> AnyHasGenericParams { AnyHasGenericParams { syntax: node.syntax } }
 }
 impl From<Impl> for AnyHasGenericParams {
     #[inline]
-    fn from(node: Impl) -> AnyHasGenericParams {
-        AnyHasGenericParams {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Impl) -> AnyHasGenericParams { AnyHasGenericParams { syntax: node.syntax } }
 }
 impl From<Trait> for AnyHasGenericParams {
     #[inline]
-    fn from(node: Trait) -> AnyHasGenericParams {
-        AnyHasGenericParams {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Trait) -> AnyHasGenericParams { AnyHasGenericParams { syntax: node.syntax } }
 }
 impl From<TypeAlias> for AnyHasGenericParams {
     #[inline]
-    fn from(node: TypeAlias) -> AnyHasGenericParams {
-        AnyHasGenericParams {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeAlias) -> AnyHasGenericParams { AnyHasGenericParams { syntax: node.syntax } }
 }
 impl AnyHasName {
     #[inline]
     pub fn new<T: ast::HasName>(node: T) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasName { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasName {
@@ -5137,107 +4803,58 @@ impl AstNode for AnyHasName {
 }
 impl From<Enum> for AnyHasName {
     #[inline]
-    fn from(node: Enum) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Enum) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<Fn> for AnyHasName {
     #[inline]
-    fn from(node: Fn) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Fn) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<IdentPat> for AnyHasName {
     #[inline]
-    fn from(node: IdentPat) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: IdentPat) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<RecordField> for AnyHasName {
     #[inline]
-    fn from(node: RecordField) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordField) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<RecordTypeField> for AnyHasName {
     #[inline]
-    fn from(node: RecordTypeField) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: RecordTypeField) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<Rename> for AnyHasName {
     #[inline]
-    fn from(node: Rename) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Rename) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<SelfParam> for AnyHasName {
     #[inline]
-    fn from(node: SelfParam) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: SelfParam) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<Trait> for AnyHasName {
     #[inline]
-    fn from(node: Trait) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Trait) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<TypeAlias> for AnyHasName {
     #[inline]
-    fn from(node: TypeAlias) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeAlias) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<TypeParam> for AnyHasName {
     #[inline]
-    fn from(node: TypeParam) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeParam) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl From<Variant> for AnyHasName {
     #[inline]
-    fn from(node: Variant) -> AnyHasName {
-        AnyHasName {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Variant) -> AnyHasName { AnyHasName { syntax: node.syntax } }
 }
 impl AnyHasTypeBounds {
     #[inline]
     pub fn new<T: ast::HasTypeBounds>(node: T) -> AnyHasTypeBounds {
-        AnyHasTypeBounds {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasTypeBounds { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasTypeBounds {
     #[inline]
     fn can_cast(kind: SyntaxKind) -> bool {
-        matches!(
-            kind,
-            ASSOC_TYPE_ARG | TRAIT | TYPE_ALIAS | TYPE_PARAM | WHERE_PRED
-        )
+        matches!(kind, ASSOC_TYPE_ARG | TRAIT | TYPE_ALIAS | TYPE_PARAM | WHERE_PRED)
     }
     #[inline]
     fn cast(syntax: SyntaxNode) -> Option<Self> {
@@ -5248,59 +4865,34 @@ impl AstNode for AnyHasTypeBounds {
 }
 impl From<AssocTypeArg> for AnyHasTypeBounds {
     #[inline]
-    fn from(node: AssocTypeArg) -> AnyHasTypeBounds {
-        AnyHasTypeBounds {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: AssocTypeArg) -> AnyHasTypeBounds { AnyHasTypeBounds { syntax: node.syntax } }
 }
 impl From<Trait> for AnyHasTypeBounds {
     #[inline]
-    fn from(node: Trait) -> AnyHasTypeBounds {
-        AnyHasTypeBounds {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Trait) -> AnyHasTypeBounds { AnyHasTypeBounds { syntax: node.syntax } }
 }
 impl From<TypeAlias> for AnyHasTypeBounds {
     #[inline]
-    fn from(node: TypeAlias) -> AnyHasTypeBounds {
-        AnyHasTypeBounds {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeAlias) -> AnyHasTypeBounds { AnyHasTypeBounds { syntax: node.syntax } }
 }
 impl From<TypeParam> for AnyHasTypeBounds {
     #[inline]
-    fn from(node: TypeParam) -> AnyHasTypeBounds {
-        AnyHasTypeBounds {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeParam) -> AnyHasTypeBounds { AnyHasTypeBounds { syntax: node.syntax } }
 }
 impl From<WherePred> for AnyHasTypeBounds {
     #[inline]
-    fn from(node: WherePred) -> AnyHasTypeBounds {
-        AnyHasTypeBounds {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: WherePred) -> AnyHasTypeBounds { AnyHasTypeBounds { syntax: node.syntax } }
 }
 impl AnyHasVisibility {
     #[inline]
     pub fn new<T: ast::HasVisibility>(node: T) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax().clone(),
-        }
+        AnyHasVisibility { syntax: node.syntax().clone() }
     }
 }
 impl AstNode for AnyHasVisibility {
     #[inline]
     fn can_cast(kind: SyntaxKind) -> bool {
-        matches!(
-            kind,
-            ENUM | FN | IMPL | TRAIT | TUPLE_FIELD | TYPE_ALIAS | VARIANT
-        )
+        matches!(kind, ENUM | FN | IMPL | TRAIT | TUPLE_FIELD | TYPE_ALIAS | VARIANT)
     }
     #[inline]
     fn cast(syntax: SyntaxNode) -> Option<Self> {
@@ -5311,59 +4903,31 @@ impl AstNode for AnyHasVisibility {
 }
 impl From<Enum> for AnyHasVisibility {
     #[inline]
-    fn from(node: Enum) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Enum) -> AnyHasVisibility { AnyHasVisibility { syntax: node.syntax } }
 }
 impl From<Fn> for AnyHasVisibility {
     #[inline]
-    fn from(node: Fn) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Fn) -> AnyHasVisibility { AnyHasVisibility { syntax: node.syntax } }
 }
 impl From<Impl> for AnyHasVisibility {
     #[inline]
-    fn from(node: Impl) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Impl) -> AnyHasVisibility { AnyHasVisibility { syntax: node.syntax } }
 }
 impl From<Trait> for AnyHasVisibility {
     #[inline]
-    fn from(node: Trait) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Trait) -> AnyHasVisibility { AnyHasVisibility { syntax: node.syntax } }
 }
 impl From<TupleField> for AnyHasVisibility {
     #[inline]
-    fn from(node: TupleField) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TupleField) -> AnyHasVisibility { AnyHasVisibility { syntax: node.syntax } }
 }
 impl From<TypeAlias> for AnyHasVisibility {
     #[inline]
-    fn from(node: TypeAlias) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: TypeAlias) -> AnyHasVisibility { AnyHasVisibility { syntax: node.syntax } }
 }
 impl From<Variant> for AnyHasVisibility {
     #[inline]
-    fn from(node: Variant) -> AnyHasVisibility {
-        AnyHasVisibility {
-            syntax: node.syntax,
-        }
-    }
+    fn from(node: Variant) -> AnyHasVisibility { AnyHasVisibility { syntax: node.syntax } }
 }
 impl std::fmt::Display for CodeItem {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

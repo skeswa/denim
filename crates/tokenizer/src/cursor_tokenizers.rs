@@ -18,12 +18,7 @@ impl<'a> Cursor<'a> {
     pub(crate) fn tokenize_next(&mut self) -> Token {
         let first_char = match self.bump() {
             Some(c) => c,
-            None => {
-                return Token {
-                    kind: TokenKind::End,
-                    len: 0,
-                }
-            }
+            None => return Token { kind: TokenKind::End, len: 0 },
         };
 
         let kind = match first_char {
@@ -42,9 +37,7 @@ impl<'a> Cursor<'a> {
                 '#' | '"' => {
                     let maybe_pound_count = self.eat_raw_double_quoted_string(1);
 
-                    let kind = RawStr {
-                        pound_count: maybe_pound_count.ok(),
-                    };
+                    let kind = RawStr { pound_count: maybe_pound_count.ok() };
 
                     Literal { kind }
                 }
@@ -164,9 +157,7 @@ impl<'a> Cursor<'a> {
             '"' => {
                 let ending = self.eat_double_quoted_string();
 
-                Literal {
-                    kind: Str { ending },
-                }
+                Literal { kind: Str { ending } }
             }
 
             // Identifier starting with an emoji. Only lexed for graceful error recovery.
@@ -176,10 +167,7 @@ impl<'a> Cursor<'a> {
             _ => Unknown,
         };
 
-        let token = Token {
-            kind,
-            len: self.pos_within_token(),
-        };
+        let token = Token { kind, len: self.pos_within_token() };
 
         self.reset_pos_within_token();
 
@@ -193,9 +181,7 @@ impl<'a> Cursor<'a> {
 
         let is_terminated = self.eat_single_quoted_string();
 
-        return Literal {
-            kind: Char { is_terminated },
-        };
+        return Literal { kind: Char { is_terminated } };
     }
 
     /// Attempts to recognize the next token as either an unknown prefix or an
@@ -265,9 +251,7 @@ impl<'a> Cursor<'a> {
             }
         }
 
-        BlockComment {
-            is_terminated: depth == 0,
-        }
+        BlockComment { is_terminated: depth == 0 }
     }
 
     /// Attempts to recognize the next token as a line comment, only advancing
@@ -305,10 +289,7 @@ impl<'a> Cursor<'a> {
 
                     let has_digits = self.eat_decimal_digits();
                     if !has_digits {
-                        return Int {
-                            base,
-                            is_empty: true,
-                        };
+                        return Int { base, is_empty: true };
                     }
                 }
                 'o' => {
@@ -318,10 +299,7 @@ impl<'a> Cursor<'a> {
 
                     let has_digits = self.eat_decimal_digits();
                     if !has_digits {
-                        return Int {
-                            base,
-                            is_empty: true,
-                        };
+                        return Int { base, is_empty: true };
                     }
                 }
                 'x' => {
@@ -331,10 +309,7 @@ impl<'a> Cursor<'a> {
 
                     let has_digits = self.eat_hexadecimal_digits();
                     if !has_digits {
-                        return Int {
-                            base,
-                            is_empty: true,
-                        };
+                        return Int { base, is_empty: true };
                     }
                 }
                 // Not a base prefix; consume additional digits.
@@ -346,12 +321,7 @@ impl<'a> Cursor<'a> {
                 '.' | 'e' | 'E' => {}
 
                 // Just a 0.
-                _ => {
-                    return Int {
-                        base,
-                        is_empty: true,
-                    }
-                }
+                _ => return Int { base, is_empty: true },
             }
         } else {
             // No base prefix, parse number in the usual way.
@@ -381,25 +351,16 @@ impl<'a> Cursor<'a> {
                     }
                 }
 
-                Float {
-                    base,
-                    is_empty: has_empty_exponent,
-                }
+                Float { base, is_empty: has_empty_exponent }
             }
             'e' | 'E' => {
                 self.bump();
 
                 let has_empty_exponent = !self.eat_float_exponent();
 
-                Float {
-                    base,
-                    is_empty: has_empty_exponent,
-                }
+                Float { base, is_empty: has_empty_exponent }
             }
-            _ => Int {
-                base,
-                is_empty: false,
-            },
+            _ => Int { base, is_empty: false },
         }
     }
 

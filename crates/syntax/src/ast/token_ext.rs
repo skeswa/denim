@@ -40,10 +40,7 @@ impl ast::Comment {
     pub fn doc_comment(&self) -> Option<&str> {
         let kind = self.kind();
         match kind {
-            CommentKind {
-                shape,
-                doc: Some(_),
-            } => {
+            CommentKind { shape, doc: Some(_) } => {
                 let prefix = kind.prefix();
                 let text = &self.text()[prefix.len()..];
                 let text = if shape == CommentShape::Block {
@@ -88,69 +85,15 @@ pub enum CommentPlacement {
 
 impl CommentKind {
     const BY_PREFIX: [(&'static str, CommentKind); 9] = [
-        (
-            "/**/",
-            CommentKind {
-                shape: CommentShape::Block,
-                doc: None,
-            },
-        ),
-        (
-            "/***",
-            CommentKind {
-                shape: CommentShape::Block,
-                doc: None,
-            },
-        ),
-        (
-            "////",
-            CommentKind {
-                shape: CommentShape::Line,
-                doc: None,
-            },
-        ),
-        (
-            "///",
-            CommentKind {
-                shape: CommentShape::Line,
-                doc: Some(CommentPlacement::Outer),
-            },
-        ),
-        (
-            "//!",
-            CommentKind {
-                shape: CommentShape::Line,
-                doc: Some(CommentPlacement::Inner),
-            },
-        ),
-        (
-            "/**",
-            CommentKind {
-                shape: CommentShape::Block,
-                doc: Some(CommentPlacement::Outer),
-            },
-        ),
-        (
-            "/*!",
-            CommentKind {
-                shape: CommentShape::Block,
-                doc: Some(CommentPlacement::Inner),
-            },
-        ),
-        (
-            "//",
-            CommentKind {
-                shape: CommentShape::Line,
-                doc: None,
-            },
-        ),
-        (
-            "/*",
-            CommentKind {
-                shape: CommentShape::Block,
-                doc: None,
-            },
-        ),
+        ("/**/", CommentKind { shape: CommentShape::Block, doc: None }),
+        ("/***", CommentKind { shape: CommentShape::Block, doc: None }),
+        ("////", CommentKind { shape: CommentShape::Line, doc: None }),
+        ("///", CommentKind { shape: CommentShape::Line, doc: Some(CommentPlacement::Outer) }),
+        ("//!", CommentKind { shape: CommentShape::Line, doc: Some(CommentPlacement::Inner) }),
+        ("/**", CommentKind { shape: CommentShape::Block, doc: Some(CommentPlacement::Outer) }),
+        ("/*!", CommentKind { shape: CommentShape::Block, doc: Some(CommentPlacement::Inner) }),
+        ("//", CommentKind { shape: CommentShape::Line, doc: None }),
+        ("/*", CommentKind { shape: CommentShape::Block, doc: None }),
     ];
 
     pub(crate) fn from_text(text: &str) -> CommentKind {
@@ -162,11 +105,8 @@ impl CommentKind {
     }
 
     pub fn prefix(&self) -> &'static str {
-        let &(prefix, _) = CommentKind::BY_PREFIX
-            .iter()
-            .rev()
-            .find(|(_, kind)| kind == self)
-            .unwrap();
+        let &(prefix, _) =
+            CommentKind::BY_PREFIX.iter().rev().find(|(_, kind)| kind == self).unwrap();
         prefix
     }
 }
@@ -174,8 +114,7 @@ impl CommentKind {
 impl ast::Whitespace {
     pub fn spans_multiple_lines(&self) -> bool {
         let text = self.text();
-        text.find('\n')
-            .map_or(false, |idx| text[idx + 1..].contains('\n'))
+        text.find('\n').map_or(false, |idx| text[idx + 1..].contains('\n'))
     }
 }
 
@@ -200,10 +139,7 @@ impl QuoteOffsets {
         let end = TextSize::of(literal);
 
         let res = QuoteOffsets {
-            quotes: (
-                TextRange::new(start, left_quote),
-                TextRange::new(right_quote, end),
-            ),
+            quotes: (TextRange::new(start, left_quote), TextRange::new(right_quote, end)),
             contents: TextRange::new(left_quote, right_quote),
         };
         Some(res)
@@ -275,9 +211,7 @@ impl IsString for ast::String {
 impl ast::String {
     pub fn value(&self) -> Result<Cow<'_, str>, EscapeError> {
         let text = self.text();
-        let text_range = self
-            .text_range_between_quotes()
-            .ok_or(EscapeError::LoneSlash)?;
+        let text_range = self.text_range_between_quotes().ok_or(EscapeError::LoneSlash)?;
         let text = &text[text_range - self.syntax().text_range().start()];
         if self.is_raw() {
             return Ok(Cow::Borrowed(text));
@@ -407,12 +341,8 @@ pub enum Radix {
 }
 
 impl Radix {
-    pub const ALL: &'static [Radix] = &[
-        Radix::Binary,
-        Radix::Octal,
-        Radix::Decimal,
-        Radix::Hexadecimal,
-    ];
+    pub const ALL: &'static [Radix] =
+        &[Radix::Binary, Radix::Octal, Radix::Decimal, Radix::Hexadecimal];
 
     const fn prefix_len(self) -> usize {
         match self {

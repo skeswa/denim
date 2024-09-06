@@ -13,10 +13,7 @@ pub struct AstChildren<N> {
 
 impl<N> AstChildren<N> {
     pub fn new(parent: &SyntaxNode) -> Self {
-        AstChildren {
-            inner: parent.children(),
-            ph: PhantomData,
-        }
+        AstChildren { inner: parent.children(), ph: PhantomData }
     }
 }
 

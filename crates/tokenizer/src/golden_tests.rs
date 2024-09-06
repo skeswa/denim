@@ -4,10 +4,7 @@ use golden_testing::GoldenTestCases;
 #[test]
 fn err_goldens() {
     for golden_test_case in GoldenTestCases::in_dir("err") {
-        println!(
-            "Golden test: {}",
-            golden_test_case.source_path.to_str().unwrap_or_default()
-        );
+        println!("Golden test: {}", golden_test_case.source_path.to_str().unwrap_or_default());
 
         expect_file![golden_test_case.tokens_path.clone()]
             .assert_eq(&golden_test_case.stringify_tokenized_source());
@@ -17,10 +14,7 @@ fn err_goldens() {
 #[test]
 fn ok_goldens() {
     for golden_test_case in GoldenTestCases::in_dir("ok") {
-        println!(
-            "Golden test: {}",
-            golden_test_case.source_path.to_str().unwrap_or_default()
-        );
+        println!("Golden test: {}", golden_test_case.source_path.to_str().unwrap_or_default());
 
         expect_file![golden_test_case.tokens_path.clone()]
             .assert_eq(&golden_test_case.stringify_tokenized_source());
@@ -68,10 +62,7 @@ mod golden_testing {
 
                 let padded_token_len = format!("{: <3}", token.len.to_string());
                 let quoted_token_substring = if token_substring.chars().count() > 80 - 2 {
-                    format!(
-                        "\"{}…",
-                        token_substring.chars().take(80 - 2).collect::<String>()
-                    )
+                    format!("\"{}…", token_substring.chars().take(80 - 2).collect::<String>())
                 } else {
                     format!("\"{}\"", token_substring)
                 };
@@ -123,11 +114,7 @@ mod golden_testing {
 
                 let source = read_to_string(&source_path).unwrap();
 
-                golden_test_cases.push(GoldenTestCase {
-                    source,
-                    source_path,
-                    tokens_path,
-                });
+                golden_test_cases.push(GoldenTestCase { source, source_path, tokens_path });
             }
 
             golden_test_cases.sort();

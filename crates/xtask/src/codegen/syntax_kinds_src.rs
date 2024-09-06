@@ -35,10 +35,8 @@ impl SyntaxKindsSrc {
         // Ensure that `puncts` has a stable order.
         sorted_punct_entries.sort_by(|a, b| a.1.cmp(&b.1));
 
-        let puncts: Vec<(String, String)> = sorted_punct_entries
-            .into_iter()
-            .map(|(k, v)| (k.to_string(), v.to_string()))
-            .collect();
+        let puncts: Vec<(String, String)> =
+            sorted_punct_entries.into_iter().map(|(k, v)| (k.to_string(), v.to_string())).collect();
 
         let mut used_puncts = vec![false; puncts.len()];
 
@@ -49,11 +47,8 @@ impl SyntaxKindsSrc {
 
         used_puncts[dollar_index] = true;
 
-        let contextual_keywords: Vec<&str> = grammar_facts
-            .contextual_keywords
-            .iter()
-            .map(String::as_str)
-            .collect();
+        let contextual_keywords: Vec<&str> =
+            grammar_facts.contextual_keywords.iter().map(String::as_str).collect();
 
         grammar.tokens().for_each(|token| {
             let name = &*grammar[token].name;
@@ -73,10 +68,8 @@ impl SyntaxKindsSrc {
                     keywords.push(name.to_owned());
                 }
                 _ => {
-                    let idx = puncts
-                        .iter()
-                        .position(|(punct, _)| punct == &name)
-                        .unwrap_or_else(|| {
+                    let idx =
+                        puncts.iter().position(|(punct, _)| punct == &name).unwrap_or_else(|| {
                             panic!("Grammar references unknown punctuation {name:?}")
                         });
                     used_puncts[idx] = true;
@@ -84,18 +77,11 @@ impl SyntaxKindsSrc {
             }
         });
 
-        puncts
-            .iter()
-            .zip(used_puncts)
-            .filter(|(_, used)| !used)
-            .for_each(|((punct, _), _)| {
-                panic!("Punctuation {punct:?} is not used in grammar");
-            });
+        puncts.iter().zip(used_puncts).filter(|(_, used)| !used).for_each(|((punct, _), _)| {
+            panic!("Punctuation {punct:?} is not used in grammar");
+        });
         keywords.extend(
-            grammar_facts
-                .reserved_words
-                .iter()
-                .map(|reserved_word| reserved_word.to_owned()),
+            grammar_facts.reserved_words.iter().map(|reserved_word| reserved_word.to_owned()),
         );
         keywords.sort();
         keywords.dedup();
@@ -146,11 +132,8 @@ impl SyntaxKindsSrc {
                 quote! { #(#cs)* }
             }
         });
-        let punctuation = self
-            .punct
-            .iter()
-            .map(|(_token, name)| format_ident!("{}", name))
-            .collect::<Vec<_>>();
+        let punctuation =
+            self.punct.iter().map(|(_token, name)| format_ident!("{}", name)).collect::<Vec<_>>();
 
         let fmt_kw_as_variant = |name| match name {
             "Self" => format_ident!("SELF_TYPE_KW"),
@@ -158,11 +141,8 @@ impl SyntaxKindsSrc {
         };
 
         let strict_keywords = self.keywords;
-        let strict_keywords_variants = strict_keywords
-            .iter()
-            .map(|s| s.as_str())
-            .map(fmt_kw_as_variant)
-            .collect::<Vec<_>>();
+        let strict_keywords_variants =
+            strict_keywords.iter().map(|s| s.as_str()).map(fmt_kw_as_variant).collect::<Vec<_>>();
         let strict_keywords_tokens = strict_keywords.iter().map(|it| format_ident!("{it}"));
 
         let contextual_keywords = self.contextual_keywords;
@@ -173,23 +153,12 @@ impl SyntaxKindsSrc {
             .collect::<Vec<_>>();
         let contextual_keywords_tokens = contextual_keywords.iter().map(|it| format_ident!("{it}"));
 
-        let literals = self
-            .literals
-            .iter()
-            .map(|name| format_ident!("{}", name))
-            .collect::<Vec<_>>();
+        let literals =
+            self.literals.iter().map(|name| format_ident!("{}", name)).collect::<Vec<_>>();
 
-        let tokens = self
-            .tokens
-            .iter()
-            .map(|name| format_ident!("{}", name))
-            .collect::<Vec<_>>();
+        let tokens = self.tokens.iter().map(|name| format_ident!("{}", name)).collect::<Vec<_>>();
 
-        let nodes = self
-            .nodes
-            .iter()
-            .map(|name| format_ident!("{}", name))
-            .collect::<Vec<_>>();
+        let nodes = self.nodes.iter().map(|name| format_ident!("{}", name)).collect::<Vec<_>>();
 
         let ast = quote! {
             #![allow(bad_style, dead_code, missing_docs, unreachable_pub)]

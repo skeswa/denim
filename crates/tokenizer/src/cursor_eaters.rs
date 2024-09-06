@@ -47,9 +47,7 @@ impl<'a> Cursor<'a> {
         while let Some(c) = self.bump() {
             match c {
                 '"' => {
-                    return TerminatedString {
-                        is_multiline: false,
-                    };
+                    return TerminatedString { is_multiline: false };
                 }
                 '\\' if self.first() == '\\' || self.first() == '"' => {
                     // Bump again to skip escaped character.

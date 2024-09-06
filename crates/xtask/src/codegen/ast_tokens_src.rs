@@ -38,9 +38,7 @@ impl AstTokensSrc {
             }
         });
 
-        AstTokensSrc {
-            tokens: tokens.collect(),
-        }
+        AstTokensSrc { tokens: tokens.collect() }
     }
 
     pub fn print(self, command: &CodegenCommands) -> String {

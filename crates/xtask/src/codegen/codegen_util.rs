@@ -31,9 +31,7 @@ pub fn write_doc_comment(contents: &[String], dest: &mut String) {
 }
 
 fn ensure_rustfmt(sh: &Shell) {
-    let version = cmd!(sh, "rustup run stable rustfmt --version")
-        .read()
-        .unwrap_or_default();
+    let version = cmd!(sh, "rustup run stable rustfmt --version").read().unwrap_or_default();
     if !version.contains("stable") {
         panic!(
             "Failed to run rustfmt from toolchain 'stable'. \

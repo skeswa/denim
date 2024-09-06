@@ -7,10 +7,7 @@ use super::{
 };
 
 pub fn lower_grammar(grammar: &Grammar, grammar_facts: &GrammarFacts) -> AstSrc {
-    let mut res = AstSrc {
-        tokens: grammar_facts.ast_token_names.clone(),
-        ..Default::default()
-    };
+    let mut res = AstSrc { tokens: grammar_facts.ast_token_names.clone(), ..Default::default() };
 
     let nodes = grammar.iter().collect::<Vec<_>>();
 
@@ -20,12 +17,7 @@ pub fn lower_grammar(grammar: &Grammar, grammar_facts: &GrammarFacts) -> AstSrc 
 
         match lower_enum(grammar, rule) {
             Some(variants) => {
-                let enum_src = AstEnumSrc {
-                    doc: Vec::new(),
-                    name,
-                    traits: Vec::new(),
-                    variants,
-                };
+                let enum_src = AstEnumSrc { doc: Vec::new(), name, traits: Vec::new(), variants };
                 res.enums.push(enum_src);
             }
             None => {
@@ -33,12 +25,7 @@ pub fn lower_grammar(grammar: &Grammar, grammar_facts: &GrammarFacts) -> AstSrc 
 
                 lower_rule(&mut fields, grammar, grammar_facts, None, rule);
 
-                res.nodes.push(AstNodeSrc {
-                    doc: Vec::new(),
-                    name,
-                    traits: Vec::new(),
-                    fields,
-                });
+                res.nodes.push(AstNodeSrc { doc: Vec::new(), name, traits: Vec::new(), fields });
             }
         }
     }
@@ -99,11 +86,7 @@ fn lower_rule(
         Rule::Node(node) => {
             let ty = grammar[*node].name.clone();
             let name = label.cloned().unwrap_or_else(|| to_lower_snake_case(&ty));
-            let field = Field::Node {
-                name,
-                ty,
-                cardinality: Cardinality::Optional,
-            };
+            let field = Field::Node { name, ty, cardinality: Cardinality::Optional };
             acc.push(field);
         }
         Rule::Token(token) => {
@@ -118,14 +101,8 @@ fn lower_rule(
         Rule::Rep(inner) => {
             if let Rule::Node(node) = &**inner {
                 let ty = grammar[*node].name.clone();
-                let name = label
-                    .cloned()
-                    .unwrap_or_else(|| pluralize(&to_lower_snake_case(&ty)));
-                let field = Field::Node {
-                    name,
-                    ty,
-                    cardinality: Cardinality::Many,
-                };
+                let name = label.cloned().unwrap_or_else(|| pluralize(&to_lower_snake_case(&ty)));
+                let field = Field::Node { name, ty, cardinality: Cardinality::Many };
                 acc.push(field);
                 return;
             }
@@ -186,14 +163,8 @@ fn lower_separated_list(
         return false;
     }
     let ty = grammar[*node].name.clone();
-    let name = label
-        .cloned()
-        .unwrap_or_else(|| pluralize(&to_lower_snake_case(&ty)));
-    let field = Field::Node {
-        name,
-        ty,
-        cardinality: Cardinality::Many,
-    };
+    let name = label.cloned().unwrap_or_else(|| pluralize(&to_lower_snake_case(&ty)));
+    let field = Field::Node { name, ty, cardinality: Cardinality::Many };
     acc.push(field);
     true
 }
