@@ -46,7 +46,7 @@ impl<'a, 'b> AstNodesSrc<'a, 'b> {
                     let methods = node.fields.iter().map(|field| {
                         let method_name = format_ident!("{}", field.method_name(grammar_facts));
                         let ty = field.ty();
-                        
+
                         if field.is_many() {
                             quote! {
                                 #[inline]
