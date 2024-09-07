@@ -147,7 +147,6 @@ impl<'a> Cursor<'a> {
             '|' => Pipe,
             '+' => Plus,
             '*' => Star,
-            '^' => Caret,
             '%' => Percent,
 
             // Character literal.

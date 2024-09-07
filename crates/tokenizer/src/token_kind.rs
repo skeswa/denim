@@ -88,8 +88,6 @@ pub enum TokenKind {
     At,
     /// "!".
     Bang,
-    /// "^".
-    Caret,
     /// "}".
     CloseBrace,
     /// "]".

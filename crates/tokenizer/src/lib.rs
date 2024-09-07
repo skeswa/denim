@@ -14,10 +14,14 @@ mod special_char;
 mod string_literal_ending;
 mod token;
 mod token_kind;
-pub mod tokenize;
-mod unescape;
+mod tokenize;
+pub mod unescape;
 
 pub use escape_error::*;
+pub use literal_kind::*;
 pub use mixed_unit::*;
 pub use mode::*;
+pub use string_literal_ending::*;
+pub use token_kind::*;
+pub use tokenize::*;
 pub use unescape::*;
