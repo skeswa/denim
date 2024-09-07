@@ -1,1 +1,1 @@
-"'\"                                                                             | 2   | Literal { kind: Char { is_terminated: false } }
+"'\"                                                         | 2   | Literal { kind: Char { is_terminated: false } }

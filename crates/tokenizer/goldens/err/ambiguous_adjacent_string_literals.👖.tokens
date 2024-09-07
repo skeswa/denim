@@ -1,29 +1,29 @@
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"print_adjacent_string_literals"                                                 | 30  | Ident
-"("                                                                              | 1   | OpenParen
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\n    "                                                                         | 5   | Whitespace
-"/* Could be two adjacent empty strings (`\"\"` + `\"\"`): */"                   | 56  | BlockComment { is_terminated: true }
-"\n    "                                                                         | 5   | Whitespace
-"\"\"\"\"this is a string \"\"and here comes one more\"\n    \"\"\""             | 55  | Literal { kind: Str { ending: TerminatedString { is_multiline: true } } }
-" "                                                                              | 1   | Whitespace
-"-"                                                                              | 1   | Minus
-" "                                                                              | 1   | Whitespace
-"one"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"more"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"for"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"the"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"road"                                                                           | 4   | UnknownPrefix
-"\"\"\"\n  );\n}"                                                                | 10  | Literal { kind: Str { ending: UnterminatedString } }
+"pub"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"print_adjacent_string_literals"                             | 30  | Ident
+"("                                                          | 1   | OpenParen
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\n    "                                                     | 5   | Whitespace
+"/* Could be two adjacent empty strings (`\"\"` + `\"\"`): … | 56  | BlockComment { is_terminated: true }
+"\n    "                                                     | 5   | Whitespace
+"\"\"\"\"this is a string \"\"and here comes one more\"\n  … | 55  | Literal { kind: Str { ending: TerminatedString { is_multiline: true } } }
+" "                                                          | 1   | Whitespace
+"-"                                                          | 1   | Minus
+" "                                                          | 1   | Whitespace
+"one"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"more"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"for"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"the"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"road"                                                       | 4   | UnknownPrefix
+"\"\"\"\n  );\n}"                                            | 10  | Literal { kind: Str { ending: UnterminatedString } }

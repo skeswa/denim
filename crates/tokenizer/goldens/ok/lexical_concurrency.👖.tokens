@@ -1,184 +1,184 @@
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"fetch_data"                                                                     | 10  | Ident
-"("                                                                              | 1   | OpenParen
-"name"                                                                           | 4   | Ident
-":"                                                                              | 1   | Colon
-" "                                                                              | 1   | Whitespace
-"str"                                                                            | 3   | Ident
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"-"                                                                              | 1   | Minus
-">"                                                                              | 1   | Gt
-" "                                                                              | 1   | Whitespace
-"str"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"fetch"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\n    "                                                                         | 5   | Whitespace
-"url"                                                                            | 3   | Ident
-":"                                                                              | 1   | Colon
-" "                                                                              | 1   | Whitespace
-"\"https://data.com/named/$name\""                                               | 30  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-","                                                                              | 1   | Comma
-"\n    "                                                                         | 5   | Whitespace
-"method"                                                                         | 6   | Ident
-":"                                                                              | 1   | Colon
-" "                                                                              | 1   | Whitespace
-"\"POST\""                                                                       | 6   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-")"                                                                              | 1   | CloseParen
-"\n"                                                                             | 1   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n\n"                                                                           | 2   | Whitespace
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"fetch_multiple_data"                                                            | 19  | Ident
-"("                                                                              | 1   | OpenParen
-"name"                                                                           | 4   | Ident
-":"                                                                              | 1   | Colon
-" "                                                                              | 1   | Whitespace
-"["                                                                              | 1   | OpenBracket
-"str"                                                                            | 3   | Ident
-"]"                                                                              | 1   | CloseBracket
-","                                                                              | 1   | Comma
-" "                                                                              | 1   | Whitespace
-"limit"                                                                          | 5   | Ident
-":"                                                                              | 1   | Colon
-" "                                                                              | 1   | Whitespace
-"u32"                                                                            | 3   | Ident
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"-"                                                                              | 1   | Minus
-">"                                                                              | 1   | Gt
-" "                                                                              | 1   | Whitespace
-"["                                                                              | 1   | OpenBracket
-"str"                                                                            | 3   | Ident
-"]"                                                                              | 1   | CloseBracket
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"let"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"first"                                                                          | 5   | Ident
-" "                                                                              | 1   | Whitespace
-"="                                                                              | 1   | Eq
-" "                                                                              | 1   | Whitespace
-"fetch_data"                                                                     | 10  | Ident
-"("                                                                              | 1   | OpenParen
-"1"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
-"."                                                                              | 1   | Dot
-"as_str"                                                                         | 6   | Ident
-")"                                                                              | 1   | CloseParen
-";"                                                                              | 1   | Semi
-"\n  "                                                                           | 3   | Whitespace
-"let"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"second"                                                                         | 6   | Ident
-" "                                                                              | 1   | Whitespace
-"="                                                                              | 1   | Eq
-" "                                                                              | 1   | Whitespace
-"fetch_data"                                                                     | 10  | Ident
-"("                                                                              | 1   | OpenParen
-"2"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
-"."                                                                              | 1   | Dot
-"as_str"                                                                         | 6   | Ident
-")"                                                                              | 1   | CloseParen
-";"                                                                              | 1   | Semi
-"\n\n  "                                                                         | 4   | Whitespace
-"let"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"prefix"                                                                         | 6   | Ident
-" "                                                                              | 1   | Whitespace
-"="                                                                              | 1   | Eq
-" "                                                                              | 1   | Whitespace
-"\"$first/$second\""                                                             | 16  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-";"                                                                              | 1   | Semi
-"\n\n  "                                                                         | 4   | Whitespace
-"let"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"the_rest"                                                                       | 8   | Ident
-" "                                                                              | 1   | Whitespace
-"="                                                                              | 1   | Eq
-" "                                                                              | 1   | Whitespace
-"3"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
-".."                                                                             | 2   | DotDot
-"limit"                                                                          | 5   | Ident
-"\n    "                                                                         | 5   | Whitespace
-"."                                                                              | 1   | Dot
-"map"                                                                            | 3   | Ident
-"("                                                                              | 1   | OpenParen
-"|"                                                                              | 1   | Pipe
-"i"                                                                              | 1   | Ident
-"|"                                                                              | 1   | Pipe
-" "                                                                              | 1   | Whitespace
-"fetch_data"                                                                     | 10  | Ident
-"("                                                                              | 1   | OpenParen
-"\"$prefix/$i\""                                                                 | 12  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"."                                                                              | 1   | Dot
-"async"                                                                          | 5   | Ident
-")"                                                                              | 1   | CloseParen
-"\n    "                                                                         | 5   | Whitespace
-"."                                                                              | 1   | Dot
-"map"                                                                            | 3   | Ident
-"("                                                                              | 1   | OpenParen
-"|"                                                                              | 1   | Pipe
-"eventual"                                                                       | 8   | Ident
-"|"                                                                              | 1   | Pipe
-" "                                                                              | 1   | Whitespace
-"eventual"                                                                       | 8   | Ident
-"."                                                                              | 1   | Dot
-"await"                                                                          | 5   | Ident
-")"                                                                              | 1   | CloseParen
-"\n    "                                                                         | 5   | Whitespace
-"."                                                                              | 1   | Dot
-"collect"                                                                        | 7   | Ident
-"("                                                                              | 1   | OpenParen
-"to_list"                                                                        | 7   | Ident
-")"                                                                              | 1   | CloseParen
-";"                                                                              | 1   | Semi
-"\n\n  "                                                                         | 4   | Whitespace
-"["                                                                              | 1   | OpenBracket
-" "                                                                              | 1   | Whitespace
-"first"                                                                          | 5   | Ident
-","                                                                              | 1   | Comma
-" "                                                                              | 1   | Whitespace
-"second"                                                                         | 6   | Ident
-","                                                                              | 1   | Comma
-" "                                                                              | 1   | Whitespace
-".."                                                                             | 2   | DotDot
-"the_rest"                                                                       | 8   | Ident
-" "                                                                              | 1   | Whitespace
-"]"                                                                              | 1   | CloseBracket
-"\n"                                                                             | 1   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n\n"                                                                           | 2   | Whitespace
-"---"                                                                            | 3   | SectionSeparator
-"\n"                                                                             | 1   | Whitespace
-"from"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"collections"                                                                    | 11  | Ident
-" "                                                                              | 1   | Whitespace
-"use"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"to_list"                                                                        | 7   | Ident
-";"                                                                              | 1   | Semi
-"\n"                                                                             | 1   | Whitespace
-"from"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"web"                                                                            | 3   | Ident
-"/"                                                                              | 1   | Slash
-"http"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"use"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"fetch"                                                                          | 5   | Ident
-";"                                                                              | 1   | Semi
+"pub"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"fetch_data"                                                 | 10  | Ident
+"("                                                          | 1   | OpenParen
+"name"                                                       | 4   | Ident
+":"                                                          | 1   | Colon
+" "                                                          | 1   | Whitespace
+"str"                                                        | 3   | Ident
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"-"                                                          | 1   | Minus
+">"                                                          | 1   | Gt
+" "                                                          | 1   | Whitespace
+"str"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"fetch"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\n    "                                                     | 5   | Whitespace
+"url"                                                        | 3   | Ident
+":"                                                          | 1   | Colon
+" "                                                          | 1   | Whitespace
+"\"https://data.com/named/$name\""                           | 30  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+","                                                          | 1   | Comma
+"\n    "                                                     | 5   | Whitespace
+"method"                                                     | 6   | Ident
+":"                                                          | 1   | Colon
+" "                                                          | 1   | Whitespace
+"\"POST\""                                                   | 6   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+")"                                                          | 1   | CloseParen
+"\n"                                                         | 1   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n\n"                                                       | 2   | Whitespace
+"pub"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"fetch_multiple_data"                                        | 19  | Ident
+"("                                                          | 1   | OpenParen
+"name"                                                       | 4   | Ident
+":"                                                          | 1   | Colon
+" "                                                          | 1   | Whitespace
+"["                                                          | 1   | OpenBracket
+"str"                                                        | 3   | Ident
+"]"                                                          | 1   | CloseBracket
+","                                                          | 1   | Comma
+" "                                                          | 1   | Whitespace
+"limit"                                                      | 5   | Ident
+":"                                                          | 1   | Colon
+" "                                                          | 1   | Whitespace
+"u32"                                                        | 3   | Ident
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"-"                                                          | 1   | Minus
+">"                                                          | 1   | Gt
+" "                                                          | 1   | Whitespace
+"["                                                          | 1   | OpenBracket
+"str"                                                        | 3   | Ident
+"]"                                                          | 1   | CloseBracket
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"let"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"first"                                                      | 5   | Ident
+" "                                                          | 1   | Whitespace
+"="                                                          | 1   | Eq
+" "                                                          | 1   | Whitespace
+"fetch_data"                                                 | 10  | Ident
+"("                                                          | 1   | OpenParen
+"1"                                                          | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+"."                                                          | 1   | Dot
+"as_str"                                                     | 6   | Ident
+")"                                                          | 1   | CloseParen
+";"                                                          | 1   | Semi
+"\n  "                                                       | 3   | Whitespace
+"let"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"second"                                                     | 6   | Ident
+" "                                                          | 1   | Whitespace
+"="                                                          | 1   | Eq
+" "                                                          | 1   | Whitespace
+"fetch_data"                                                 | 10  | Ident
+"("                                                          | 1   | OpenParen
+"2"                                                          | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+"."                                                          | 1   | Dot
+"as_str"                                                     | 6   | Ident
+")"                                                          | 1   | CloseParen
+";"                                                          | 1   | Semi
+"\n\n  "                                                     | 4   | Whitespace
+"let"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"prefix"                                                     | 6   | Ident
+" "                                                          | 1   | Whitespace
+"="                                                          | 1   | Eq
+" "                                                          | 1   | Whitespace
+"\"$first/$second\""                                         | 16  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+";"                                                          | 1   | Semi
+"\n\n  "                                                     | 4   | Whitespace
+"let"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"the_rest"                                                   | 8   | Ident
+" "                                                          | 1   | Whitespace
+"="                                                          | 1   | Eq
+" "                                                          | 1   | Whitespace
+"3"                                                          | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+".."                                                         | 2   | DotDot
+"limit"                                                      | 5   | Ident
+"\n    "                                                     | 5   | Whitespace
+"."                                                          | 1   | Dot
+"map"                                                        | 3   | Ident
+"("                                                          | 1   | OpenParen
+"|"                                                          | 1   | Pipe
+"i"                                                          | 1   | Ident
+"|"                                                          | 1   | Pipe
+" "                                                          | 1   | Whitespace
+"fetch_data"                                                 | 10  | Ident
+"("                                                          | 1   | OpenParen
+"\"$prefix/$i\""                                             | 12  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"."                                                          | 1   | Dot
+"async"                                                      | 5   | Ident
+")"                                                          | 1   | CloseParen
+"\n    "                                                     | 5   | Whitespace
+"."                                                          | 1   | Dot
+"map"                                                        | 3   | Ident
+"("                                                          | 1   | OpenParen
+"|"                                                          | 1   | Pipe
+"eventual"                                                   | 8   | Ident
+"|"                                                          | 1   | Pipe
+" "                                                          | 1   | Whitespace
+"eventual"                                                   | 8   | Ident
+"."                                                          | 1   | Dot
+"await"                                                      | 5   | Ident
+")"                                                          | 1   | CloseParen
+"\n    "                                                     | 5   | Whitespace
+"."                                                          | 1   | Dot
+"collect"                                                    | 7   | Ident
+"("                                                          | 1   | OpenParen
+"to_list"                                                    | 7   | Ident
+")"                                                          | 1   | CloseParen
+";"                                                          | 1   | Semi
+"\n\n  "                                                     | 4   | Whitespace
+"["                                                          | 1   | OpenBracket
+" "                                                          | 1   | Whitespace
+"first"                                                      | 5   | Ident
+","                                                          | 1   | Comma
+" "                                                          | 1   | Whitespace
+"second"                                                     | 6   | Ident
+","                                                          | 1   | Comma
+" "                                                          | 1   | Whitespace
+".."                                                         | 2   | DotDot
+"the_rest"                                                   | 8   | Ident
+" "                                                          | 1   | Whitespace
+"]"                                                          | 1   | CloseBracket
+"\n"                                                         | 1   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n\n"                                                       | 2   | Whitespace
+"---"                                                        | 3   | SectionSeparator
+"\n"                                                         | 1   | Whitespace
+"from"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"collections"                                                | 11  | Ident
+" "                                                          | 1   | Whitespace
+"use"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"to_list"                                                    | 7   | Ident
+";"                                                          | 1   | Semi
+"\n"                                                         | 1   | Whitespace
+"from"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"web"                                                        | 3   | Ident
+"/"                                                          | 1   | Slash
+"http"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"use"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"fetch"                                                      | 5   | Ident
+";"                                                          | 1   | Semi

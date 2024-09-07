@@ -1,30 +1,30 @@
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"["                                                                              | 1   | OpenBracket
-"\n  "                                                                           | 3   | Whitespace
-"'x'"                                                                            | 3   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-"' '"                                                                            | 3   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-"'0'"                                                                            | 3   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-"'hello'"                                                                        | 7   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-"'\x7f'"                                                                         | 6   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-"'\n'"                                                                           | 4   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-"'\\'"                                                                           | 4   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n  "                                                                           | 3   | Whitespace
-"'\''"                                                                           | 4   | Literal { kind: Char { is_terminated: true } }
-","                                                                              | 1   | Comma
-"\n"                                                                             | 1   | Whitespace
-"]"                                                                              | 1   | CloseBracket
-")"                                                                              | 1   | CloseParen
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"["                                                          | 1   | OpenBracket
+"\n  "                                                       | 3   | Whitespace
+"'x'"                                                        | 3   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+"' '"                                                        | 3   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+"'0'"                                                        | 3   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+"'hello'"                                                    | 7   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+"'\x7f'"                                                     | 6   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+"'\n'"                                                       | 4   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+"'\\'"                                                       | 4   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n  "                                                       | 3   | Whitespace
+"'\''"                                                       | 4   | Literal { kind: Char { is_terminated: true } }
+","                                                          | 1   | Comma
+"\n"                                                         | 1   | Whitespace
+"]"                                                          | 1   | CloseBracket
+")"                                                          | 1   | CloseParen

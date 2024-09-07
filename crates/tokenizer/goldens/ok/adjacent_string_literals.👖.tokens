@@ -1,22 +1,22 @@
-"pub"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"print_adjacent_string_literals"                                                 | 30  | Ident
-"("                                                                              | 1   | OpenParen
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\n    "                                                                         | 5   | Whitespace
-"\"this is a string \""                                                          | 19  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-"\"and here comes one more\""                                                    | 25  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-"\n    "                                                                         | 5   | Whitespace
-"\"\"\" - one more for the road\"\"\""                                           | 30  | Literal { kind: Str { ending: TerminatedString { is_multiline: true } } }
-"\n  "                                                                           | 3   | Whitespace
-")"                                                                              | 1   | CloseParen
-";"                                                                              | 1   | Semi
-"\n"                                                                             | 1   | Whitespace
-"}"                                                                              | 1   | CloseBrace
+"pub"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"print_adjacent_string_literals"                             | 30  | Ident
+"("                                                          | 1   | OpenParen
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\n    "                                                     | 5   | Whitespace
+"\"this is a string \""                                      | 19  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+"\"and here comes one more\""                                | 25  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+"\n    "                                                     | 5   | Whitespace
+"\"\"\" - one more for the road\"\"\""                       | 30  | Literal { kind: Str { ending: TerminatedString { is_multiline: true } } }
+"\n  "                                                       | 3   | Whitespace
+")"                                                          | 1   | CloseParen
+";"                                                          | 1   | Semi
+"\n"                                                         | 1   | Whitespace
+"}"                                                          | 1   | CloseBrace

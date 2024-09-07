@@ -1,50 +1,50 @@
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"call_your_mom"                                                                  | 13  | Ident
-"("                                                                              | 1   | OpenParen
-"mom"                                                                            | 3   | Ident
-":"                                                                              | 1   | Colon
-" "                                                                              | 1   | Whitespace
-"Fn"                                                                             | 2   | Ident
-"("                                                                              | 1   | OpenParen
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"-"                                                                              | 1   | Minus
-">"                                                                              | 1   | Gt
-" "                                                                              | 1   | Whitespace
-"unknown"                                                                        | 7   | Ident
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"📞${mom()}\""                                                                  | 14  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n"                                                                             | 1   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n\n"                                                                           | 2   | Whitespace
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"my_mom"                                                                         | 6   | Ident
-"("                                                                              | 1   | OpenParen
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"-"                                                                              | 1   | Minus
-">"                                                                              | 1   | Gt
-" "                                                                              | 1   | Whitespace
-"str"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"\"👩🏾‍🦱\""                                                                       | 17  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-"\n"                                                                             | 1   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n\n"                                                                           | 2   | Whitespace
-"call_your_mom"                                                                  | 13  | Ident
-"("                                                                              | 1   | OpenParen
-"my_mom"                                                                         | 6   | Ident
-"."                                                                              | 1   | Dot
-"fn"                                                                             | 2   | Ident
-")"                                                                              | 1   | CloseParen
-"\n"                                                                             | 1   | Whitespace
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"call_your_mom"                                              | 13  | Ident
+"("                                                          | 1   | OpenParen
+"mom"                                                        | 3   | Ident
+":"                                                          | 1   | Colon
+" "                                                          | 1   | Whitespace
+"Fn"                                                         | 2   | Ident
+"("                                                          | 1   | OpenParen
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"-"                                                          | 1   | Minus
+">"                                                          | 1   | Gt
+" "                                                          | 1   | Whitespace
+"unknown"                                                    | 7   | Ident
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"📞${mom()}\""                                              | 14  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n"                                                         | 1   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n\n"                                                       | 2   | Whitespace
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"my_mom"                                                     | 6   | Ident
+"("                                                          | 1   | OpenParen
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"-"                                                          | 1   | Minus
+">"                                                          | 1   | Gt
+" "                                                          | 1   | Whitespace
+"str"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"\"👩🏾‍🦱\""                                                   | 17  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+"\n"                                                         | 1   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n\n"                                                       | 2   | Whitespace
+"call_your_mom"                                              | 13  | Ident
+"("                                                          | 1   | OpenParen
+"my_mom"                                                     | 6   | Ident
+"."                                                          | 1   | Dot
+"fn"                                                         | 2   | Ident
+")"                                                          | 1   | CloseParen
+"\n"                                                         | 1   | Whitespace

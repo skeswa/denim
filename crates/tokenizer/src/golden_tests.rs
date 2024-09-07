@@ -28,7 +28,7 @@ mod golden_testing {
         path::{Path, PathBuf},
     };
 
-    use crate::{token::Token, tokenize::tokenize};
+    use crate::{golden_tests::FIRST_COLUMN_WIDTH, token::Token, tokenize::tokenize};
 
     /// A single test case that compares the "correct" tokenization of Denim
     /// source code against its "actual" tokenization.
@@ -61,16 +61,29 @@ mod golden_testing {
                     .replace("\t", "\\t");
 
                 let padded_token_len = format!("{: <3}", token.len.to_string());
-                let quoted_token_substring = if token_substring.chars().count() > 80 - 2 {
-                    format!("\"{}…", token_substring.chars().take(80 - 2).collect::<String>())
+                let token_substring_length = token_substring.chars().count();
+                let unpadded_first_column_width = FIRST_COLUMN_WIDTH - 2;
+
+                let quoted_token_substring = if token_substring_length > unpadded_first_column_width
+                {
+                    format!(
+                        "\"{}…",
+                        token_substring
+                            .chars()
+                            .take(unpadded_first_column_width)
+                            .collect::<String>()
+                    )
                 } else {
-                    format!("\"{}\"", token_substring)
+                    let missing_whitespace = (0..(unpadded_first_column_width
+                        - token_substring_length))
+                        .map(|_| ' ')
+                        .collect::<String>();
+
+                    format!("\"{}\"{}", token_substring, missing_whitespace)
                 };
 
-                let serialized_token = format!(
-                    "{: <80} | {} | {:?}",
-                    quoted_token_substring, padded_token_len, token.kind
-                );
+                let serialized_token =
+                    format!("{} | {} | {:?}", quoted_token_substring, padded_token_len, token.kind);
 
                 token_summaries.push(serialized_token);
 
@@ -123,3 +136,7 @@ mod golden_testing {
         }
     }
 }
+
+/// How many unicode characters wide the first column of the golden test case
+/// should be.
+const FIRST_COLUMN_WIDTH: usize = 60;

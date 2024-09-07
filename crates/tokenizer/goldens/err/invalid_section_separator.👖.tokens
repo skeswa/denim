@@ -1,17 +1,17 @@
-"hello"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"world\""                                                                      | 7   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-";"                                                                              | 1   | Semi
-"\n"                                                                             | 1   | Whitespace
-"---"                                                                            | 3   | SectionSeparator
-"-"                                                                              | 1   | Minus
-"\n"                                                                             | 1   | Whitespace
-"from"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"\"github.com/hello/world\""                                                     | 24  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-" "                                                                              | 1   | Whitespace
-"use"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"hello"                                                                          | 5   | Ident
-";"                                                                              | 1   | Semi
+"hello"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"world\""                                                  | 7   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+";"                                                          | 1   | Semi
+"\n"                                                         | 1   | Whitespace
+"---"                                                        | 3   | SectionSeparator
+"-"                                                          | 1   | Minus
+"\n"                                                         | 1   | Whitespace
+"from"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"\"github.com/hello/world\""                                 | 24  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+" "                                                          | 1   | Whitespace
+"use"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"hello"                                                      | 5   | Ident
+";"                                                          | 1   | Semi

@@ -1,36 +1,36 @@
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"print_random_number"                                                            | 19  | Ident
-"("                                                                              | 1   | OpenParen
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"let"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"r"                                                                              | 1   | Ident
-" "                                                                              | 1   | Whitespace
-"="                                                                              | 1   | Eq
-" "                                                                              | 1   | Whitespace
-"random_int"                                                                     | 10  | Ident
-"("                                                                              | 1   | OpenParen
-")"                                                                              | 1   | CloseParen
-";"                                                                              | 1   | Semi
-"\n\n  "                                                                         | 4   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"Here is a random number: $r\""                                                | 29  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n"                                                                             | 1   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n\n"                                                                           | 2   | Whitespace
-"---"                                                                            | 3   | SectionSeparator
-"\n"                                                                             | 1   | Whitespace
-"from"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"my_math_lib"                                                                    | 11  | Ident
-" "                                                                              | 1   | Whitespace
-"show"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"random_int"                                                                     | 10  | Ident
-";"                                                                              | 1   | Semi
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"print_random_number"                                        | 19  | Ident
+"("                                                          | 1   | OpenParen
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"let"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"r"                                                          | 1   | Ident
+" "                                                          | 1   | Whitespace
+"="                                                          | 1   | Eq
+" "                                                          | 1   | Whitespace
+"random_int"                                                 | 10  | Ident
+"("                                                          | 1   | OpenParen
+")"                                                          | 1   | CloseParen
+";"                                                          | 1   | Semi
+"\n\n  "                                                     | 4   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"Here is a random number: $r\""                            | 29  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n"                                                         | 1   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n\n"                                                       | 2   | Whitespace
+"---"                                                        | 3   | SectionSeparator
+"\n"                                                         | 1   | Whitespace
+"from"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"my_math_lib"                                                | 11  | Ident
+" "                                                          | 1   | Whitespace
+"show"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"random_int"                                                 | 10  | Ident
+";"                                                          | 1   | Semi

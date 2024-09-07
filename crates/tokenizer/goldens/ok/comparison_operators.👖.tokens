@@ -1,151 +1,151 @@
-"impl"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"Printify"                                                                       | 8   | Ident
-" "                                                                              | 1   | Whitespace
-"for"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"Val"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n  "                                                                           | 3   | Whitespace
-"fn"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"printify"                                                                       | 8   | Ident
-"("                                                                              | 1   | OpenParen
-"self"                                                                           | 4   | Ident
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n    "                                                                         | 5   | Whitespace
-"if"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"self"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"==="                                                                            | 3   | EqEqEq
-" "                                                                              | 1   | Whitespace
-"42"                                                                             | 2   | Literal { kind: Int { base: Decimal, is_empty: false } }
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n      "                                                                       | 7   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"so true\""                                                                    | 9   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n    "                                                                         | 5   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-" "                                                                              | 1   | Whitespace
-"else"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"if"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"self"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"=="                                                                             | 2   | EqEq
-" "                                                                              | 1   | Whitespace
-"69"                                                                             | 2   | Literal { kind: Int { base: Decimal, is_empty: false } }
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n      "                                                                       | 7   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"nice\""                                                                       | 6   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n    "                                                                         | 5   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-" "                                                                              | 1   | Whitespace
-"else"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"if"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"self"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"<"                                                                              | 1   | Lt
-" "                                                                              | 1   | Whitespace
-"0"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: true } }
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n      "                                                                       | 7   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"why so negative\""                                                            | 17  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n    "                                                                         | 5   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-" "                                                                              | 1   | Whitespace
-"else"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"if"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"self"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"!="                                                                             | 2   | NEq
-" "                                                                              | 1   | Whitespace
-"1"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
-" "                                                                              | 1   | Whitespace
-"or"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"self"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"!=="                                                                            | 3   | NEqEq
-" "                                                                              | 1   | Whitespace
-"2"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n      "                                                                       | 7   | Whitespace
-"if"                                                                             | 2   | Ident
-" "                                                                              | 1   | Whitespace
-"not"                                                                            | 3   | Ident
-" "                                                                              | 1   | Whitespace
-"self"                                                                           | 4   | Ident
-"."                                                                              | 1   | Dot
-"lt"                                                                             | 2   | Ident
-"("                                                                              | 1   | OpenParen
-"10"                                                                             | 2   | Literal { kind: Int { base: Decimal, is_empty: false } }
-")"                                                                              | 1   | CloseParen
-"."                                                                              | 1   | Dot
-"and"                                                                            | 3   | Ident
-"("                                                                              | 1   | OpenParen
-"self"                                                                           | 4   | Ident
-"."                                                                              | 1   | Dot
-"gt"                                                                             | 2   | Ident
-"("                                                                              | 1   | OpenParen
-"3"                                                                              | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
-")"                                                                              | 1   | CloseParen
-")"                                                                              | 1   | CloseParen
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n        "                                                                     | 9   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"free as a three i see\""                                                      | 23  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n      "                                                                       | 7   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-" "                                                                              | 1   | Whitespace
-"else"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n        "                                                                     | 9   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"🤷🏾‍♂️\""                                                                      | 19  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n      "                                                                       | 7   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n    "                                                                         | 5   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-" "                                                                              | 1   | Whitespace
-"else"                                                                           | 4   | Ident
-" "                                                                              | 1   | Whitespace
-"{"                                                                              | 1   | OpenBrace
-"\n      "                                                                       | 7   | Whitespace
-"print"                                                                          | 5   | Ident
-"("                                                                              | 1   | OpenParen
-"\"looks like we have a DJ on our hands\""                                       | 38  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
-")"                                                                              | 1   | CloseParen
-"\n    "                                                                         | 5   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n  "                                                                           | 3   | Whitespace
-"}"                                                                              | 1   | CloseBrace
-"\n"                                                                             | 1   | Whitespace
-"}"                                                                              | 1   | CloseBrace
+"impl"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"Printify"                                                   | 8   | Ident
+" "                                                          | 1   | Whitespace
+"for"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"Val"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n  "                                                       | 3   | Whitespace
+"fn"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"printify"                                                   | 8   | Ident
+"("                                                          | 1   | OpenParen
+"self"                                                       | 4   | Ident
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n    "                                                     | 5   | Whitespace
+"if"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"self"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"==="                                                        | 3   | EqEqEq
+" "                                                          | 1   | Whitespace
+"42"                                                         | 2   | Literal { kind: Int { base: Decimal, is_empty: false } }
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n      "                                                   | 7   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"so true\""                                                | 9   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n    "                                                     | 5   | Whitespace
+"}"                                                          | 1   | CloseBrace
+" "                                                          | 1   | Whitespace
+"else"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"if"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"self"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"=="                                                         | 2   | EqEq
+" "                                                          | 1   | Whitespace
+"69"                                                         | 2   | Literal { kind: Int { base: Decimal, is_empty: false } }
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n      "                                                   | 7   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"nice\""                                                   | 6   | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n    "                                                     | 5   | Whitespace
+"}"                                                          | 1   | CloseBrace
+" "                                                          | 1   | Whitespace
+"else"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"if"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"self"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"<"                                                          | 1   | Lt
+" "                                                          | 1   | Whitespace
+"0"                                                          | 1   | Literal { kind: Int { base: Decimal, is_empty: true } }
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n      "                                                   | 7   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"why so negative\""                                        | 17  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n    "                                                     | 5   | Whitespace
+"}"                                                          | 1   | CloseBrace
+" "                                                          | 1   | Whitespace
+"else"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"if"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"self"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"!="                                                         | 2   | NEq
+" "                                                          | 1   | Whitespace
+"1"                                                          | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+" "                                                          | 1   | Whitespace
+"or"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"self"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"!=="                                                        | 3   | NEqEq
+" "                                                          | 1   | Whitespace
+"2"                                                          | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n      "                                                   | 7   | Whitespace
+"if"                                                         | 2   | Ident
+" "                                                          | 1   | Whitespace
+"not"                                                        | 3   | Ident
+" "                                                          | 1   | Whitespace
+"self"                                                       | 4   | Ident
+"."                                                          | 1   | Dot
+"lt"                                                         | 2   | Ident
+"("                                                          | 1   | OpenParen
+"10"                                                         | 2   | Literal { kind: Int { base: Decimal, is_empty: false } }
+")"                                                          | 1   | CloseParen
+"."                                                          | 1   | Dot
+"and"                                                        | 3   | Ident
+"("                                                          | 1   | OpenParen
+"self"                                                       | 4   | Ident
+"."                                                          | 1   | Dot
+"gt"                                                         | 2   | Ident
+"("                                                          | 1   | OpenParen
+"3"                                                          | 1   | Literal { kind: Int { base: Decimal, is_empty: false } }
+")"                                                          | 1   | CloseParen
+")"                                                          | 1   | CloseParen
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n        "                                                 | 9   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"free as a three i see\""                                  | 23  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n      "                                                   | 7   | Whitespace
+"}"                                                          | 1   | CloseBrace
+" "                                                          | 1   | Whitespace
+"else"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n        "                                                 | 9   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"🤷🏾‍♂️\""                                                  | 19  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n      "                                                   | 7   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n    "                                                     | 5   | Whitespace
+"}"                                                          | 1   | CloseBrace
+" "                                                          | 1   | Whitespace
+"else"                                                       | 4   | Ident
+" "                                                          | 1   | Whitespace
+"{"                                                          | 1   | OpenBrace
+"\n      "                                                   | 7   | Whitespace
+"print"                                                      | 5   | Ident
+"("                                                          | 1   | OpenParen
+"\"looks like we have a DJ on our hands\""                   | 38  | Literal { kind: Str { ending: TerminatedString { is_multiline: false } } }
+")"                                                          | 1   | CloseParen
+"\n    "                                                     | 5   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n  "                                                       | 3   | Whitespace
+"}"                                                          | 1   | CloseBrace
+"\n"                                                         | 1   | Whitespace
+"}"                                                          | 1   | CloseBrace
