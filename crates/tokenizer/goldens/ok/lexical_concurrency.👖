@@ -1,0 +1,24 @@
+pub fn fetch_data(name: str) -> str {
+  fetch(
+    url: "https://data.com/named/$name",
+    method: "POST",
+  )
+}
+
+pub fn fetch_multiple_data(name: [str], limit: u32) -> [str] {
+  let first = fetch_data(1.as_str);
+  let second = fetch_data(2.as_str);
+
+  let prefix = "$first/$second";
+
+  let the_rest = 3..limit
+    .map(|i| fetch_data("$prefix/$i").async)
+    .map(|eventual| eventual.await)
+    .collect(to_list);
+
+  [ first, second, ..the_rest ]
+}
+
+---
+from collections use to_list;
+from web/http use fetch;
