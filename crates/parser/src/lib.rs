@@ -1,5 +1,6 @@
 mod error_util;
 mod event;
+mod grammar;
 mod input;
 mod output;
 mod parser;
