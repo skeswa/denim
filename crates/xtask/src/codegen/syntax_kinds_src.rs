@@ -157,6 +157,7 @@ impl SyntaxKindsSrc {
             self.literals.iter().map(|name| format_ident!("{}", name)).collect::<Vec<_>>();
 
         let tokens = self.tokens.iter().map(|name| format_ident!("{}", name)).collect::<Vec<_>>();
+        let last_token = tokens.last().unwrap();
 
         let nodes = self.nodes.iter().map(|name| format_ident!("{}", name)).collect::<Vec<_>>();
 
@@ -184,6 +185,11 @@ impl SyntaxKindsSrc {
                 #[doc(hidden)]
                 __LAST,
             }
+
+            /// Makes the last variant of `SyntaxKind` that can be considered a
+            /// token.
+            pub const LAST_SYNTAX_KIND_TOKEN: SyntaxKind = SyntaxKind::#last_token;
+
             use self::SyntaxKind::*;
 
             impl SyntaxKind {

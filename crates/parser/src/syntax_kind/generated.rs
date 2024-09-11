@@ -234,6 +234,9 @@ pub enum SyntaxKind {
     #[doc(hidden)]
     __LAST,
 }
+#[doc = r" Makes the last variant of `SyntaxKind` that can be considered a"]
+#[doc = r" token."]
+pub const LAST_SYNTAX_KIND_TOKEN: SyntaxKind = SyntaxKind::WHITESPACE;
 use self::SyntaxKind::*;
 impl SyntaxKind {
     #[doc = r" Checks whether this syntax kind is a strict keyword for the given edition."]

@@ -4,7 +4,7 @@
 mod generated;
 
 #[allow(unreachable_pub)]
-pub use self::generated::SyntaxKind;
+pub use self::generated::{SyntaxKind, LAST_SYNTAX_KIND_TOKEN};
 
 impl From<u16> for SyntaxKind {
     #[inline]

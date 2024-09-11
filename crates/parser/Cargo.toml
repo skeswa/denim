@@ -4,5 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+drop_bomb = "0.1.5"
+stdx = { path = "../stdx" }
 tracing = "0.1.40"
 tokenizer = { path = "../tokenizer" }
