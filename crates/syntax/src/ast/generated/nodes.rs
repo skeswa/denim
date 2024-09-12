@@ -811,8 +811,6 @@ impl NameRef {
     #[inline]
     pub fn Self_token(&self) -> Option<SyntaxToken> { support::token(&self.syntax, T![Self]) }
     #[inline]
-    pub fn crate_token(&self) -> Option<SyntaxToken> { support::token(&self.syntax, T![crate]) }
-    #[inline]
     pub fn ident_token(&self) -> Option<SyntaxToken> { support::token(&self.syntax, T![ident]) }
     #[inline]
     pub fn int_number_token(&self) -> Option<SyntaxToken> {
@@ -820,8 +818,6 @@ impl NameRef {
     }
     #[inline]
     pub fn self_token(&self) -> Option<SyntaxToken> { support::token(&self.syntax, T![self]) }
-    #[inline]
-    pub fn super_token(&self) -> Option<SyntaxToken> { support::token(&self.syntax, T![super]) }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]

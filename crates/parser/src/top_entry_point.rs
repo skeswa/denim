@@ -1,4 +1,4 @@
-use crate::{event, input::Input, output::Output, parser};
+use crate::{event, grammar, input::Input, output::Output, parser};
 
 /// Parse the whole of the input as a given syntactic construct.
 ///
@@ -19,11 +19,12 @@ impl TopEntryPoint {
     pub fn parse(&self, input: &Input) -> Output {
         let _p = tracing::info_span!("TopEntryPoint::parse", ?self).entered();
         let entry_point: fn(&'_ mut parser::Parser<'_>) = match self {
-            TopEntryPoint::SourceFile => todo!(),
+            TopEntryPoint::SourceFile => grammar::entry::top::source_file,
             TopEntryPoint::Pattern => todo!(),
             TopEntryPoint::Type => todo!(),
             TopEntryPoint::Expr => todo!(),
         };
+
         let mut p = parser::Parser::new(input);
         entry_point(&mut p);
         let events = p.finish();

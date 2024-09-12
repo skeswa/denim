@@ -28,7 +28,7 @@ Name =
   '#ident' | 'self'
 
 NameRef =
-  '#ident' | '@int_number' | 'self' | 'super' | 'crate' | 'Self'
+  '#ident' | '@int_number' | 'self' | 'Self'
 
 Path =
   (qualifier:Path '::')? segment:PathSegment

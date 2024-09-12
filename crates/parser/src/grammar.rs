@@ -38,6 +38,12 @@
 // mod patterns;
 // mod types;
 
+mod attributes;
+mod expressions;
+mod items;
+mod paths;
+mod types;
+
 use crate::{
     parser::{CompletedMarker, Marker, Parser},
     SyntaxKind::{self, *},
@@ -51,11 +57,9 @@ pub(crate) mod entry {
         use super::*;
 
         pub(crate) fn source_file(p: &mut Parser<'_>) {
-            todo!()
-            // let m = p.start();
-            // p.eat(SHEBANG);
-            // items::mod_contents(p, false);
-            // m.complete(p, SOURCE_FILE);
+            let m = p.start();
+            items::source_contents(p, false);
+            m.complete(p, SOURCE_FILE);
         }
 
         pub(crate) fn pattern(p: &mut Parser<'_>) {
