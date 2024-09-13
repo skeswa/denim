@@ -5,6 +5,16 @@ use std::{
 
 use crate::{token::Token, tokenize::tokenize};
 
+/// How many unicode characters wide the first column of the golden test case
+/// should be.
+const FIRST_COLUMN_WIDTH: usize = 60;
+
+/// File extension used by source files.
+const SOURCE_FILE_EXTENSION: &'static str = "denim";
+
+/// File extension used by token golden files.
+const TOKENS_FILE_EXTENSION: &'static str = "dtok";
+
 /// A single test case that compares the "correct" tokenization of Denim
 /// source code against its "actual" tokenization.
 #[derive(PartialEq, Eq, PartialOrd, Ord)]
@@ -74,7 +84,7 @@ impl GoldenTestCases {
     pub(crate) fn in_dir(dir_name: &'static str) -> impl Iterator<Item = GoldenTestCase> {
         let crate_root_dir_path = Path::new(env!("CARGO_MANIFEST_DIR"));
 
-        let goldens_dir_path = crate_root_dir_path.join("goldens");
+        let goldens_dir_path = crate_root_dir_path.join("src").join("goldens");
 
         let dir_path = goldens_dir_path.join(dir_name);
 
@@ -89,12 +99,12 @@ impl GoldenTestCases {
             let file_path = file.path();
 
             // Skip non-source files.
-            if file_path.extension().unwrap_or_default() != "👖" {
+            if file_path.extension().unwrap_or_default() != SOURCE_FILE_EXTENSION {
                 continue;
             }
 
             let source_path = file_path.clone();
-            let tokens_path = file_path.clone().with_extension("👖.tokens");
+            let tokens_path = file_path.clone().with_extension(TOKENS_FILE_EXTENSION);
 
             let source = read_to_string(&source_path).unwrap();
 
@@ -106,7 +116,3 @@ impl GoldenTestCases {
         golden_test_cases.into_iter()
     }
 }
-
-/// How many unicode characters wide the first column of the golden test case
-/// should be.
-const FIRST_COLUMN_WIDTH: usize = 60;
