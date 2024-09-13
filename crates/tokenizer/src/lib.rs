@@ -3,8 +3,7 @@ mod cursor;
 mod cursor_eaters;
 mod cursor_tokenizers;
 mod escape_error;
-#[cfg(test)]
-mod golden_tests;
+mod goldens;
 mod literal_kind;
 mod mixed_unit;
 mod mode;
