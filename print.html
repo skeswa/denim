@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" class="light" dir="ltr">
+<html lang="en" class="light sidebar-visible" dir="ltr">
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
@@ -8,7 +8,7 @@
 
 
         <!-- Custom HTML head -->
-        
+
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-color" content="#ffffff">
@@ -31,15 +31,17 @@
 
         <!-- Custom theme stylesheets -->
 
-    </head>
-    <body class="sidebar-visible no-js">
-    <div id="body-container">
+
         <!-- Provide site root to javascript -->
         <script>
             var path_to_root = "";
             var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
         </script>
-
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
         <!-- Work around some values being stored in localStorage wrapped in quotes -->
         <script>
             try {
@@ -61,19 +63,16 @@
             var theme;
             try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
             if (theme === null || theme === undefined) { theme = default_theme; }
-            var html = document.querySelector('html');
+            const html = document.documentElement;
             html.classList.remove('light')
             html.classList.add(theme);
-            var body = document.querySelector('body');
-            body.classList.remove('no-js')
-            body.classList.add('js');
+            html.classList.add("js");
         </script>
 
         <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
 
         <!-- Hide / unhide sidebar before it is displayed -->
         <script>
-            var body = document.querySelector('body');
             var sidebar = null;
             var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
             if (document.body.clientWidth >= 1080) {
@@ -83,45 +82,25 @@
                 sidebar = 'hidden';
             }
             sidebar_toggle.checked = sidebar === 'visible';
-            body.classList.remove('sidebar-visible');
-            body.classList.add("sidebar-" + sidebar);
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
         </script>
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
-            <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="overview.html">Overview</a></li><li class="chapter-item expanded affix "><a href="journal/index.html">Journal</a></li><li class="chapter-item expanded "><a href="journal/2024_08_07_redesign.html"><strong aria-hidden="true">1.</strong> Redesign (Aug 2024)</a></li><li class="chapter-item expanded "><a href="journal/2023_09_16_hot_takes.html"><strong aria-hidden="true">2.</strong> Hot Takes (Sept 2023)</a></li><li class="chapter-item expanded "><a href="journal/2022_06_08_tour.html"><strong aria-hidden="true">3.</strong> Tour (June 2022)</a></li></ol>
-            </div>
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle">
                 <div class="sidebar-resize-indicator"></div>
             </div>
         </nav>
 
-        <!-- Track and set sidebar scroll position -->
-        <script>
-            var sidebarScrollbox = document.querySelector('#sidebar .sidebar-scrollbox');
-            sidebarScrollbox.addEventListener('click', function(e) {
-                if (e.target.tagName === 'A') {
-                    sessionStorage.setItem('sidebar-scroll', sidebarScrollbox.scrollTop);
-                }
-            }, { passive: true });
-            var sidebarScrollTop = sessionStorage.getItem('sidebar-scroll');
-            sessionStorage.removeItem('sidebar-scroll');
-            if (sidebarScrollTop) {
-                // preserve sidebar scroll position when navigating via links within sidebar
-                sidebarScrollbox.scrollTop = sidebarScrollTop;
-            } else {
-                // scroll sidebar to current active section when navigating via "next/previous chapter" buttons
-                var activeSection = document.querySelector('#sidebar .active');
-                if (activeSection) {
-                    activeSection.scrollIntoView({ block: 'center' });
-                }
-            }
-        </script>
-
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky">
                     <div class="left-buttons">
                         <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -354,7 +333,7 @@ developed with the following transpilation targets in mind:</p>
 <ul>
 <li><input disabled="" type="checkbox" checked=""/>
 <a href="journal/2024_08_07_redesign.html#lexical-concurrency">Lexical concurrency</a></li>
-<li><input disabled="" type="checkbox"/>
+<li><input disabled="" type="checkbox" checked=""/>
 <a href="journal/2024_08_07_redesign.html#anonymous-structs">Anonymous structs</a></li>
 <li><input disabled="" type="checkbox"/>
 <a href="journal/2024_08_07_redesign.html#minimum-viable-operators">Minimum viable operators</a></li>
@@ -800,123 +779,54 @@ fn print_foobar(foobar: FooBar) {
   }
 }
 <span class="boring">}</span></code></pre></pre>
-<h3 id="a-little-of-everything"><a class="header" href="#a-little-of-everything">A little of everything</a></h3>
+<h3 id="minimum-viable-operators"><a class="header" href="#minimum-viable-operators">Minimum Viable Operators</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Operator</th><th>Meaning</th></tr></thead><tbody>
+<tr><td><code>+</code></td><td>Numeric addition</td></tr>
+<tr><td><code>-</code></td><td>Numeric subtration, numeric negation</td></tr>
+<tr><td><code>/</code></td><td>Numeric division</td></tr>
+<tr><td><code>*</code></td><td>Numeric multiplication, <code>unknown</code></td></tr>
+<tr><td><code>==</code></td><td>Strict equality</td></tr>
+<tr><td><code>!=</code></td><td>Strict inequality</td></tr>
+<tr><td><code>.</code></td><td>Sub-referencing</td></tr>
+<tr><td><code>..</code></td><td>Spread</td></tr>
+<tr><td><code>:</code></td><td>Key-value specification, trait type syntax</td></tr>
+<tr><td><code>::</code></td><td>Subtype-referencing</td></tr>
+<tr><td>`</td><td>`</td></tr>
+<tr><td><code>&amp;</code></td><td>Type intersection, selfification</td></tr>
+<tr><td><code>!</code></td><td>Result type suffix</td></tr>
+<tr><td><code>?</code></td><td>Option type suffix</td></tr>
+<tr><td><code>$</code></td><td>String interpolation</td></tr>
+</tbody></table>
+</div>
+<h4 id="notable-exclusions"><a class="header" href="#notable-exclusions">Notable exclusions</a></h4>
 <ul>
-<li><input disabled="" type="checkbox" checked=""/>
-Common-sense builtins</li>
-<li><input disabled="" type="checkbox" checked=""/>
-Dart-style doc comments</li>
-<li><input disabled="" type="checkbox" checked=""/>
-Go-style packaging and visibility</li>
-<li><input disabled="" type="checkbox" checked=""/>
-Rust-style enums</li>
-<li><input disabled="" type="checkbox" checked=""/>
-Rust-style pattern matching</li>
-<li><input disabled="" type="checkbox" checked=""/>
-Strict param labeling</li>
-<li><input disabled="" type="checkbox" checked=""/>
-Imports at the bottom</li>
-<li><input disabled="" type="checkbox"/>
-<code>*</code> not <code>any</code></li>
-<li><input disabled="" type="checkbox"/>
-Mutation semantics</li>
-<li><input disabled="" type="checkbox"/>
-Keyword suffixing</li>
-<li><input disabled="" type="checkbox"/>
-Optional chaining</li>
-<li><input disabled="" type="checkbox"/>
-Selfification</li>
-<li><input disabled="" type="checkbox"/>
-Getterification</li>
-<li><input disabled="" type="checkbox"/>
-<code>body</code> param</li>
-<li><input disabled="" type="checkbox"/>
-Operator aliasing for Option and Result</li>
-<li><input disabled="" type="checkbox"/>
-Destructuring</li>
-<li><input disabled="" type="checkbox"/>
-Lexical concurrency</li>
-<li><input disabled="" type="checkbox"/>
-Anonymous structs</li>
-<li><input disabled="" type="checkbox"/>
-Minimum viable operators</li>
-<li><input disabled="" type="checkbox"/>
-Function overloading</li>
-<li><input disabled="" type="checkbox"/>
-Trait-based inheritance</li>
-<li><input disabled="" type="checkbox"/>
-<code>impl</code> anything</li>
+<li>Other numeric operators (<code>%</code>, <code>**</code>, <code>~/</code>, etc.)
+<ul>
+<li>Instead, we use methods like (<code>num.mod(3)</code>, <code>num.pow(2)</code>, <code>num.div(3)</code>)</li>
 </ul>
-<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
-</span><span class="boring">fn main() {
-</span>enum Weather {
-  Cloudy,
-  Sunny { uv_index: f32 },
-  PartlyCloudy,
-  Rainy(RainForecast),
-}
-
-/// Fetches information about the wetaher for the specified [date] in the
-/// location indicated by [zip].
-pub fn fetch_weather_data(date: Date, zip: ZipCode) -&gt; [WeatherData]! {
-  let raw_weather_data =
-      fetch("https://theweather.com/$zip?date=${date.as_dd_mm_yyyy}")
-      .try
-      .as_str;
-
-  raw_weather_data
-    .lines
-    .map(|line| WeatherData::parse(line))
-    .collect(to_result_list.fn)
-    .ctx("Parsing each line of raw weather data")
-}
-
-fn seven_day(zip: ZipCode) -&gt; [WeatherData!] {
-  let today = Date::today;
-
-  let list_of_eventuals: [Eventual&lt;WeatherData!&gt;] = 0..7.iter()
-      .map(|day_offset| today.prev_day(day_offset))
-      .map(|date| date.fetch_weather_data(&amp;date, zip).async)
-      .collect(to_list.fn)
-
-  let eventual_of_list: Eventual&lt;[WeatherData!]&gt; = list_of_eventuals.flattened;
-
-  eventual_of_list.await
-}
-
-impl DoI {
-  fn need_an_umbrella_today(home_zip: ZipCode, work_zip: ZipCode) -&gt; bool {
-    // The two invocations of `fetch_weather_data` happen concurrently:
-    let home_weather_data = fetch_weather_data(date: Date::today, zip: home_zip);
-    let work_weather_data = fetch_weather_data(date: Date::today, zip: work_zip);
-
-    home_weather_data.matches(Weather::Rainy)
-      or work_weather_data.matches(Weather::Rainy)
-  }
-}
-
-impl WeatherData {
-  fn as_weather(self) -&gt; Weather {
-    self.match {
-      WeatherData { rain_data } if rain_data.pct_chance_of_rain &gt; .5 =&gt;
-          Weather::Rainy(RainForecast::from(rain_data))
-      WeatherData { sun_quotient, uv_index } if sun_quotient &gt; .7 =&gt;
-          Weather::Sunny { uv_index },
-      WeatherData { sun_quotient } if sun_quotient &lt;= .7 and sun_quotient &gt; .25 =&gt;
-          Weather::PartlyCloudy,
-      WeatherData { sun_quotient } =&gt; Weather::Cloudy,
-    }
-  }
-}
-
----
-from location use ZipCode;
-from time use Date;
-
-from ~/my/weather/lib use WeatherData;
-
-from ./util/web use fetch;
-<span class="boring">}</span></code></pre></pre>
+</li>
+<li>Bitwise operators (<code>^</code>, <code>&gt;&gt;</code>, <code>&lt;&lt;</code>, etc.)
+<ul>
+<li>Instead, we use methods like (<code>int.bitwise_not</code>, <code>num.bitwise_shift(2)</code>, <code>num.bitwise_unshift(1)</code>)</li>
+</ul>
+</li>
+<li>Combination operators (<code>+=</code>, <code>-=</code>, <code>/=</code>, etc.)
+<ul>
+<li>Instead, we encourage combination of expressions (e.g. <code>a += 3</code> -&gt; <code>a = a + 3</code>)</li>
+</ul>
+</li>
+<li>Boolean operators (<code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, etc.)
+<ul>
+<li>Instead, we use <code>and</code>, <code>or</code>, <code>not</code></li>
+</ul>
+</li>
+<li>Nullish operators (<code>?.</code>, <code>??</code>, etc.)
+<ul>
+<li>Instead of <code>?.</code>, we just make <code>.</code> smarter</li>
+<li>Instead of <code>??</code>, we use the <code>.or_else(value)</code> method</li>
+</ul>
+</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="denims-language-design-takes"><a class="header" href="#denims-language-design-takes">Denim's Language Design Takes</a></h1>
 <p>Programming language design opinions sorted more or less from hottest (most
 unique/surprising) to coldest (Least unique/surprising).</p>
